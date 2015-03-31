@@ -26,14 +26,13 @@ import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.Sink;
 import com.choicemaker.cm.core.base.AbstractRecordSourceSerializer;
 import com.choicemaker.cm.core.base.PMManager;
-import com.choicemaker.cm.io.db.base.DbRecordSource;
 import com.choicemaker.util.Precondition;
 import com.choicemaker.util.StringUtils;
 
 /**
- * This is a wrapper object around Oracle DbRecordSource and it can be
+ * This is a wrapper object around Oracle OracleRecordSource and it can be
  * serialized, because it stores string values with which to create the
- * DbRecordSource.
+ * OracleRecordSource.
  *
  * @author pcheung (initial version implemented as SerializableRecordSource)
  * @author rphall (rewrote to ISerializableRecordSource)
@@ -52,7 +51,7 @@ public class OracleSerializableRecordSource implements
 	private String dbConfig;
 	private String sqlQuery;
 
-	private transient DbRecordSource sqlRS;
+	private transient OracleRecordSource sqlRS;
 	private transient DataSource ds;
 	private transient ImmutableProbabilityModel model;
 
@@ -81,9 +80,9 @@ public class OracleSerializableRecordSource implements
 		return ds;
 	}
 
-	private DbRecordSource getRS () {
+	private OracleRecordSource getRS () {
 		if (sqlRS == null) {
-			sqlRS = new DbRecordSource ();
+			sqlRS = new OracleRecordSource ();
 			sqlRS.setDs(getDataSource ());
 			sqlRS.setModel(getModel ());
 			sqlRS.setConf(getDbConfig());

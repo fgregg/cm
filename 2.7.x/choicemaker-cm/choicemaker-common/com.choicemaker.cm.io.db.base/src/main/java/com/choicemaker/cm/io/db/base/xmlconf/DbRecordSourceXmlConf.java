@@ -22,7 +22,7 @@ import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.xmlconf.RecordSourceXmlConfigurator;
-import com.choicemaker.cm.io.db.base.DbRecordSource;
+import com.choicemaker.cm.io.db.oracle.OracleRecordSource;
 
 /**
  * Handling of Db Marked Record Pair sources.
@@ -38,7 +38,7 @@ public class DbRecordSourceXmlConf implements RecordSourceXmlConfigurator {
 	}
 
 	public Class getHandledType() {
-		return DbRecordSource.class;
+		return OracleRecordSource.class;
 	}
 
 	/**
@@ -56,7 +56,7 @@ public class DbRecordSourceXmlConf implements RecordSourceXmlConfigurator {
 	 */
 	public void add(RecordSource s) throws XmlConfException {
 		try {
-			DbRecordSource src = (DbRecordSource) s;
+			OracleRecordSource src = (OracleRecordSource) s;
 			String fileName = src.getFileName();
 			Element e = new Element("RecordSource");
 			e.setAttribute("class", EXTENSION_POINT_ID);
@@ -78,6 +78,6 @@ public class DbRecordSourceXmlConf implements RecordSourceXmlConfigurator {
 		String conf = e.getAttributeValue("conf");
 		String selection = e.getChildText("selection");
 		String connectionName = e.getChildText("connectionName");
-		return new DbRecordSource(fileName, connectionName, model, conf, selection);
+		return new OracleRecordSource(fileName, connectionName, model, conf, selection);
 	}
 }

@@ -35,8 +35,8 @@ import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 import com.choicemaker.cm.gui.utils.JavaHelpUtils;
 import com.choicemaker.cm.gui.utils.dialogs.FileChooserFactory;
 import com.choicemaker.cm.io.db.base.DataSources;
-import com.choicemaker.cm.io.db.base.DbRecordSource;
 import com.choicemaker.cm.io.db.base.util.DbMessageUtil;
+import com.choicemaker.cm.io.db.oracle.OracleRecordSource;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 import com.choicemaker.cm.modelmaker.gui.dialogs.RecordSourceGui;
 import com.choicemaker.cm.modelmaker.gui.utils.Enable;
@@ -112,7 +112,7 @@ public class DbRecordSourceGui extends RecordSourceGui implements Enable {
             return;
         }
         sourceFileName.setText(source.getFileName());
-        DbRecordSource s = (DbRecordSource) source;
+        OracleRecordSource s = (OracleRecordSource) source;
 
         conf.setText(s.getConf());
         whereField.setText(s.getSelection());
@@ -238,10 +238,10 @@ public class DbRecordSourceGui extends RecordSourceGui implements Enable {
     }
 
     /**
-     * Builds an DbRecordSource.
+     * Builds an OracleRecordSource.
      */
     public void buildSource() {
-        DbRecordSource dbSource = (DbRecordSource) source;
+        OracleRecordSource dbSource = (OracleRecordSource) source;
 
         dbSource.setDataSourceName((String) dataSource.getSelectedItem());
         dbSource.setFileName(getSourceFileName());

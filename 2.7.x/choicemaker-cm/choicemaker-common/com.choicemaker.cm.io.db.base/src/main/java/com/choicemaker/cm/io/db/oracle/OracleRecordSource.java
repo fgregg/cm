@@ -8,7 +8,7 @@
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
-package com.choicemaker.cm.io.db.base;
+package com.choicemaker.cm.io.db.oracle;
 
 import java.io.IOException;
 import java.sql.CallableStatement;
@@ -23,6 +23,9 @@ import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.Sink;
 import com.choicemaker.cm.core.util.NameUtils;
+import com.choicemaker.cm.io.db.base.DataSources;
+import com.choicemaker.cm.io.db.base.DbAccessor;
+import com.choicemaker.cm.io.db.base.DbReaderParallel;
 
 /**
  * Oracle record source. This implementation assumes that various stored
@@ -35,8 +38,8 @@ import com.choicemaker.cm.core.util.NameUtils;
  * @author    Adam Winkel
  * @version   $Revision: 1.2 $ $Date: 2010/03/24 22:36:54 $
  */
-public class DbRecordSource implements RecordSource {
-	private static Logger logger = Logger.getLogger(DbRecordSource.class
+public class OracleRecordSource implements RecordSource {
+	private static Logger logger = Logger.getLogger(OracleRecordSource.class
 			.getName());
 	private static final int CURSOR = -10;
 
@@ -60,7 +63,7 @@ public class DbRecordSource implements RecordSource {
 	/**
 	 * Creates an uninitialized instance.
 	 */
-	public DbRecordSource() {
+	public OracleRecordSource() {
 		name = "";
 		selection = "";
 	}
@@ -68,7 +71,7 @@ public class DbRecordSource implements RecordSource {
 	/**
 	 * Constructor.
 	 */
-	public DbRecordSource(String fileName, String dataSourceName,
+	public OracleRecordSource(String fileName, String dataSourceName,
 			ImmutableProbabilityModel model, String conf, String selection) {
 		setFileName(fileName);
 		setDataSourceName(dataSourceName);

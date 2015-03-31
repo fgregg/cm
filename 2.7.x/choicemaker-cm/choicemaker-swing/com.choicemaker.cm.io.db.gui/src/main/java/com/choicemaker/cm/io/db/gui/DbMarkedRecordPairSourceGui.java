@@ -35,8 +35,8 @@ import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 import com.choicemaker.cm.gui.utils.JavaHelpUtils;
 import com.choicemaker.cm.gui.utils.dialogs.FileChooserFactory;
 import com.choicemaker.cm.io.db.base.DataSources;
-import com.choicemaker.cm.io.db.base.DbMarkedRecordPairSource2;
 import com.choicemaker.cm.io.db.base.util.DbMessageUtil;
+import com.choicemaker.cm.io.db.oracle.OracleMarkedRecordPairSource2;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 import com.choicemaker.cm.modelmaker.gui.dialogs.MarkedRecordPairSourceGui;
 import com.choicemaker.cm.modelmaker.gui.utils.Enable;
@@ -44,7 +44,7 @@ import com.choicemaker.cm.modelmaker.gui.utils.EnablednessGuard;
 //import db.jdbc.pool.*;
 
 /**
- * The MRPSGui associated the DbMarkedRecordPairSource2.
+ * The MRPSGui associated the OracleMarkedRecordPairSource2.
  * An objects of this class would be created by the
  * DbMarkedRecordPairSourceGuiFactory.  It is used
  * by the AbstractApplication so that users can easily configure
@@ -118,7 +118,7 @@ public class DbMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui imple
             return;
         }
         sourceFileName.setText(source.getFileName());
-        DbMarkedRecordPairSource2 s = (DbMarkedRecordPairSource2) source;
+        OracleMarkedRecordPairSource2 s = (OracleMarkedRecordPairSource2) source;
 
         conf.setText(s.getConf());
         whereField.setText(s.getSelection());
@@ -244,10 +244,10 @@ public class DbMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui imple
     }
 
     /**
-     * Builds an DbMarkedRecordPairSource2.
+     * Builds an OracleMarkedRecordPairSource2.
      */
     public void buildSource() {
-        DbMarkedRecordPairSource2 dbSource = (DbMarkedRecordPairSource2) source;
+        OracleMarkedRecordPairSource2 dbSource = (OracleMarkedRecordPairSource2) source;
 
         dbSource.setDataSourceName((String) dataSource.getSelectedItem());
         dbSource.setFileName(getSourceFileName());

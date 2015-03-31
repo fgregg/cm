@@ -41,7 +41,7 @@
    <extension
          id="DB2DatabaseAbstraction"
          name="DB2DatabaseAbstraction"
-         point="com.choicemaker.cm.io.blocking.automated.base.databaseAbstraction">
+         point="com.choicemaker.cm.io.db.base.databaseAbstraction">
       <databaseAbstraction
             class="com.choicemaker.cm.io.db.db2.blocking.DB2DatabaseAbstraction">
       </databaseAbstraction>

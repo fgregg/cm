@@ -8,7 +8,7 @@
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
-package com.choicemaker.cm.io.db.base;
+package com.choicemaker.cm.io.db.oracle;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -30,8 +30,8 @@ import com.choicemaker.cm.core.Decision;
  * @author    Martin Buechi
  * @version   $Revision: 1.2 $ $Date: 2010/03/28 09:04:53 $
  */
-public class DbTakeSnapshot {
-	private static Logger logger = Logger.getLogger(DbTakeSnapshot.class.getName());
+public class OracleTakeSnapshot {
+	private static Logger logger = Logger.getLogger(OracleTakeSnapshot.class.getName());
 
 	private DataSource ds;
 
@@ -40,7 +40,7 @@ public class DbTakeSnapshot {
 	 *
 	 * @param   ds  Data source for getting a connection to the database.
 	 */
-	public DbTakeSnapshot(DataSource ds) {
+	public OracleTakeSnapshot(DataSource ds) {
 		this.ds = ds;
 	}
 

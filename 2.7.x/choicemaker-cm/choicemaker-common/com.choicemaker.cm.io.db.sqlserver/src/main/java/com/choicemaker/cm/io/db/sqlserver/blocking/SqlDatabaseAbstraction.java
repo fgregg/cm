@@ -10,7 +10,7 @@
  */
 package com.choicemaker.cm.io.db.sqlserver.blocking;
 
-import com.choicemaker.cm.io.blocking.automated.base.db.DatabaseAbstraction;
+import com.choicemaker.cm.io.db.base.DatabaseAbstraction;
 
 /**
  * Description
@@ -21,21 +21,21 @@ import com.choicemaker.cm.io.blocking.automated.base.db.DatabaseAbstraction;
 public class SqlDatabaseAbstraction implements DatabaseAbstraction {
 
 	/**
-	 * @see com.choicemaker.cm.plugin.automatedblocking.db.DatabaseAbstraction#getSetDateFormatExpression()
+	 * @see com.choicemaker.cm.io.db.base.plugin.automatedblocking.db.DatabaseAbstraction#getSetDateFormatExpression()
 	 */
 	public String getSetDateFormatExpression() {
 		return "SET DATEFORMAT ymd"; // doesn't really matter
 	}
 
 	/**
-	 * @see com.choicemaker.cm.plugin.automatedblocking.db.DatabaseAbstraction#getSysdateExpression()
+	 * @see com.choicemaker.cm.io.db.base.plugin.automatedblocking.db.DatabaseAbstraction#getSysdateExpression()
 	 */
 	public String getSysdateExpression() {
 		return "getdate()";
 	}
 
 	/**
-	 * @see com.choicemaker.cm.plugin.automatedblocking.db.DatabaseAbstraction#getDateFieldExpression(java.lang.String)
+	 * @see com.choicemaker.cm.io.db.base.plugin.automatedblocking.db.DatabaseAbstraction#getDateFieldExpression(java.lang.String)
 	 */
 	public String getDateFieldExpression(String field) {
 		return "Convert(VARCHAR(10), " + field + ", 120)";

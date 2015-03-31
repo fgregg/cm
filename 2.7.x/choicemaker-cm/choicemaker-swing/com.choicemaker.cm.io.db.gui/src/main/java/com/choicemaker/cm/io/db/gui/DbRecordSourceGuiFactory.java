@@ -11,7 +11,7 @@
 package com.choicemaker.cm.io.db.gui;
 
 import com.choicemaker.cm.core.Source;
-import com.choicemaker.cm.io.db.base.DbRecordSource;
+import com.choicemaker.cm.io.db.oracle.OracleRecordSource;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 import com.choicemaker.cm.modelmaker.gui.dialogs.SourceGui;
 import com.choicemaker.cm.modelmaker.gui.sources.SourceGuiFactory;
@@ -28,11 +28,11 @@ public class DbRecordSourceGuiFactory implements SourceGuiFactory {
 	}
 
 	public SourceGui createGui(ModelMaker parent, Source s) {
-		return new DbRecordSourceGui(parent, (DbRecordSource)s);
+		return new DbRecordSourceGui(parent, (OracleRecordSource)s);
 	}
 
 	public SourceGui createGui(ModelMaker parent) {
-		return createGui(parent, new DbRecordSource());
+		return createGui(parent, new OracleRecordSource());
 	}
 
 	public SourceGui createSaveGui(ModelMaker parent) {
@@ -44,7 +44,7 @@ public class DbRecordSourceGuiFactory implements SourceGuiFactory {
 	}
 
 	public Class getHandledType() {
-		return DbRecordSource.class;
+		return OracleRecordSource.class;
 	}
 
 	public String toString() {

@@ -12,7 +12,7 @@ package com.choicemaker.cm.io.db.gui;
 
 import com.choicemaker.cm.core.MarkedRecordPairSource;
 import com.choicemaker.cm.core.Source;
-import com.choicemaker.cm.io.db.base.DbMarkedRecordPairSource2;
+import com.choicemaker.cm.io.db.oracle.OracleMarkedRecordPairSource2;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 import com.choicemaker.cm.modelmaker.gui.dialogs.SourceGui;
 import com.choicemaker.cm.modelmaker.gui.sources.SourceGuiFactory;
@@ -33,7 +33,7 @@ public class DbMarkedRecordPairSourceGuiFactory implements SourceGuiFactory {
 	}
 
 	public SourceGui createGui(ModelMaker parent) {
-		return createGui(parent, new DbMarkedRecordPairSource2());
+		return createGui(parent, new OracleMarkedRecordPairSource2());
 	}
 
 	public SourceGui createSaveGui(ModelMaker parent) {
@@ -45,7 +45,7 @@ public class DbMarkedRecordPairSourceGuiFactory implements SourceGuiFactory {
 	}
 
 	public Class getHandledType() {
-		return DbMarkedRecordPairSource2.class;
+		return OracleMarkedRecordPairSource2.class;
 	}
 
 	public String toString() {

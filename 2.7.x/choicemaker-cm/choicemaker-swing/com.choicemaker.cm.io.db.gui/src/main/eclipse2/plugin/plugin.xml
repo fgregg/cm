@@ -24,7 +24,7 @@
             hasSink="false"
             name="Database"
             class="com.choicemaker.cm.io.db.gui.DbMarkedRecordPairSourceGuiFactory"
-            handledClass="com.choicemaker.cm.io.db.base.DbMarkedRecordPairSource">
+            handledClass="com.choicemaker.cm.io.db.base.OracleMarkedRecordPairSource">
       </gui>
    </extension>
    <extension
@@ -35,7 +35,7 @@
             hasSink="false"
             name="Database"
             class="com.choicemaker.cm.io.db.gui.DbRecordSourceGuiFactory"
-            handledClass="com.choicemaker.cm.io.db.base.DbRecordSource">
+            handledClass="com.choicemaker.cm.io.db.base.OracleRecordSource">
       </gui>
    </extension>
 

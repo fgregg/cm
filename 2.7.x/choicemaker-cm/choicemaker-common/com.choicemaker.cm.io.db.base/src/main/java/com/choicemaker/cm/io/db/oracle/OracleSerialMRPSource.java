@@ -8,7 +8,7 @@
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
-package com.choicemaker.cm.io.db.base;
+package com.choicemaker.cm.io.db.oracle;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -33,6 +33,8 @@ import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.Sink;
 import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
 import com.choicemaker.cm.core.base.PMManager;
+import com.choicemaker.cm.io.db.base.DbAccessor;
+import com.choicemaker.cm.io.db.base.DbReaderParallel;
 
 
 /**
@@ -46,13 +48,13 @@ import com.choicemaker.cm.core.base.PMManager;
  * @author pcheung
  *
  */
-public class DbSerialMRPSource implements MarkedRecordPairSource, Serializable {
+public class OracleSerialMRPSource implements MarkedRecordPairSource, Serializable {
 
 	/* As of 2010-03-10 */
 	static final long serialVersionUID = 2592253692957626142L;
 
 	private static final int CURSOR = -10;
-	private static Logger logger = Logger.getLogger(DbSerialMRPSource.class.getName());
+	private static Logger logger = Logger.getLogger(OracleSerialMRPSource.class.getName());
 
 	// Properties
 	private String dataSourceName;
@@ -76,7 +78,7 @@ public class DbSerialMRPSource implements MarkedRecordPairSource, Serializable {
 	/**
 	 * Constructor.
 	 */
-	public DbSerialMRPSource (String dataSourceName, String modelName, String conf, String selection) {
+	public OracleSerialMRPSource (String dataSourceName, String modelName, String conf, String selection) {
 		this.dataSourceName = dataSourceName;
 		this.modelName = modelName;
 		this.selection = selection;

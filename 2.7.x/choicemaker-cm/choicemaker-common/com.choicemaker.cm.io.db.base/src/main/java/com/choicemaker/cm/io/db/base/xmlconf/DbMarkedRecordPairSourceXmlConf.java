@@ -22,7 +22,7 @@ import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.MarkedRecordPairSource;
 import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.xmlconf.MarkedRecordPairSourceXmlConfigurator;
-import com.choicemaker.cm.io.db.base.DbMarkedRecordPairSource2;
+import com.choicemaker.cm.io.db.oracle.OracleMarkedRecordPairSource2;
 
 /**
  * Handling of Db Marked Record Pair sources.
@@ -38,7 +38,7 @@ public class DbMarkedRecordPairSourceXmlConf implements MarkedRecordPairSourceXm
 	}
 
 	public Class getHandledType() {
-		return DbMarkedRecordPairSource2.class;
+		return OracleMarkedRecordPairSource2.class;
 	}
 
 	/**
@@ -56,7 +56,7 @@ public class DbMarkedRecordPairSourceXmlConf implements MarkedRecordPairSourceXm
 	 */
 	public void add(MarkedRecordPairSource s) throws XmlConfException {
 		try {
-			DbMarkedRecordPairSource2 src = (DbMarkedRecordPairSource2) s;
+			OracleMarkedRecordPairSource2 src = (OracleMarkedRecordPairSource2) s;
 			String fileName = src.getFileName();
 			Element e = new Element("MarkedRecordPairSource");
 			e.setAttribute("class", EXTENSION_POINT_ID);
@@ -78,6 +78,6 @@ public class DbMarkedRecordPairSourceXmlConf implements MarkedRecordPairSourceXm
 		String conf = e.getAttributeValue("conf");
 		String selection = e.getChildText("selection");
 		String connectionName = e.getChildText("connectionName");
-		return new DbMarkedRecordPairSource2(fileName, connectionName, model, conf, selection);
+		return new OracleMarkedRecordPairSource2(fileName, connectionName, model, conf, selection);
 	}
 }

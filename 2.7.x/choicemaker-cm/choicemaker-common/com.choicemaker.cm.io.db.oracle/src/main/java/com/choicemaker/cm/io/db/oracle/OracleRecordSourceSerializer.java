@@ -19,7 +19,6 @@ import java.util.regex.Pattern;
 import com.choicemaker.cm.core.ISerializableRecordSource;
 import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.base.AbstractRecordSourceSerializer;
-import com.choicemaker.cm.io.db.base.DbRecordSource;
 import com.choicemaker.util.Precondition;
 
 /**
@@ -90,7 +89,7 @@ public class OracleRecordSourceSerializer
 		if (rs instanceof OracleSerializableRecordSource) {
 			// Trivial case
 			retVal = (OracleSerializableRecordSource) rs;
-		} else if (rs instanceof DbRecordSource) {
+		} else if (rs instanceof OracleRecordSource) {
 			// TODO FIXME handle this case if dsJnidName is known
 			// i.e. if it is passed as a constructor property or it is
 			// set as a property immediately after construction.
