@@ -16,9 +16,7 @@
       <import plugin="com.choicemaker.cm.io.db.base"/>
    </requires>
 
-
    <extension-point id="databaseAccessor" name="databaseAccessor" schema="schema/databaseAccessor.exsd"/>
-   <extension-point id="databaseAbstraction" name="databaseAbstraction" schema="schema/databaseAbstraction.exsd"/>
 
    <extension
          point="com.choicemaker.cm.core.generatorPlugin">

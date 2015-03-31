@@ -36,7 +36,7 @@ public interface ProbabilityModelConfiguration {
 
 	/** @deprecated */
 	String PN_DATABASE_ABSTRACTION =
-			ChoiceMakerExtensionPoint.CM_IO_BLOCKING_AUTOMATED_BASE_DATABASEABSTRACTION;
+			ChoiceMakerExtensionPoint.CM_IO_DB_BASE_DATABASEABSTRACTION;
 
 	/** @deprecated */
 	String PN_DATABASE_ACCESSOR =

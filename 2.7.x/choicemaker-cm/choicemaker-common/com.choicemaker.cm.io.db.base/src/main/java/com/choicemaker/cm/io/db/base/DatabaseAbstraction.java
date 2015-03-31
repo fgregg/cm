@@ -8,22 +8,24 @@
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
-package com.choicemaker.cm.io.blocking.automated.base.db;
+package com.choicemaker.cm.io.db.base;
 
 import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
 
 /**
  * Description
  * 
- * @author  Martin Buechi
+ * @author Martin Buechi
  * @version $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:47 $
  */
 public interface DatabaseAbstraction {
-	String EXTENSION_POINT = ChoiceMakerExtensionPoint.CM_IO_BLOCKING_AUTOMATED_BASE_DATABASEABSTRACTION;
-	
+
+	String EXTENSION_POINT =
+		ChoiceMakerExtensionPoint.CM_IO_DB_BASE_DATABASEABSTRACTION;
+
 	String getSetDateFormatExpression();
-	
+
 	String getSysdateExpression();
-	
+
 	String getDateFieldExpression(String field);
 }

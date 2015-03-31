@@ -36,8 +36,8 @@ public interface ChoiceMakerExtensionPoint {
 	public static final String CM_CORE_RSSERIALIZER =
 		"com.choicemaker.cm.core.rsSerializer";
 
-	public static final String CM_IO_BLOCKING_AUTOMATED_BASE_DATABASEABSTRACTION =
-		"com.choicemaker.cm.io.blocking.automated.base.databaseAbstraction";
+	public static final String CM_IO_DB_BASE_DATABASEABSTRACTION =
+		"com.choicemaker.cm.io.db.base.databaseAbstraction";
 	public static final String CM_IO_BLOCKING_AUTOMATED_BASE_DATABASEACCESSOR =
 		"com.choicemaker.cm.io.blocking.automated.base.databaseAccessor";
 

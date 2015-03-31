@@ -54,7 +54,7 @@
    <extension
          id="sqlServerDatabaseAbstraction"
          name="sqlServerDatabaseAbstraction"
-         point="com.choicemaker.cm.io.blocking.automated.base.databaseAbstraction">
+         point="com.choicemaker.cm.io.db.base.databaseAbstraction">
       <databaseAbstraction
             class="com.choicemaker.cm.io.db.sqlserver.blocking.SqlDatabaseAbstraction">
       </databaseAbstraction>

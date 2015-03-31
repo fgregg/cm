@@ -13,7 +13,7 @@ import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_CORE_OBJECTGE
 import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_CORE_REPORTER;
 import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_CORE_RSREADER;
 import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_CORE_RSSERIALIZER;
-import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_IO_BLOCKING_AUTOMATED_BASE_DATABASEABSTRACTION;
+import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_IO_DB_BASE_DATABASEABSTRACTION;
 import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_IO_BLOCKING_AUTOMATED_BASE_DATABASEACCESSOR;
 import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_MATCHING_CFG_CASCADEDPARSER;
 import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_MATCHING_CFG_PARSER;
@@ -154,7 +154,7 @@ public class ExtensionPointTest {
 			CMPluginRegistry registry) {
 		assertTrue(registry != null);
 		CMExtensionPoint ep =
-			registry.getExtensionPoint(CM_IO_BLOCKING_AUTOMATED_BASE_DATABASEABSTRACTION);
+			registry.getExtensionPoint(CM_IO_DB_BASE_DATABASEABSTRACTION);
 		assertTrue(ep != null);
 	}
 
