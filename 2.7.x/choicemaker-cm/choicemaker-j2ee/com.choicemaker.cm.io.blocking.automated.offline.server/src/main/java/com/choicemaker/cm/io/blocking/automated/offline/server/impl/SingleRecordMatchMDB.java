@@ -35,6 +35,7 @@ import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.batch.ProcessingEventLog;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
+import com.choicemaker.cm.core.DatabaseException;
 import com.choicemaker.cm.core.ISerializableRecordSource;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
@@ -72,6 +73,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.services.MatchingService
 import com.choicemaker.cm.io.blocking.automated.offline.services.OABABlockingService;
 import com.choicemaker.cm.io.blocking.automated.offline.services.OversizedDedupService;
 import com.choicemaker.cm.io.blocking.automated.offline.services.RecValService2;
+import com.choicemaker.cm.io.db.base.DatabaseAbstraction;
+import com.choicemaker.cm.io.db.base.DatabaseAbstractionManager;
 import com.choicemaker.e2.CMConfigurationElement;
 import com.choicemaker.e2.CMExtension;
 import com.choicemaker.e2.E2Exception;
@@ -381,9 +384,11 @@ public class SingleRecordMatchMDB extends AbstractOabaMDB {
 		// Cache ABA statistics for field-value counts
 		log.info("Caching ABA statistic for master records..");
 		try {
+			DatabaseAbstractionManager mgr = new AggregateDatabaseAbstractionManager();
+			DatabaseAbstraction dba = mgr.lookupDatabaseAbstraction(masterDS);
 			DbbCountsCreator cc = new DbbCountsCreator();
-			cc.setCacheCountSources(masterDS, getAbaStatisticsController());
-		} catch (SQLException e) {
+			cc.setCacheCountSources(masterDS, dba, getAbaStatisticsController());
+		} catch (SQLException | DatabaseException e) {
 			String msg = "Unable to cache master ABA statistics: " + e;
 			log.severe(msg);
 			throw new BlockingException(msg);

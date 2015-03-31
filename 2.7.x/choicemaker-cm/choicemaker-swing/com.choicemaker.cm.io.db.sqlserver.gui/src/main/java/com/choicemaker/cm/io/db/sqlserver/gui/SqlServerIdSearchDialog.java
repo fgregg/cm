@@ -35,6 +35,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import com.choicemaker.cm.args.AbaSettings;
+import com.choicemaker.cm.core.DatabaseException;
 import com.choicemaker.cm.core.Decision;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.MarkedRecordPairSource;
@@ -308,7 +309,11 @@ public class SqlServerIdSearchDialog extends JDialog {
 			SqlServerUtils.maybeUpdateCounts(ds, model, statsCache);
 		} catch (SQLException ex) {
 			SqlServerUtils.setDefaultCursor(modelMaker, this);
-			ErrorDialog.showErrorDialog(this, "Error updating counts" , ex);
+			ErrorDialog.showErrorDialog(this, "Error updating counts: " + ex, ex);
+			return;
+		} catch (DatabaseException e) {
+			SqlServerUtils.setDefaultCursor(modelMaker, this);
+			ErrorDialog.showErrorDialog(this, "Error updating counts: " + e, e);
 			return;
 		}
 								

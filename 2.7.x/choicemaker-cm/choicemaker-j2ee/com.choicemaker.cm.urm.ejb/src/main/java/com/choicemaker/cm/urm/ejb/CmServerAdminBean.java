@@ -26,12 +26,16 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
+import com.choicemaker.cm.core.DatabaseException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.core.configure.xml.NotFoundException;
 import com.choicemaker.cm.core.configure.xml.XmlConfigurablesRegistry;
 import com.choicemaker.cm.io.blocking.automated.base.db.DbbCountsCreator;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.AbaStatisticsController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.AggregateDatabaseAbstractionManager;
+import com.choicemaker.cm.io.db.base.DatabaseAbstraction;
+import com.choicemaker.cm.io.db.base.DatabaseAbstractionManager;
 import com.choicemaker.cm.urm.IUpdateDerivedFields;
 import com.choicemaker.cm.urm.base.DbRecordCollection;
 import com.choicemaker.cm.urm.exceptions.ConfigException;
@@ -193,7 +197,7 @@ public class CmServerAdminBean implements SessionBean {
 	}
 
 	public void updateCounts(String probabilityModel, String urlString)
-		throws RecordCollectionException, ConfigException, RemoteException {
+		throws RecordCollectionException, ConfigException, RemoteException, DatabaseException {
 		DataSource ds = null;
 		try {
 			log.fine("url" + urlString);
@@ -212,10 +216,12 @@ public class CmServerAdminBean implements SessionBean {
 			//
 			//new CountsUpdate().updateCounts(ds, true);
 			// </BUGFIX>
+			DatabaseAbstractionManager mgr = new AggregateDatabaseAbstractionManager();
+			DatabaseAbstraction dba = mgr.lookupDatabaseAbstraction(ds);
 			DbbCountsCreator countsCreator = new DbbCountsCreator();
 			countsCreator.install(ds);
-			countsCreator.create(ds, false);
-			countsCreator.setCacheCountSources(ds,statsController);
+			countsCreator.create(ds, dba, false);
+			countsCreator.setCacheCountSources(ds, dba, statsController);
 		} catch (NamingException e) {
 			log.severe(e.toString());
 			throw new ConfigException(e.toString());

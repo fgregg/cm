@@ -17,6 +17,7 @@ import java.util.SortedSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.choicemaker.cm.core.DatabaseException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.base.Evaluator;
@@ -122,8 +123,6 @@ public class OnlineRecordMatcherBean extends OnlineMatchBaseBean {
 		 *                 The value <code>-1</code> means bring back all matches and holds.
 		 * @param	returnRecordRef  If true <code>findMatches</code> returns array of <code>MatchRecordRef</code>, otherwise it returns an array of <code>MatchRecordVal</code>	
 		 * @return  An array of matched records.
-		 * @throws  RemoteException
-		 * @throws SQLException 
 		 */	
 	
 	public EvaluatedRecord[] 	getMatchCandidates(
@@ -143,7 +142,7 @@ public class OnlineRecordMatcherBean extends OnlineMatchBaseBean {
 										RecordCollectionException,
 										ConfigException,
 										CmRuntimeException, 
-										RemoteException, SQLException
+										RemoteException, SQLException, DatabaseException
 	{
 		EvaluatedRecord[] matchCand = null;					
 				

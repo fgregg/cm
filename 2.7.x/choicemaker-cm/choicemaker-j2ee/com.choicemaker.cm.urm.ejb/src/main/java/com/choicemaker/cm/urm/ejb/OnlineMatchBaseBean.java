@@ -29,6 +29,7 @@ import javax.sql.DataSource;
 import com.choicemaker.cm.args.AbaSettings;
 import com.choicemaker.cm.core.Accessor;
 import com.choicemaker.cm.core.Constants;
+import com.choicemaker.cm.core.DatabaseException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.base.Match;
@@ -46,6 +47,9 @@ import com.choicemaker.cm.io.blocking.automated.base.Blocker2;
 import com.choicemaker.cm.io.blocking.automated.base.BlockingSetReporter;
 import com.choicemaker.cm.io.blocking.automated.base.db.DbbCountsCreator;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.AbaStatisticsController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.AggregateDatabaseAbstractionManager;
+import com.choicemaker.cm.io.db.base.DatabaseAbstraction;
+import com.choicemaker.cm.io.db.base.DatabaseAbstractionManager;
 import com.choicemaker.cm.io.db.base.DbAccessor;
 import com.choicemaker.cm.io.db.base.DbReaderParallel;
 import com.choicemaker.cm.io.xml.base.XmlSingleRecordWriter;
@@ -219,7 +223,7 @@ public class OnlineMatchBaseBean implements SessionBean {
 			ConfigException,
 			UrmIncompleteBlockingSetsException,
 			UrmUnderspecifiedQueryException,
-			RemoteException, SQLException {
+			RemoteException, SQLException, DatabaseException {
 
 		ImmutableProbabilityModel model = null;
 		Record q = null;
@@ -247,8 +251,10 @@ public class OnlineMatchBaseBean implements SessionBean {
 				// It is not the responsibility of this service to update counts.
 				// Treat the flag isCountsUpdated as a check for whether
 				// counts have been cached in memory.
+				DatabaseAbstractionManager mgr = new AggregateDatabaseAbstractionManager();
+				DatabaseAbstraction dba = mgr.lookupDatabaseAbstraction(ds);
 				DbbCountsCreator countsCreator = new DbbCountsCreator();
-				countsCreator.setCacheCountSources(ds,statsController);
+				countsCreator.setCacheCountSources(ds,dba,statsController);
 				isCountsUpdated = true;
 				// END BUGFIX
 			}

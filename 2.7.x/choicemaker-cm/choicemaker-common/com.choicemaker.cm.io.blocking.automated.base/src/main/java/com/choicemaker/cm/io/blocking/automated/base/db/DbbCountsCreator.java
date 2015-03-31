@@ -17,11 +17,9 @@ import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -38,10 +36,7 @@ import com.choicemaker.cm.io.blocking.automated.IDbTable;
 import com.choicemaker.cm.io.blocking.automated.base.CountField;
 import com.choicemaker.cm.io.blocking.automated.base.DbTable;
 import com.choicemaker.cm.io.blocking.automated.cachecount.AbaStatisticsImpl;
-import com.choicemaker.e2.CMConfigurationElement;
-import com.choicemaker.e2.CMExtension;
-import com.choicemaker.e2.E2Exception;
-import com.choicemaker.e2.platform.CMPlatformUtils;
+import com.choicemaker.cm.io.db.base.DatabaseAbstraction;
 
 /**
  * Database Blocking Counts Creator
@@ -49,67 +44,21 @@ import com.choicemaker.e2.platform.CMPlatformUtils;
  * @author mbuechi
  */
 public class DbbCountsCreator {
+
 	private static Logger logger = Logger.getLogger(DbbCountsCreator.class
 			.getName());
-
-//	// BUG 2009-08-21 rphall
-//	// If the "models" instance data is whacked (see below),
-//	// this data member should be whacked.
-//	private IBlockingConfiguration[] blockingConfigurations;
-//	// END BUG
-//
-//	// BUG 2009-08-21 rphall
-//	// This data member is sometimes hidden (see the create method) and
-//	// sometimes never set (see the second constructor). There's no big
-//	// advantage to caching the models as instance data, so this data member
-//	// should be whacked.
-//	private ImmutableProbabilityModel[] models;
-//	// END BUG
-//
-//	// DESIGN BUG? 2009-08-21 rphall
-//	// By holding this connection as instance data, instances of this class
-//	// become responsible for closing it (see the close method). But the close
-//	// method on instances of this class are called less than consistently.
-//	// It might be better to pass a connection in for each method that requires
-//	// a connections, and therefore never accept responsibility from a client
-//	// for closing a connection. This class would then follow the fly-weight
-//	// design pattern -- just a template of procedural methods for updating
-//	// counts in memory and in the database.
-//	private Connection connection;
-//
-//	// END DESIGN BUG?
-//
-//	// BUGFIX 2009-08-21 rphall
-//	// This method is only used by other constructors of this class,
-//	// and it can not be public since it does a half-ass job of initializing
-//	// an instance (the other public constructors know how to compensate
-//	// for this deficiency, but other clients couldn't compensate)
-//	// public DbbCountsCreator(Connection connection, BlockingConfiguration[]
-//	// blockingConfigurations) throws SQLException {
-//	private DbbCountsCreator(Connection connection,
-//			IBlockingConfiguration[] blockingConfigurations)
-//			throws SQLException {
-//		// BUG 2009-08-21 rphall
-//		// This constructor never sets the "models" instance member,
-//		// which causes the "setCacheCountSources()" method to
-//		// fail quietly.
-//		this.connection = connection;
-//// MODIFIED 2015-03-21 rphall (EJB3)
-////		this.connection.setAutoCommit(false);
-//		this.blockingConfigurations = blockingConfigurations;
-//		// END BUG
+	
+//	private final DatabaseAbstractionManager databaseAbstractionManager;
+//	
+//	public DbbCountsCreator(DatabaseAbstractionManager mgr) {
+//		if (mgr == null) {
+//			throw new IllegalArgumentException("null database abstraction manager");
+//		}
+//		this.databaseAbstractionManager = mgr;
 //	}
 //
-//	// END BUGFIX
-//
-//	public DbbCountsCreator(Connection connection, ImmutableProbabilityModel[] models)
-//			throws SQLException {
-//		this(connection, getBlockingConfigurations(models));
-//		this.models = models;
-//	}
-//
-//	public DbbCountsCreator(Connection connection) throws SQLException {
-//		this(connection, PMManager.getModels());
+//	public DatabaseAbstractionManager getDatabaseAbstractionManager() {
+//		return databaseAbstractionManager;
 //	}
 
 	public void install(DataSource ds) throws SQLException {
@@ -136,7 +85,8 @@ public class DbbCountsCreator {
 		logger.info("DEBUG " + METHOD + "exiting");
 	}
 
-	private void setConfigFields(final Connection connection) throws SQLException {
+	private void setConfigFields(final Connection connection)
+			throws SQLException {
 		final String METHOD = "DbbCountsCreator.setConfigFields: ";
 		assert connection != null;
 		logger.info("DEBUG " + METHOD + "entering");
@@ -224,13 +174,13 @@ public class DbbCountsCreator {
 			rs.close();
 			query =
 				"SELECT ViewName, ColumnName, MasterId, MIN(MinCount) "
-					+ "FROM TB_CMT_COUNT_CONFIG_FIELDS t1 "
-					+ "WHERE ColumnName IS NOT NULL AND NOT EXISTS ("
-					+ "SELECT * FROM TB_CMT_COUNT_FIELDS t2 "
-					+ "WHERE t1.ViewName = t2.ViewName AND "
-					+ "t1.ColumnName = t2.ColumnName AND "
-					+ "t1.MasterId = t2.MasterId) "
-					+ "GROUP BY ViewName, ColumnName, MasterId";
+						+ "FROM TB_CMT_COUNT_CONFIG_FIELDS t1 "
+						+ "WHERE ColumnName IS NOT NULL AND NOT EXISTS ("
+						+ "SELECT * FROM TB_CMT_COUNT_FIELDS t2 "
+						+ "WHERE t1.ViewName = t2.ViewName AND "
+						+ "t1.ColumnName = t2.ColumnName AND "
+						+ "t1.MasterId = t2.MasterId) "
+						+ "GROUP BY ViewName, ColumnName, MasterId";
 			logger.info("DEBUG " + query);
 			rs = stmt.executeQuery(query);
 			// Some JDBC drivers don't support multiple statements or result
@@ -280,8 +230,7 @@ public class DbbCountsCreator {
 						+ "TB_CMT_COUNT_CONFIG_FIELDS k "
 						+ "WHERE f.ViewName = k.ViewName AND ("
 						+ "(f.ColumnName IS NULL AND k.ColumnName IS NULL) OR "
-						+ "(f.ColumnName = k.ColumnName)"
-						+ ") )";
+						+ "(f.ColumnName = k.ColumnName)" + ") )";
 			logger.info("DEBUG " + query);
 			stmt.execute(query);
 			query =
@@ -313,28 +262,11 @@ public class DbbCountsCreator {
 		logger.info("DEBUG " + METHOD + "exiting");
 	}
 
-	public void create(DataSource ds, boolean neverComputedOnly)
-			throws SQLException {
-		final String METHOD = "DbbCountsCreator.setMainFields: ";
-		if (ds == null) {
-			throw new IllegalArgumentException(METHOD + "null data source");
-		}
-		logger.info("DEBUG " + METHOD + "entering");
-
-		try {
-			ImmutableProbabilityModel[] models = PMManager.getModels();
-			DatabaseAbstraction[] dbas = getDatabaseAbstractions(models);
-			for (DatabaseAbstraction dba : dbas) {
-				create(ds, dba, neverComputedOnly);
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new SQLException(e.toString());
-		}
-		
-		logger.info("DEBUG " + "exiting");
-	}
+//	public void create(DataSource ds, boolean neverComputedOnly)
+//			throws SQLException {
+//		DatabaseAbstraction dba = getDatabaseAbstractionManager().lookupDatabaseAbstraction(ds);
+//		create(ds, dba, neverComputedOnly);
+//	}
 
 	public void create(DataSource ds, DatabaseAbstraction databaseAbstraction,
 			boolean neverComputedOnly) throws SQLException {
@@ -343,7 +275,8 @@ public class DbbCountsCreator {
 			throw new IllegalArgumentException(METHOD + "null data source");
 		}
 		if (databaseAbstraction == null) {
-			throw new IllegalArgumentException(METHOD + "null database abstraction");
+			throw new IllegalArgumentException(METHOD
+					+ "null database abstraction");
 		}
 		logger.info("DEBUG " + METHOD + "entering");
 
@@ -466,7 +399,9 @@ public class DbbCountsCreator {
 		}
 	}
 
-	public void setCacheCountSources(DataSource ds, AbaStatisticsCache cache) throws SQLException {
+	public void setCacheCountSources(DataSource ds,
+			DatabaseAbstraction databaseAbstraction, AbaStatisticsCache cache)
+			throws SQLException {
 		final String METHOD = "DbbCountsCreator.setCacheCountSources: ";
 		if (ds == null) {
 			throw new IllegalArgumentException(METHOD + "null data source");
@@ -548,7 +483,8 @@ public class DbbCountsCreator {
 				for (ImmutableProbabilityModel model : models) {
 					final String bcName = model.getBlockingConfigurationName();
 					final String dn = model.getDatabaseConfigurationName();
-					logger.info("DEBUG " + "Using blocking configuration: " + bcName);
+					logger.info("DEBUG " + "Using blocking configuration: "
+							+ bcName);
 					IBlockingConfiguration bc =
 						((BlockingAccessor) model.getAccessor())
 								.getBlockingConfiguration(bcName, dn);
@@ -608,9 +544,9 @@ public class DbbCountsCreator {
 		if (l.size() == 0) {
 			String msg =
 				"Required views for automated blocking were not found. "
-				+ "Automated blocking will not work without them. "
-				+ "Use CM-Analyzer to produce a script that will create them, "
-				+ "then run the script to add them to the database.";
+						+ "Automated blocking will not work without them. "
+						+ "Use CM-Analyzer to produce a script that will create them, "
+						+ "then run the script to add them to the database.";
 			logger.warning(msg);
 		}
 		logger.info("DEBUG " + "...readTableSizes");
@@ -672,50 +608,52 @@ public class DbbCountsCreator {
 		return res;
 	}
 
-	private static DatabaseAbstraction[] getDatabaseAbstractions(
-			ImmutableProbabilityModel[] models) throws E2Exception {
-		Set<String> dbaNames = new HashSet<>();
-		for (ImmutableProbabilityModel model : models) {
-			final String dbaName = model.getDatabaseAbstractionName();
-			if (dbaName == null) {
-				String msg = "Missing name of database abstraction for model '"
-						+ model.getModelName() + "'";
-				logger.warning(msg);
-			}
-			dbaNames.add(dbaName);
-		}
-		if (dbaNames.isEmpty()) {
-			String msg = "No database abstractions configured for any model.";
-			logger.severe(msg);
-			throw new IllegalStateException(msg);
-		}
-		List<DatabaseAbstraction> dbas = new ArrayList<>();
-		for (String dbaName : dbaNames) {
-			DatabaseAbstraction dba = getDatabaseAbtraction(dbaName);
-			if (dba == null) {
-				String msg = "Missing database abstraction '" + dbaName + "'";
-				logger.severe(msg);
-				throw new IllegalStateException(msg);
-			}
-			dbas.add(dba);
-		}
-		DatabaseAbstraction[] retVal = dbas.toArray(new DatabaseAbstraction[dbas.size()]);
-		return retVal;
-	}
-
-	private static DatabaseAbstraction getDatabaseAbtraction(String das)
-			throws E2Exception {
-		assert das != null && !das.isEmpty();
-		CMExtension dbExtension =
-			CMPlatformUtils.getExtension(DatabaseAbstraction.EXTENSION_POINT,
-					das);
-		CMConfigurationElement[] configurationElements =
-			dbExtension.getConfigurationElements();
-		CMConfigurationElement classConfiguration = configurationElements[0];
-		DatabaseAbstraction databaseAbstraction =
-			(DatabaseAbstraction) classConfiguration
-					.createExecutableExtension("class");
-		return databaseAbstraction;
-	}
+//	private static DatabaseAbstraction[] getDatabaseAbstractions(
+//			ImmutableProbabilityModel[] models) throws E2Exception {
+//		Set<String> dbaNames = new HashSet<>();
+//		for (ImmutableProbabilityModel model : models) {
+//			final String dbaName = model.getDatabaseAbstractionName();
+//			if (dbaName == null) {
+//				String msg =
+//					"Missing name of database abstraction for model '"
+//							+ model.getModelName() + "'";
+//				logger.warning(msg);
+//			}
+//			dbaNames.add(dbaName);
+//		}
+//		if (dbaNames.isEmpty()) {
+//			String msg = "No database abstractions configured for any model.";
+//			logger.severe(msg);
+//			throw new IllegalStateException(msg);
+//		}
+//		List<DatabaseAbstraction> dbas = new ArrayList<>();
+//		for (String dbaName : dbaNames) {
+//			DatabaseAbstraction dba = getDatabaseAbtraction(dbaName);
+//			if (dba == null) {
+//				String msg = "Missing database abstraction '" + dbaName + "'";
+//				logger.severe(msg);
+//				throw new IllegalStateException(msg);
+//			}
+//			dbas.add(dba);
+//		}
+//		DatabaseAbstraction[] retVal =
+//			dbas.toArray(new DatabaseAbstraction[dbas.size()]);
+//		return retVal;
+//	}
+//
+//	private static DatabaseAbstraction getDatabaseAbtraction(String das)
+//			throws E2Exception {
+//		assert das != null && !das.isEmpty();
+//		CMExtension dbExtension =
+//			CMPlatformUtils.getExtension(DatabaseAbstraction.EXTENSION_POINT,
+//					das);
+//		CMConfigurationElement[] configurationElements =
+//			dbExtension.getConfigurationElements();
+//		CMConfigurationElement classConfiguration = configurationElements[0];
+//		DatabaseAbstraction databaseAbstraction =
+//			(DatabaseAbstraction) classConfiguration
+//					.createExecutableExtension("class");
+//		return databaseAbstraction;
+//	}
 
 }

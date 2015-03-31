@@ -30,6 +30,8 @@ import com.choicemaker.cm.io.blocking.automated.AbaStatistics;
 import com.choicemaker.cm.io.blocking.automated.base.db.DbbCountsCreator;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.AbaStatisticsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SqlRecordSourceController;
+import com.choicemaker.cm.io.db.base.DatabaseAbstraction;
+import com.choicemaker.cm.io.db.base.DatabaseAbstractionManager;
 
 @Singleton
 public class AbaStatisticsSingleton implements AbaStatisticsController {
@@ -80,11 +82,13 @@ public class AbaStatisticsSingleton implements AbaStatisticsController {
 			log.severe(msg);
 			throw new DatabaseException(msg, e);
 		}
+		DatabaseAbstractionManager mgr = new AggregateDatabaseAbstractionManager();
+		DatabaseAbstraction dba = mgr.lookupDatabaseAbstraction(ds);
 		DbbCountsCreator countsCreator = new DbbCountsCreator();
 		try {
 			countsCreator.install(ds);
-			countsCreator.create(ds, false);
-			countsCreator.setCacheCountSources(ds, this);
+			countsCreator.create(ds, dba, false);
+			countsCreator.setCacheCountSources(ds, dba, this);
 		} catch (SQLException e) {
 			String msg =
 				"Unable to compute ABA statistics for '" + urlString + "': "

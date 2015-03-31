@@ -20,6 +20,7 @@ import java.util.SortedSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.choicemaker.cm.core.DatabaseException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.base.Match;
@@ -92,7 +93,7 @@ public class OnlineMatchAnalyzerBean extends OnlineMatchBaseBean {
 									RecordCollectionException,
 									ConfigException,
 									CmRuntimeException,
-									RemoteException, SQLException
+									RemoteException, SQLException, DatabaseException
  	 {
 		ArrayList  evalRecords = new ArrayList();					
 		

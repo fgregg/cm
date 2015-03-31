@@ -7,8 +7,6 @@ import static com.choicemaker.cm.core.ProbabilityModelConfiguration.AN_DATABASE_
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.net.MalformedURLException;
@@ -19,13 +17,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
-import com.choicemaker.cm.core.ModelConfigurationException;
-import com.choicemaker.cm.core.ProbabilityModelConfiguration;
-import com.choicemaker.cm.core.base.DefaultProbabilityModelManager;
-import com.choicemaker.cm.core.base.MutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.core.compiler.DoNothingCompiler;
 import com.choicemaker.cm.core.compiler.ICompiler;

@@ -15,21 +15,23 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
 
+import com.choicemaker.cm.core.DatabaseException;
 // import com.choicemaker.cm.compiler.impl.CompilerFactory;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.io.blocking.automated.AbaStatisticsCache;
 import com.choicemaker.cm.io.blocking.automated.BlockingAccessor;
 import com.choicemaker.cm.io.blocking.automated.DatabaseAccessor;
-import com.choicemaker.cm.io.blocking.automated.base.db.DatabaseAbstraction;
 import com.choicemaker.cm.io.blocking.automated.base.db.DbbCountsCreator;
 import com.choicemaker.cm.io.db.base.DataSources;
+import com.choicemaker.cm.io.db.base.DatabaseAbstraction;
+import com.choicemaker.cm.io.db.base.DatabaseAbstractionManager;
 import com.choicemaker.cm.io.db.base.DbAccessor;
 import com.choicemaker.cm.io.db.base.DbReaderSequential;
 import com.choicemaker.cm.io.db.base.xmlconf.ConnectionPoolDataSourceXmlConf;
 import com.choicemaker.cm.io.db.sqlserver.RecordReader;
-import com.choicemaker.cm.io.db.sqlserver.blocking.SqlDatabaseAbstraction;
 import com.choicemaker.cm.io.db.sqlserver.blocking.SqlDatabaseAccessor;
+import com.choicemaker.cm.io.db.sqlserver.blocking.SqlServerDatabaseAbstractionManager;
 
 /**
  * @author ajwinkel
@@ -79,7 +81,7 @@ public class SqlServerUtils {
 
 	static void maybeUpdateCounts(DataSource ds, ImmutableProbabilityModel model,
 			AbaStatisticsCache statsCache)
-			throws SQLException {
+			throws SQLException, DatabaseException {
 		
 		if (model == lastModel &&
 			ds == lastDs &&
@@ -92,12 +94,13 @@ public class SqlServerUtils {
 			return;
 		}
 
+		DatabaseAbstractionManager mgr = new SqlServerDatabaseAbstractionManager();
+		DatabaseAbstraction dba = mgr.lookupDatabaseAbstraction(ds);
 		DbbCountsCreator cr = new DbbCountsCreator();
 		cr.install(ds);
-		DatabaseAbstraction dba = new SqlDatabaseAbstraction();
 		// "true" means to do them only if we haven't done them before...
 		cr.create(ds, dba, true);
-		cr.setCacheCountSources(ds, statsCache);
+		cr.setCacheCountSources(ds, dba, statsCache);
 		
 		lastModel = model;
 		lastDs = ds;

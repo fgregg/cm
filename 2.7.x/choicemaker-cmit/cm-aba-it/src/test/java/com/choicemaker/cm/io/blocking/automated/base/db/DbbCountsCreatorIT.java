@@ -25,7 +25,6 @@ import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.db.base.DataSources;
 import com.choicemaker.cm.io.db.base.xmlconf.ConnectionPoolDataSourceXmlConf;
-import com.choicemaker.demo.simple_person_matching.SimplePersonPluginTesting;
 import com.choicemaker.e2.CMExtension;
 import com.choicemaker.e2.embed.EmbeddedPlatform;
 import com.choicemaker.e2.platform.CMPlatformUtils;

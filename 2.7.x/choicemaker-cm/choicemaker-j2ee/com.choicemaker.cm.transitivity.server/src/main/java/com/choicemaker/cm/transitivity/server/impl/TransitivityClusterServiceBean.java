@@ -46,6 +46,9 @@ import com.choicemaker.cm.io.blocking.automated.UnderspecifiedQueryException;
 import com.choicemaker.cm.io.blocking.automated.base.Blocker2;
 import com.choicemaker.cm.io.blocking.automated.base.db.DbbCountsCreator;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.AbaStatisticsController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.AggregateDatabaseAbstractionManager;
+import com.choicemaker.cm.io.db.base.DatabaseAbstraction;
+import com.choicemaker.cm.io.db.base.DatabaseAbstractionManager;
 import com.choicemaker.cm.transitivity.core.TransitivityException;
 import com.choicemaker.cm.transitivity.core.TransitivityResult;
 import com.choicemaker.cm.transitivity.server.util.MatchBiconnectedIterator;
@@ -257,10 +260,12 @@ public class TransitivityClusterServiceBean implements SessionBean {
 	}
 
 	private synchronized void init(DataSource dataSource)
-			throws XmlConfException, RemoteException, SQLException {
+			throws XmlConfException, RemoteException, SQLException, DatabaseException {
+		DatabaseAbstractionManager mgr = new AggregateDatabaseAbstractionManager();
+		DatabaseAbstraction dba = mgr.lookupDatabaseAbstraction(dataSource);
 		if (!inited) {
 			DbbCountsCreator countsCreator = new DbbCountsCreator();
-			countsCreator.setCacheCountSources(dataSource, statsController);
+			countsCreator.setCacheCountSources(dataSource, dba, statsController);
 			inited = true;
 		}
 	}
