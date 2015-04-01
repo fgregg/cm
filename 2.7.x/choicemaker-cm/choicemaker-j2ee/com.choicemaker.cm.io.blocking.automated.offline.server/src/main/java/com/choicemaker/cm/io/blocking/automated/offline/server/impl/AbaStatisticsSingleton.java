@@ -82,12 +82,15 @@ public class AbaStatisticsSingleton implements AbaStatisticsController {
 			log.severe(msg);
 			throw new DatabaseException(msg, e);
 		}
-		DatabaseAbstractionManager mgr = new AggregateDatabaseAbstractionManager();
+		DatabaseAbstractionManager mgr =
+			new AggregateDatabaseAbstractionManager();
 		DatabaseAbstraction dba = mgr.lookupDatabaseAbstraction(ds);
 		DbbCountsCreator countsCreator = new DbbCountsCreator();
 		try {
 			countsCreator.install(ds);
-			countsCreator.create(ds, dba, false);
+			final boolean neverComputeOnly = false;
+			final boolean commitChanges = false;
+			countsCreator.create(ds, dba, neverComputeOnly, commitChanges);
 			countsCreator.setCacheCountSources(ds, dba, this);
 		} catch (SQLException e) {
 			String msg =

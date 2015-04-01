@@ -220,7 +220,9 @@ public class CmServerAdminBean implements SessionBean {
 			DatabaseAbstraction dba = mgr.lookupDatabaseAbstraction(ds);
 			DbbCountsCreator countsCreator = new DbbCountsCreator();
 			countsCreator.install(ds);
-			countsCreator.create(ds, dba, false);
+			final boolean neverComputeOnly = false;
+			final boolean commitChanges = false;
+			countsCreator.create(ds, dba, neverComputeOnly, commitChanges);
 			countsCreator.setCacheCountSources(ds, dba, statsController);
 		} catch (NamingException e) {
 			log.severe(e.toString());

@@ -108,8 +108,8 @@ public class AbaStatisticsControllerIT {
 	private ServerConfigurationController serverController;
 
 	@EJB
-	private AbaStatisticsController statsController;	
-	
+	private AbaStatisticsController statsController;
+
 	TestEntityCounts te;
 
 	WellKnownTestConfiguration getTestConfiguration() {
@@ -181,7 +181,8 @@ public class AbaStatisticsControllerIT {
 		final String METHOD = "testUpdateMasterAbaStatistics";
 		OabaParameters params = createPersistentOabaParameters(METHOD);
 		String modelName = params.getModelConfigurationName();
-		ImmutableProbabilityModel model = PMManager.getImmutableModelInstance(modelName);
+		ImmutableProbabilityModel model =
+			PMManager.getImmutableModelInstance(modelName);
 		AbaStatistics stats = statsController.getStatistics(model);
 		assertTrue(stats != null);
 		checkCounts();

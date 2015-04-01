@@ -10,6 +10,8 @@
  */
 package com.choicemaker.cm.io.blocking.automated.base.db;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -47,19 +49,19 @@ public class DbbCountsCreator {
 
 	private static Logger logger = Logger.getLogger(DbbCountsCreator.class
 			.getName());
-	
-//	private final DatabaseAbstractionManager databaseAbstractionManager;
-//	
-//	public DbbCountsCreator(DatabaseAbstractionManager mgr) {
-//		if (mgr == null) {
-//			throw new IllegalArgumentException("null database abstraction manager");
-//		}
-//		this.databaseAbstractionManager = mgr;
-//	}
-//
-//	public DatabaseAbstractionManager getDatabaseAbstractionManager() {
-//		return databaseAbstractionManager;
-//	}
+
+	// private final DatabaseAbstractionManager databaseAbstractionManager;
+	//
+	// public DbbCountsCreator(DatabaseAbstractionManager mgr) {
+	// if (mgr == null) {
+	// throw new IllegalArgumentException("null database abstraction manager");
+	// }
+	// this.databaseAbstractionManager = mgr;
+	// }
+	//
+	// public DatabaseAbstractionManager getDatabaseAbstractionManager() {
+	// return databaseAbstractionManager;
+	// }
 
 	public void install(DataSource ds) throws SQLException {
 		final String METHOD = "DbbCountsCreator.install: ";
@@ -262,14 +264,21 @@ public class DbbCountsCreator {
 		logger.info("DEBUG " + METHOD + "exiting");
 	}
 
-//	public void create(DataSource ds, boolean neverComputedOnly)
-//			throws SQLException {
-//		DatabaseAbstraction dba = getDatabaseAbstractionManager().lookupDatabaseAbstraction(ds);
-//		create(ds, dba, neverComputedOnly);
-//	}
+	// public void create(DataSource ds, boolean neverComputedOnly)
+	// throws SQLException {
+	// DatabaseAbstraction dba =
+	// getDatabaseAbstractionManager().lookupDatabaseAbstraction(ds);
+	// create(ds, dba, neverComputedOnly);
+	// }
 
 	public void create(DataSource ds, DatabaseAbstraction databaseAbstraction,
 			boolean neverComputedOnly) throws SQLException {
+		create(ds, databaseAbstraction, neverComputedOnly, true);
+	}
+
+	public void create(DataSource ds, DatabaseAbstraction databaseAbstraction,
+			boolean neverComputedOnly, boolean commitChanges)
+			throws SQLException {
 		final String METHOD = "DbbCountsCreator.create: ";
 		if (ds == null) {
 			throw new IllegalArgumentException(METHOD + "null data source");
@@ -280,6 +289,9 @@ public class DbbCountsCreator {
 		}
 		logger.info("DEBUG " + METHOD + "entering");
 
+		// Debugging
+		String _latest_query = null;
+
 		// BUG 2009-08-21 rphall
 		// This method may fail if two CM Server instances use the same database
 		// simultaneously.
@@ -288,7 +300,9 @@ public class DbbCountsCreator {
 		try {
 			connection = ds.getConnection();
 			stmt = connection.createStatement();
-			stmt.execute(databaseAbstraction.getSetDateFormatExpression());
+			String q0 = databaseAbstraction.getSetDateFormatExpression();
+			_latest_query = q0;
+			stmt.execute(q0);
 			String delete;
 			String query;
 			if (neverComputedOnly) {
@@ -318,8 +332,10 @@ public class DbbCountsCreator {
 				// END DESIGN BUG
 			}
 			logger.info("DEBUG " + delete);
+			_latest_query = delete;
 			stmt.execute(delete);
 			logger.info("DEBUG " + query);
+			_latest_query = query;
 			ResultSet rs = stmt.executeQuery(query);
 			List<String> l = new ArrayList<>();
 			while (rs.next()) {
@@ -342,6 +358,7 @@ public class DbbCountsCreator {
 								+ ", 'table', COUNT(DISTINCT " + uniqueId
 								+ ") FROM " + table;
 					logger.info("DEBUG " + query);
+					_latest_query = query;
 					stmt.execute(query);
 
 				} else {
@@ -349,6 +366,7 @@ public class DbbCountsCreator {
 					query =
 						"SELECT " + column + " FROM " + table + " WHERE 0 = 1";
 					logger.info("DEBUG " + query);
+					_latest_query = query;
 					ResultSet tmpRs = stmt.executeQuery(query);
 					int columnType = tmpRs.getMetaData().getColumnType(1);
 					boolean isDate =
@@ -368,6 +386,7 @@ public class DbbCountsCreator {
 								+ " HAVING COUNT(" + uniqueId + ") > "
 								+ minCount;
 					logger.info("DEBUG " + query);
+					_latest_query = query;
 					stmt.execute(query);
 				}
 
@@ -376,10 +395,31 @@ public class DbbCountsCreator {
 							+ databaseAbstraction.getSysdateExpression()
 							+ " WHERE FieldId = " + fieldId;
 				logger.info("DEBUG " + query);
+				_latest_query = query;
 				stmt.execute(query);
 
-				connection.commit();
+				if (commitChanges) {
+					logger.info(METHOD + "commiting ABA statistics to DB");
+					connection.commit();
+				} else {
+					String msg =
+						"skipping commit of ABA statistics to DB "
+								+ "-- assuming a managed connection will "
+								+ "automagically commit them instead.";
+					logger.info(METHOD + msg);
+				}
 			}
+
+		} catch (SQLException e) {
+			StringWriter sw = new StringWriter();
+			PrintWriter pw = new PrintWriter(sw);
+			String msg =
+				METHOD + "Unable to create ABA statistics: " + e.toString();
+			pw.println(msg);
+			pw.println("   LATEST QUERY: " + _latest_query);
+			msg = sw.toString();
+			logger.severe(msg);
+			throw e;
 
 		} finally {
 			if (stmt != null) {
@@ -608,52 +648,52 @@ public class DbbCountsCreator {
 		return res;
 	}
 
-//	private static DatabaseAbstraction[] getDatabaseAbstractions(
-//			ImmutableProbabilityModel[] models) throws E2Exception {
-//		Set<String> dbaNames = new HashSet<>();
-//		for (ImmutableProbabilityModel model : models) {
-//			final String dbaName = model.getDatabaseAbstractionName();
-//			if (dbaName == null) {
-//				String msg =
-//					"Missing name of database abstraction for model '"
-//							+ model.getModelName() + "'";
-//				logger.warning(msg);
-//			}
-//			dbaNames.add(dbaName);
-//		}
-//		if (dbaNames.isEmpty()) {
-//			String msg = "No database abstractions configured for any model.";
-//			logger.severe(msg);
-//			throw new IllegalStateException(msg);
-//		}
-//		List<DatabaseAbstraction> dbas = new ArrayList<>();
-//		for (String dbaName : dbaNames) {
-//			DatabaseAbstraction dba = getDatabaseAbtraction(dbaName);
-//			if (dba == null) {
-//				String msg = "Missing database abstraction '" + dbaName + "'";
-//				logger.severe(msg);
-//				throw new IllegalStateException(msg);
-//			}
-//			dbas.add(dba);
-//		}
-//		DatabaseAbstraction[] retVal =
-//			dbas.toArray(new DatabaseAbstraction[dbas.size()]);
-//		return retVal;
-//	}
-//
-//	private static DatabaseAbstraction getDatabaseAbtraction(String das)
-//			throws E2Exception {
-//		assert das != null && !das.isEmpty();
-//		CMExtension dbExtension =
-//			CMPlatformUtils.getExtension(DatabaseAbstraction.EXTENSION_POINT,
-//					das);
-//		CMConfigurationElement[] configurationElements =
-//			dbExtension.getConfigurationElements();
-//		CMConfigurationElement classConfiguration = configurationElements[0];
-//		DatabaseAbstraction databaseAbstraction =
-//			(DatabaseAbstraction) classConfiguration
-//					.createExecutableExtension("class");
-//		return databaseAbstraction;
-//	}
+	// private static DatabaseAbstraction[] getDatabaseAbstractions(
+	// ImmutableProbabilityModel[] models) throws E2Exception {
+	// Set<String> dbaNames = new HashSet<>();
+	// for (ImmutableProbabilityModel model : models) {
+	// final String dbaName = model.getDatabaseAbstractionName();
+	// if (dbaName == null) {
+	// String msg =
+	// "Missing name of database abstraction for model '"
+	// + model.getModelName() + "'";
+	// logger.warning(msg);
+	// }
+	// dbaNames.add(dbaName);
+	// }
+	// if (dbaNames.isEmpty()) {
+	// String msg = "No database abstractions configured for any model.";
+	// logger.severe(msg);
+	// throw new IllegalStateException(msg);
+	// }
+	// List<DatabaseAbstraction> dbas = new ArrayList<>();
+	// for (String dbaName : dbaNames) {
+	// DatabaseAbstraction dba = getDatabaseAbtraction(dbaName);
+	// if (dba == null) {
+	// String msg = "Missing database abstraction '" + dbaName + "'";
+	// logger.severe(msg);
+	// throw new IllegalStateException(msg);
+	// }
+	// dbas.add(dba);
+	// }
+	// DatabaseAbstraction[] retVal =
+	// dbas.toArray(new DatabaseAbstraction[dbas.size()]);
+	// return retVal;
+	// }
+	//
+	// private static DatabaseAbstraction getDatabaseAbtraction(String das)
+	// throws E2Exception {
+	// assert das != null && !das.isEmpty();
+	// CMExtension dbExtension =
+	// CMPlatformUtils.getExtension(DatabaseAbstraction.EXTENSION_POINT,
+	// das);
+	// CMConfigurationElement[] configurationElements =
+	// dbExtension.getConfigurationElements();
+	// CMConfigurationElement classConfiguration = configurationElements[0];
+	// DatabaseAbstraction databaseAbstraction =
+	// (DatabaseAbstraction) classConfiguration
+	// .createExecutableExtension("class");
+	// return databaseAbstraction;
+	// }
 
 }
