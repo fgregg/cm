@@ -7,46 +7,22 @@
 
   <parent>
     <groupId>com.choicemaker.cm</groupId>
-    <artifactId>choicemaker-j2ee</artifactId>
+    <artifactId>choicemaker-common</artifactId>
     <version>2.7.1-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
-  <artifactId>com.choicemaker.cm.io.blocking.automated.offline.server</artifactId>
+  <artifactId>com.choicemaker.cm.io.db.jboss</artifactId>
   <packaging>jar</packaging>
-  <name>ChoiceMaker Offline Matching (OABA Server)</name>
+  <name>ChoiceMaker I/O: JBoss DB Wrapper</name>
 
   <properties>
-		<!-- JBoss dependency versions -->
-    <version.org.jboss.as.plugins.maven.plugin>7.3.Final</version.org.jboss.as.plugins.maven.plugin>
-    <version.org.jboss.spec.jboss.javaee.6.0>3.0.0.Final</version.org.jboss.spec.jboss.javaee.6.0>
-
-		<!-- maven-compiler-plugin -->
-    <plugin.maven-compiler.version>3.1</plugin.maven-compiler.version>
-    <plugin.maven-compiler.compilerVersion>1.7</plugin.maven-compiler.compilerVersion>
-    <plugin.maven-compiler.source>1.7</plugin.maven-compiler.source>
-    <plugin.maven-compiler.target>1.7</plugin.maven-compiler.target>
-
-		<!-- other plugin versions -->
-    <plugin.ejb.version>2.3</plugin.ejb.version>
-    <version.org.jboss.spec.jboss.javaee.7.0>1.0.0.Final</version.org.jboss.spec.jboss.javaee.7.0>
-
-    <!-- Eclipse 2 plugin parameters -->
-    <eclipse.plugin.runtime.library.name>oaba-server.jar</eclipse.plugin.runtime.library.name>
-    <eclipse.plugin.src.zip.name>oaba-serversrc.zip</eclipse.plugin.src.zip.name>
+    <eclipse.plugin.runtime.library.name>cm-jboss.jar</eclipse.plugin.runtime.library.name>
+    <eclipse.plugin.src.zip.name>cmjbosssrc.zip</eclipse.plugin.src.zip.name>
   </properties>
 
   <build>
     <plugins>
-
-      <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <source>1.7</source>
-          <target>1.7</target>
-        </configuration>
-      </plugin>
-
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>build-helper-maven-plugin</artifactId>
@@ -135,43 +111,10 @@
     </plugins>
   </build>
 
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.jboss.spec</groupId>
-        <artifactId>jboss-javaee-7.0</artifactId>
-        <version>
-        ${version.org.jboss.spec.jboss.javaee.7.0}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
-
   <dependencies>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.args</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.batch</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.core</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.io.blocking.automated.base</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.io.blocking.automated.offline</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.io.blocking.automated.offline.core</artifactId>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
@@ -179,49 +122,16 @@
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.io.flatfile.base</artifactId>
+      <artifactId>com.choicemaker.cm.io.db.oracle</artifactId>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.io.xml.base</artifactId>
+      <artifactId>com.choicemaker.cm.io.db.sqlserver</artifactId>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.ml.me.base</artifactId>
+      <artifactId>com.choicemaker.cm.io.blocking.automated.base</artifactId>
     </dependency>
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-collections4</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.persistence</groupId>
-      <artifactId>javax.persistence</artifactId>
-      <version>2.1.0</version>
-    </dependency>
-    <dependency>
-      <groupId>javax</groupId>
-      <artifactId>javaee-api</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <scope>test</scope>
-    </dependency>
-<!-- HACK -->
-    <dependency>
-      <groupId>org.jboss.spec</groupId>
-      <artifactId>jboss-javaee-7.0</artifactId>
-      <version>${version.org.jboss.spec.jboss.javaee.7.0}</version>
-      <type>pom</type>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.jboss.ironjacamar</groupId>
-      <artifactId>ironjacamar-jdbc</artifactId>
-      <version>${version.org.jboss.spec.jboss.javaee.7.0}</version>
-    </dependency>
-<!-- END HACK -->
   </dependencies>
 
 </project>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+   id="com.choicemaker.cm.io.db.jboss"
+   name="JBoss DB Wrapper Plug-in"
+   version="2.7.0"
+   provider-name="ChoiceMaker LLC">
+
+   <runtime>
+      <library name="cm-jboss.jar">
+         <export name="*"/>
+      </library>
+   </runtime>
+   <requires>
+      <import plugin="com.choicemaker.cm.core"/>
+      <import plugin="com.choicemaker.cm.compiler"/>
+      <import plugin="com.choicemaker.cm.io.db.base"/>
+      <import plugin="com.choicemaker.cm.io.db.oracle"/>
+      <import plugin="com.choicemaker.cm.io.db.sqlserver"/>
+      <import plugin="com.choicemaker.cm.io.blocking.automated.base"/>
+      <import plugin="com.choicemaker.cm.io.composite.base"/>
+   </requires>
+
+</plugin>

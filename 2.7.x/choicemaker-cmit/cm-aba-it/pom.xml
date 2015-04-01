@@ -379,21 +379,6 @@
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.mmdevtools</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.modelmaker</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.module</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.wcohen.ss</artifactId>
       <scope>test</scope>
     </dependency>

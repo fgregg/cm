@@ -999,6 +999,18 @@
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
+        <artifactId>com.choicemaker.cm.io.db.jboss</artifactId>
+        <version>${choicemaker.current.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
+        <artifactId>com.choicemaker.cm.io.db.jboss</artifactId>
+        <version>${choicemaker.current.version}</version>
+        <classifier>eclipse2prj</classifier>
+        <type>zip</type>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.io.db.oracle</artifactId>
         <version>${choicemaker.current.version}</version>
       </dependency>
