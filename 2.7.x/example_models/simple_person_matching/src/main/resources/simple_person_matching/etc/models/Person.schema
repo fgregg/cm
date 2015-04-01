@@ -20,7 +20,7 @@
         <field name="entityId" type="int">
             <dbField type="int" name="entity_id"/>
         </field>
-        <field name="recordId" key="true" type="int">
+        <field name="record_id" key="true" type="int">
             <dbField key="true" type="int" name="record_id"/>
             <blockingField key="true"/>
         </field>
