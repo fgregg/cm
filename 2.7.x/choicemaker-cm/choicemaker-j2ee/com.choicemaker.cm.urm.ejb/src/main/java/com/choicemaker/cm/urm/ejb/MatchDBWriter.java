@@ -67,7 +67,7 @@ public class MatchDBWriter {
 		Connection connWrite = null;		
 		try {
 			connWrite = ds.getConnection();
-			connWrite.setAutoCommit(false);
+//			connWrite.setAutoCommit(false); // 2015-04-01a EJB3 CHANGE rphall
 			
 			truncatePairsTable(connWrite);
 			

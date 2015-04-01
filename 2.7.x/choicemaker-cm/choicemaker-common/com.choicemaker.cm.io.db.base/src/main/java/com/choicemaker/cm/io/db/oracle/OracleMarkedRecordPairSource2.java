@@ -107,7 +107,7 @@ public class OracleMarkedRecordPairSource2 implements MarkedRecordPairSource {
 			dbr = ((DbAccessor) model.getAccessor()).getDbReaderParallel(conf);
 			int noCursors = dbr.getNoCursors();
 			conn = ds.getConnection();
-			conn.setAutoCommit(false);
+//			conn.setAutoCommit(false); // 2015-04-01a EJB3 CHANGE rphall
 			//((OracleConnection) conn).setDefaultRowPrefetch(100);
 			String sql = "call CMTTRAINING.ACCESS_SNAPSHOT (?,?,?,?)";
 			stmt = conn.prepareCall(sql);

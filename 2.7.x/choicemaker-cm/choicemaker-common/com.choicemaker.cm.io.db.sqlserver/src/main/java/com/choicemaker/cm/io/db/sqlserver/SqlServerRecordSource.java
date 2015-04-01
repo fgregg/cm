@@ -65,7 +65,7 @@ public class SqlServerRecordSource implements RecordSource {
 		try {
 			if (connection == null) {
 				connection = ds.getConnection();
-				connection.setAutoCommit(true);
+//				connection.setAutoCommit(true); // 2015-04-01a EJB3 CHANGE rphall
 			}
 			//connection.setAutoCommit(false);
 			connection.setReadOnly(true);

@@ -25,7 +25,6 @@ import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
 import javax.sql.DataSource;
 
-import com.choicemaker.cm.args.AbaSettings;
 import com.choicemaker.cm.args.BatchProcessingEvent;
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
@@ -132,7 +131,7 @@ public class SingleRecordMatchMDB extends AbstractOabaMDB {
 
 		// run single record match between stage and master.
 		t = System.currentTimeMillis();
-		handleSingleMatching(data, mSink, batchJob, params);
+		handleSingleMatching(data, mSink, batchJob, params, settings);
 		log.info("Msecs in single matching " + (System.currentTimeMillis() - t));
 
 		String cachedFileName = mSink.getInfo();
@@ -335,7 +334,8 @@ public class SingleRecordMatchMDB extends AbstractOabaMDB {
 	 */
 	private void handleSingleMatching(OabaJobMessage data,
 			IMatchRecord2Sink mSinkFinal, BatchJob batchJob,
-			OabaParameters params) throws BlockingException {
+			OabaParameters params, OabaSettings settings)
+			throws BlockingException {
 
 		final String modelConfigId = params.getModelConfigurationName();
 		ImmutableProbabilityModel model =
@@ -366,34 +366,46 @@ public class SingleRecordMatchMDB extends AbstractOabaMDB {
 			log.severe(msg);
 			throw e;
 		}
-		assert masterDS != null;
+		// assert masterDS != null;
 
-		// Staging is never used for ABA statistics
-//		// Cache ABA statistics for field-value counts
-//		log.info("Caching ABA statistic for staging records..");
-//		try {
-//			DbbCountsCreator cc = new DbbCountsCreator();
-//			cc.setCacheCountSources(stageDS, getAbaStatisticsController());
-//		} catch (SQLException e) {
-//			String msg = "Unable to cache staging ABA statistics: " + e;
-//			log.severe(msg);
-//			throw new BlockingException(msg);
-//		}
-//		log.info("... finished caching ABA statistics for staging records.");
+		// Staging is used for ABA statistics only if the master source
+		// isn't being used (i.e. it is null)
+		if (masterDS != null) {
+			// Cache ABA statistics for field-value counts from master
+			log.info("Caching ABA statistic for master records..");
+			try {
+				DatabaseAbstractionManager mgr =
+					new AggregateDatabaseAbstractionManager();
+				DatabaseAbstraction dba =
+					mgr.lookupDatabaseAbstraction(masterDS);
+				DbbCountsCreator cc = new DbbCountsCreator();
+				cc.setCacheCountSources(masterDS, dba,
+						getAbaStatisticsController());
+			} catch (SQLException | DatabaseException e) {
+				String msg = "Unable to cache master ABA statistics: " + e;
+				log.severe(msg);
+				throw new BlockingException(msg);
+			}
+			log.info("... finished caching ABA statistics for master records.");
 
-		// Cache ABA statistics for field-value counts
-		log.info("Caching ABA statistic for master records..");
-		try {
-			DatabaseAbstractionManager mgr = new AggregateDatabaseAbstractionManager();
-			DatabaseAbstraction dba = mgr.lookupDatabaseAbstraction(masterDS);
-			DbbCountsCreator cc = new DbbCountsCreator();
-			cc.setCacheCountSources(masterDS, dba, getAbaStatisticsController());
-		} catch (SQLException | DatabaseException e) {
-			String msg = "Unable to cache master ABA statistics: " + e;
-			log.severe(msg);
-			throw new BlockingException(msg);
+		} else {
+			// Cache ABA statistics for field-value counts from staging
+			log.info("Caching ABA statistic for staging records..");
+			try {
+				DatabaseAbstractionManager mgr =
+					new AggregateDatabaseAbstractionManager();
+				DatabaseAbstraction dba =
+					mgr.lookupDatabaseAbstraction(stageDS);
+				DbbCountsCreator cc = new DbbCountsCreator();
+				cc.setCacheCountSources(stageDS, dba,
+						getAbaStatisticsController());
+			} catch (SQLException | DatabaseException e) {
+				String msg = "Unable to cache staging ABA statistics: " + e;
+				log.severe(msg);
+				throw new BlockingException(msg);
+			}
+			log.info("... finished caching ABA statistics for staging records.");
 		}
-		log.info("... finished caching ABA statistics for master records.");
 
 		String dbaName = model.getDatabaseAccessorName();
 		CMExtension dbaExt =
@@ -410,7 +422,11 @@ public class SingleRecordMatchMDB extends AbstractOabaMDB {
 		}
 		assert databaseAccessor != null;
 		databaseAccessor.setCondition("");
-		databaseAccessor.setDataSource(stageDS);
+		if (masterDS != null) {
+			databaseAccessor.setDataSource(masterDS);
+		} else {
+			databaseAccessor.setDataSource(stageDS);
+		}
 
 		RecordSource stage = null;
 		try {
@@ -455,13 +471,10 @@ public class SingleRecordMatchMDB extends AbstractOabaMDB {
 
 			while (stage.hasNext()) {
 				Record q = stage.getNext();
-				// FIXME temporary HACK
-				AbaSettings FIXME = null;
-				// END FIXME
 				AbaStatistics stats =
 					getAbaStatisticsController().getStatistics(model);
 				AutomatedBlocker rs =
-					new Blocker2(databaseAccessor, model, q, FIXME, stats);
+					new Blocker2(databaseAccessor, model, q, settings, stats);
 				log.fine(q.getId() + " " + rs + " " + model);
 
 				SortedSet<Match> s =
@@ -525,15 +538,12 @@ public class SingleRecordMatchMDB extends AbstractOabaMDB {
 
 	@Override
 	protected void notifyProcessingCompleted(OabaJobMessage data) {
-		// FIXME
-		// MessageBeanUtils.sendStartData(data, getJmsContext(), dedupQueue,
-		// getLogger());
+		// No further processing, so no notification
 	}
 
 	@Override
-	protected OabaProcessingEvent getCompletionEvent() {
-		// FIXME
-		return null;
+	protected BatchProcessingEvent getCompletionEvent() {
+		return BatchProcessingEvent.DONE;
 	}
 
 }

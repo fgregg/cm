@@ -63,7 +63,7 @@ public class OabaPairResultControllerBean implements OabaPairResultController {
 		try {
 			connection = em.unwrap(Connection.class);
 			connection.setReadOnly(true);
-			connection.setAutoCommit(true);
+//			connection.setAutoCommit(true); // 2015-04-01a EJB3 CHANGE rphall
 			String query = createRecordCountQuery(job);
 			logger.fine(query);
 
@@ -139,7 +139,7 @@ public class OabaPairResultControllerBean implements OabaPairResultController {
 		try {
 			connection = em.unwrap(Connection.class);
 			connection.setReadOnly(true);
-			connection.setAutoCommit(true);
+//			connection.setAutoCommit(true); // 2015-04-01a EJB3 CHANGE rphall
 			String query = createRecordIdTypeQuery(job);
 			logger.fine(query);
 

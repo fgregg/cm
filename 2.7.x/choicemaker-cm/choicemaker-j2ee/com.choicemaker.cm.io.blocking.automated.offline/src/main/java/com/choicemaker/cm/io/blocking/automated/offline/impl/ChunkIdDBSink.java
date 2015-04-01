@@ -141,7 +141,7 @@ public class ChunkIdDBSink implements IChunkRecordIdSink {
 	public void open() throws BlockingException {
 		try {
 			conn = ds.getConnection();
-			conn.setAutoCommit(false);
+//			conn.setAutoCommit(false); // 2015-04-01a EJB3 CHANGE rphall
 			insertStmt = conn.prepareStatement(INSERT_SQL);
 
 			// need to get rid of old data on the data for this group ID.
@@ -163,7 +163,7 @@ public class ChunkIdDBSink implements IChunkRecordIdSink {
 	public void append() throws BlockingException {
 		try {
 			conn = ds.getConnection();
-			conn.setAutoCommit(false);
+//			conn.setAutoCommit(false); // 2015-04-01a EJB3 CHANGE rphall
 			insertStmt = conn.prepareStatement(INSERT_SQL);
 		} catch (SQLException ex) {
 			throw new BlockingException(ex.toString());

@@ -147,7 +147,7 @@ public class SqlServerCompositeRecordSource implements RecordSource {
 
 		if (connection == null) {
 			connection = ds.getConnection();
-			connection.setAutoCommit(true);
+//			connection.setAutoCommit(true); // 2015-04-01a EJB3 CHANGE rphall
 			connection.setReadOnly(true);
 		}
 		stmt = connection.createStatement();
@@ -199,7 +199,7 @@ public class SqlServerCompositeRecordSource implements RecordSource {
 
 		if (connection == null) {
 			connection = ds.getConnection();
-			connection.setAutoCommit(true);
+//			connection.setAutoCommit(true); // 2015-04-01a EJB3 CHANGE rphall
 			connection.setReadOnly(true);
 		}
 

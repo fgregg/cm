@@ -1,7 +1,7 @@
 package com.choicemaker.cmit.oaba.srm;
 
-import static com.choicemaker.cm.args.BatchProcessing.EVT_INIT;
-import static com.choicemaker.cm.args.BatchProcessing.PCT_INIT;
+import static com.choicemaker.cm.args.BatchProcessing.EVT_DONE;
+import static com.choicemaker.cm.args.BatchProcessing.PCT_DONE;
 
 import java.util.logging.Logger;
 
@@ -43,9 +43,9 @@ public class SrmOabaServiceBeanIT extends
 	}
 
 	public SrmOabaServiceBeanIT() {
-		super(LOG_SOURCE, logger, EVT_INIT, PCT_INIT,
+		super(LOG_SOURCE, logger, EVT_DONE, PCT_DONE,
 				SimplePersonSqlServerSRMConfiguration.class,
-				BatchProcessingPhase.INITIAL);
+				BatchProcessingPhase.FINAL);
 	}
 
 	@Override

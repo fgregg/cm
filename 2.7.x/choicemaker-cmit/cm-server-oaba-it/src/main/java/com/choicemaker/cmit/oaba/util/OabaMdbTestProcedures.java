@@ -42,6 +42,8 @@ public class OabaMdbTestProcedures {
 	private static final Logger logger = Logger
 			.getLogger(OabaMdbTestProcedures.class.getName());
 
+	public static final long HACK_3X_LONG_TIMEOUT = 3 * LONG_TIMEOUT_MILLIS;
+
 	public static boolean isValidConfigurationClass(Class<?> c) {
 		boolean retVal = false;
 		if (c != null && WellKnownTestConfiguration.class.isAssignableFrom(c)) {
@@ -132,7 +134,7 @@ public class OabaMdbTestProcedures {
 		validateDestinations(oabaPhase, listeningQueue);
 
 		// Start the OABA processing job
-//		OabaLinkageType lt = test.getO
+		// OabaLinkageType lt = test.getO
 		BatchJob batchJob =
 			OabaTestUtils.startOabaJob(linkage, tag, otp, externalId);
 		assertTrue(batchJob != null);
@@ -143,7 +145,7 @@ public class OabaMdbTestProcedures {
 		// Find the OABA parameters associated with the job
 		final long jobId = batchJob.getId();
 		final OabaParametersController paramsController =
-				otp.getOabaParamsController();
+			otp.getOabaParamsController();
 		OabaParameters params =
 			paramsController.findOabaParametersByBatchJobId(jobId);
 		te.add(params);
@@ -187,7 +189,7 @@ public class OabaMdbTestProcedures {
 			} else if (oabaPhase == BatchProcessingPhase.FINAL) {
 				oabaNotification =
 					JmsUtils.receiveFinalBatchProcessingNotification(batchJob,
-							LOG_SOURCE, statusListener, LONG_TIMEOUT_MILLIS);
+							LOG_SOURCE, statusListener, HACK_3X_LONG_TIMEOUT);
 			} else {
 				throw new Error("unexpected phase: " + oabaPhase);
 			}

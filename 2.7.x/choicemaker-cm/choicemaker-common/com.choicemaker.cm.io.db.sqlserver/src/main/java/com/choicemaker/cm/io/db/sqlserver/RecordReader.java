@@ -67,7 +67,7 @@ public class RecordReader implements RecordSource {
 			if (connection == null) {
 				connection = ds.getConnection();
 			}
-			connection.setAutoCommit(false);
+//			connection.setAutoCommit(false); // 2015-04-01a EJB3 CHANGE rphall
 			stmt = connection.createStatement();
 			stmt.setFetchSize(100);
 			ResultSet rs = stmt.executeQuery(query);
@@ -91,12 +91,24 @@ public class RecordReader implements RecordSource {
 		}
 		if (ds != null) {
 			if (connection != null) {
-				try {
-					connection.commit();
-				} catch (java.sql.SQLException e) {
-					ex = e;
-					logger.severe("Commiting: " + e.toString());
-				}
+				// EJB3 CHANGE 2015-04-01 rphall
+				// Record readers are used sometimes used with EJB3 managed
+				// connections. In these cases, they should not be explicitly
+				// closed, but rather rely on the EJB3 container to do so.
+				//
+				// The rub is that a record reader may be used with non-managed
+				// connections. Because auto-commit is off, the connection
+				// must be committed by some other mechanism. The close method
+				// probably needs a boolean flag to indicate whether the
+				// connection needs to be committed, or a record reader needs
+				// to be constructed with such a flag.
+//				try {
+//					connection.commit();
+//				} catch (java.sql.SQLException e) {
+//					ex = e;
+//					logger.severe("Commiting: " + e.toString());
+//				}
+				// END EJB3 CHANGE
 				try {
 					connection.close();
 					connection = null;

@@ -77,11 +77,40 @@ public class SqlDatabaseAccessor implements DatabaseAccessor {
 		try {
 			query = getQuery(blocker, dbr);
 			connection = ds.getConnection();
-			connection.setAutoCommit(false);
+//			connection.setAutoCommit(false); // 2015-04-01a EJB3 CHANGE rphall
 			stmt = connection.createStatement();
 			stmt.setFetchSize(100);
 			logger.fine(query);
-			ResultSet rs = stmt.executeQuery(query);
+			// BUG 2015-04-01 rphall
+			// SQL query returns multiple result sets,
+			// 		but executeQuery can't handle more than one.
+			//ResultSet rs = stmt.executeQuery(query);
+			// BUGFIX: see
+			// How to Retrieve Multiple Result Sets from a Stored Procedure in JDBC
+			// http://links.rph.cx/m9jJav
+			ResultSet rs = null;
+			boolean isResultSet = stmt.execute(query);
+			int count = 0;
+			do {
+				if (isResultSet) {
+					rs = stmt.getResultSet();
+					break;
+				} else {
+					count = stmt.getUpdateCount();
+					if (count >= 0) {
+						String msg =
+							"Query returned update count == '" + count + "'";
+						logger.fine(msg);
+					} else {
+						String msg =
+							"Query '" + query + "' did not return a result set";
+						logger.severe(msg);
+						throw new SQLException(msg);
+					}
+				}
+				isResultSet = stmt.getMoreResults();
+			} while (isResultSet || count != -1);
+			// END BUGFIX
 			rs.setFetchSize(100);
 			dbr.open(rs, stmt);
 		} catch (SQLException ex) {
@@ -102,12 +131,18 @@ public class SqlDatabaseAccessor implements DatabaseAccessor {
 			logger.severe("Closing statement: " + e.toString());
 		}
 		if (connection != null) {
-			try {
-				connection.commit();
-			} catch (java.sql.SQLException e) {
-				ex = e;
-				logger.severe("Commiting: " + e.toString());
-			}
+			// EJB3 CHANGE 2015-04-01 rphall
+			// Database accessors are used only when blocking against a SQL
+			// database using EJB3 managed connections. They should not be
+			// explicitly closed, but rather rely on the EJB3 container to
+			// do so.
+//			try {
+//				connection.commit();
+//			} catch (java.sql.SQLException e) {
+//				ex = e;
+//				logger.severe("Commiting: " + e.toString());
+//			}
+			// END EJB3 CHANGE
 			try {
 				connection.close();
 				connection = null;

@@ -127,7 +127,7 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 		
 		try {
 			connection = ds.getConnection();
-			connection.setAutoCommit(false);
+//			connection.setAutoCommit(false); // 2015-04-01a EJB3 CHANGE rphall
 
 			if (startSession != null) {
 				Statement stmt = connection.createStatement();
@@ -250,12 +250,18 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 			logger.severe("Closing statement." + e.toString());
 		}
 		if (connection != null) {
-			try {
-				connection.commit();
-			} catch (java.sql.SQLException e) {
-				ex = e;
-				logger.severe("Commiting." + e.toString());
-			}
+			// EJB3 CHANGE 2015-04-01 rphall
+			// Database accessors are used only when blocking against a SQL
+			// database using EJB3 managed connections. They should not be
+			// explicitly closed, but rather rely on the EJB3 container to
+			// do so.
+//			try {
+//				connection.commit();
+//			} catch (java.sql.SQLException e) {
+//				ex = e;
+//				logger.severe("Commiting." + e.toString());
+//			}
+			// END EJB3 CHANGE
 			if (endSession != null) {
 				try {
 					Statement stmt = connection.createStatement();

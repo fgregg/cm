@@ -83,7 +83,7 @@ public class OracleRecordSource implements RecordSource {
 	public void open() throws IOException {
 		try {
 			conn = ds.getConnection();
-			conn.setAutoCommit(false);
+//			conn.setAutoCommit(false); // 2015-04-01a EJB3 CHANGE rphall
 
 //			System.out.println (" user: " + conn.getMetaData().getUserName());
 
