@@ -42,7 +42,7 @@ public class OabaMdbTestProcedures {
 	private static final Logger logger = Logger
 			.getLogger(OabaMdbTestProcedures.class.getName());
 
-	public static final long HACK_3X_LONG_TIMEOUT = 3 * LONG_TIMEOUT_MILLIS;
+	public static final long HACK_3X_LONG_TIMEOUT = 10 * LONG_TIMEOUT_MILLIS;
 
 	public static boolean isValidConfigurationClass(Class<?> c) {
 		boolean retVal = false;
