@@ -90,7 +90,7 @@ public class OabaTestUtils {
 		final OabaSettings updatedSettings;
 		if (!_os0.equals(_os1)) {
 			updatedSettings = test.getSettingsController().save(_os1);
-			te.add(_os1);
+			te.add(updatedSettings);
 		} else {
 			updatedSettings = _os0;
 		}
