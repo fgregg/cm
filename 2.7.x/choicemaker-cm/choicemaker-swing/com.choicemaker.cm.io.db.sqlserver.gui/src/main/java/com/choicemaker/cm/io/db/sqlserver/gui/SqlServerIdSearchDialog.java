@@ -20,6 +20,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.SortedSet;
+import java.util.logging.Logger;
 
 import javax.sql.DataSource;
 import javax.swing.BorderFactory;
@@ -63,6 +64,9 @@ import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 public class SqlServerIdSearchDialog extends JDialog {
 
 	private static final long serialVersionUID = 271L;
+	
+	private static final Logger logger = Logger
+			.getLogger(SqlServerIdSearchDialog.class.getName());
 
 	private static final int MIN_LPBS = 10;
 	private static final int MIN_STBSGL = MIN_LPBS;
@@ -304,6 +308,10 @@ public class SqlServerIdSearchDialog extends JDialog {
 		
 		// FIXME temporary HACK
 		AbaStatisticsCache statsCache = null;
+		String msg =
+			"SqlServerIdSearchDialog.findMatches: "
+					+ "HACK: Null cache for ABA statistics";
+		logger.severe(msg);
 		// END FIXME
 		try {
 			SqlServerUtils.maybeUpdateCounts(ds, model, statsCache);

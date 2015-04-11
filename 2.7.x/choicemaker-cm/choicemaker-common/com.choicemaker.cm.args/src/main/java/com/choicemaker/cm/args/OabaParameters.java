@@ -32,16 +32,22 @@ public interface OabaParameters extends PersistentObject, Serializable {
 
 	float getHighThreshold();
 
-	/** The staging record source (and its id) is never null */
-	long getStageRsId();
-
-	/** The staging record source (and its type) is never null */
-	String getStageRsType();
-
-	/** The master record source (and its id) may be null */
-	Long getMasterRsId();
-
-	/** The master record source (and its type) may be null */
-	String getMasterRsType();
+// Master/staging refactoring
+//
+//	/** The staging record source (and its id) is never null */
+//	long getStageRsId();
+//
+//	/** The staging record source (and its type) is never null */
+//	String getStageRsType();
+//
+//	/** The master record source (and its id) may be null */
+//	Long getMasterRsId();
+//
+//	/** The master record source (and its type) may be null */
+//	String getMasterRsType();
+	
+	MatchingConfiguration getMatchingConfiguration();
+	
+// END Master/staging refactoring
 
 }
