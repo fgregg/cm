@@ -124,15 +124,15 @@ public class StartOabaMDB extends AbstractOabaMDB {
 				getLogger().info(
 						"Match threshold: " + params.getHighThreshold());
 				getLogger().info(
-						"Staging record source id: " + params.getStageRsId());
+						"Staging record source id: " + params.getQueryRsId());
 				getLogger().info(
 						"Staging record source type: "
-								+ params.getStageRsType());
+								+ params.getQueryRsType());
 				getLogger().info(
-						"Master record source id: " + params.getMasterRsId());
+						"Master record source id: " + params.getReferenceRsId());
 				getLogger().info(
 						"Master record source type: "
-								+ params.getMasterRsType());
+								+ params.getReferenceRsType());
 				getLogger()
 						.info("Linkage type: " + params.getOabaLinkageType());
 

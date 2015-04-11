@@ -112,16 +112,16 @@ public class OabaServiceBean implements OabaService {
 			if (type == null) {
 				validityErrors.add("null task type");
 			}
-			if (bp.getStageRsType() == null) {
+			if (bp.getQueryRsType() == null) {
 				validityErrors.add("null staging source type");
 			}
 			if (OabaLinkageType.STAGING_DEDUPLICATION == type) {
-				if (bp.getMasterRsId() != null || bp.getMasterRsType() != null) {
+				if (bp.getReferenceRsId() != null || bp.getReferenceRsType() != null) {
 					validityErrors
 							.add("non-null master source parameter for a de-duplication task");
 				}
 			} else {
-				if (bp.getMasterRsId() == null || bp.getMasterRsType() == null) {
+				if (bp.getReferenceRsId() == null || bp.getReferenceRsType() == null) {
 					validityErrors
 							.add("null master source parameter for a linkage task");
 				}
@@ -182,14 +182,14 @@ public class OabaServiceBean implements OabaService {
 
 		OabaParameters submittedParams;
 		final OabaLinkageType task = bp.getOabaLinkageType();
-		if (bp.getMasterRsId() == null && bp.getMasterRsType() == null
+		if (bp.getReferenceRsId() == null && bp.getReferenceRsType() == null
 				&& OabaLinkageType.STAGING_DEDUPLICATION == task) {
 			submittedParams = bp;
 		} else {
 			submittedParams =
 				new OabaParametersEntity(bp.getModelConfigurationName(),
 						bp.getLowThreshold(), bp.getHighThreshold(),
-						bp.getStageRsId(), bp.getStageRsType(), null, null,
+						bp.getQueryRsId(), bp.getQueryRsType(), null, null,
 						OabaLinkageType.STAGING_DEDUPLICATION);
 		}
 

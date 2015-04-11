@@ -207,18 +207,18 @@ public class OabaTestUtils {
 
 		final OabaLinkageType linkage = params.getOabaLinkageType();
 		if (OabaLinkageType.STAGING_DEDUPLICATION == linkage) {
-			assertTrue(params.getMasterRsId() == null);
-			assertTrue(params.getMasterRsType() == null);
+			assertTrue(params.getReferenceRsId() == null);
+			assertTrue(params.getReferenceRsType() == null);
 		} else {
-			assertTrue(params.getMasterRsId() != null
-					&& params.getMasterRsId().equals(expected.getMasterRsId()));
-			assertTrue(params.getMasterRsType() != null
-					&& params.getMasterRsType().equals(
-							expected.getMasterRsType()));
+			assertTrue(params.getReferenceRsId() != null
+					&& params.getReferenceRsId().equals(expected.getReferenceRsId()));
+			assertTrue(params.getReferenceRsType() != null
+					&& params.getReferenceRsType().equals(
+							expected.getReferenceRsType()));
 		}
-		assertTrue(params.getStageRsId() == expected.getStageRsId());
-		assertTrue(params.getStageRsType() != null
-				&& params.getStageRsType().equals(expected.getStageRsType()));
+		assertTrue(params.getQueryRsId() == expected.getQueryRsId());
+		assertTrue(params.getQueryRsType() != null
+				&& params.getQueryRsType().equals(expected.getQueryRsType()));
 		assertTrue(params.getModelConfigurationName() != null
 				&& params.getModelConfigurationName().equals(
 						expected.getModelConfigurationName()));

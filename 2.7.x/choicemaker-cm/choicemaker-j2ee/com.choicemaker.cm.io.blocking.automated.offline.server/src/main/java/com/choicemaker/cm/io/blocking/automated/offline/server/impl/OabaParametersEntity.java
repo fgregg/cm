@@ -63,27 +63,27 @@ public class OabaParametersEntity extends AbstractParametersEntity implements
 			pw.print(tag + ": Linkage task: " + task);
 			if (task == OabaLinkageType.STAGING_DEDUPLICATION) {
 				pw.println(" (deduplicating a single record source)");
-				pw.println(tag + ": Staging record source: " + p.getStageRsId());
+				pw.println(tag + ": Staging record source: " + p.getQueryRsId());
 				pw.println(tag + ": Staging record source type: "
-						+ p.getStageRsType());
+						+ p.getQueryRsType());
 			} else if (task == OabaLinkageType.STAGING_TO_MASTER_LINKAGE) {
 				pw.println(" (linking a staging source to a master source)");
-				pw.println(tag + ": Staging record source: " + p.getStageRsId());
+				pw.println(tag + ": Staging record source: " + p.getQueryRsId());
 				pw.println(tag + ": Staging record source type: "
-						+ p.getStageRsType());
-				pw.println(tag + ": Master record source: " + p.getMasterRsId());
+						+ p.getQueryRsType());
+				pw.println(tag + ": Master record source: " + p.getReferenceRsId());
 				pw.println(tag + ": Master record source type: "
-						+ p.getMasterRsType());
+						+ p.getReferenceRsType());
 			} else if (task == OabaLinkageType.MASTER_TO_MASTER_LINKAGE) {
 				pw.println(" (linking a master source to a master source)");
 				pw.println(tag + ": Master record source 1: "
-						+ p.getStageRsId());
+						+ p.getQueryRsId());
 				pw.println(tag + ": Master record source 1 type: "
-						+ p.getStageRsType());
+						+ p.getQueryRsType());
 				pw.println(tag + ": Master record source 2: "
-						+ p.getMasterRsId());
+						+ p.getReferenceRsId());
 				pw.println(tag + ": Master record source 2 type: "
-						+ p.getMasterRsType());
+						+ p.getReferenceRsType());
 			} else {
 				throw new IllegalArgumentException("unexpected task type: "
 						+ task);
@@ -107,8 +107,8 @@ public class OabaParametersEntity extends AbstractParametersEntity implements
 
 	public OabaParametersEntity(OabaParameters bp) {
 		this(bp.getModelConfigurationName(), bp.getLowThreshold(), bp
-				.getHighThreshold(), bp.getStageRsId(), bp.getStageRsType(), bp
-				.getMasterRsId(), bp.getMasterRsType(), bp.getOabaLinkageType());
+				.getHighThreshold(), bp.getQueryRsId(), bp.getQueryRsType(), bp
+				.getReferenceRsId(), bp.getReferenceRsType(), bp.getOabaLinkageType());
 	}
 
 	public OabaParametersEntity(String modelConfigurationName,
@@ -160,23 +160,23 @@ public class OabaParametersEntity extends AbstractParametersEntity implements
 	}
 
 	@Override
-	public long getStageRsId() {
-		return stageRsId;
+	public long getQueryRsId() {
+		return queryRsId;
 	}
 
 	@Override
-	public String getStageRsType() {
-		return stageRsType;
+	public String getQueryRsType() {
+		return queryRsType;
 	}
 
 	@Override
-	public Long getMasterRsId() {
-		return masterRsId;
+	public Long getReferenceRsId() {
+		return referenceRsId;
 	}
 
 	@Override
-	public String getMasterRsType() {
-		return masterRsType;
+	public String getReferenceRsType() {
+		return referenceRsType;
 	}
 
 	@Override

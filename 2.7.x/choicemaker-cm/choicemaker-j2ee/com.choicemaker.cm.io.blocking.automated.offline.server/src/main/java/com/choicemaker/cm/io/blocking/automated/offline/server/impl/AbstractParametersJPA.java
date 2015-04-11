@@ -40,13 +40,13 @@ public interface AbstractParametersJPA {
 
 	String CN_HIGH_THRESHOLD = "HIGH_THRESHOLD";
 
-	String CN_STAGE_RS = "STAGE_ID";
+	String CN_QUERY_RS = "STAGE_ID";
 
-	String CN_STAGE_RS_TYPE = "STAGE_TYPE";
+	String CN_QUERY_RS_TYPE = "STAGE_TYPE";
 
-	String CN_MASTER_RS = "MASTER_ID";
+	String CN_REFERENCE_RS = "MASTER_ID";
 
-	String CN_MASTER_RS_TYPE = "MASTER_TYPE";
+	String CN_REFERENCE_RS_TYPE = "MASTER_TYPE";
 
 	String CN_TASK = "TASK";
 

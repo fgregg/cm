@@ -126,14 +126,14 @@ public class SqlRecordSourceControllerBean implements SqlRecordSourceController 
 	@Override
 	public DataSource getStageDataSource(OabaParameters params)
 			throws BlockingException {
-		DataSource retVal = getDataSource(params.getStageRsId());
+		DataSource retVal = getDataSource(params.getQueryRsId());
 		return retVal;
 	}
 
 	@Override
 	public DataSource getMasterDataSource(OabaParameters params)
 			throws BlockingException {
-		DataSource retVal = getDataSource(params.getMasterRsId());
+		DataSource retVal = getDataSource(params.getReferenceRsId());
 		return retVal;
 	}
 

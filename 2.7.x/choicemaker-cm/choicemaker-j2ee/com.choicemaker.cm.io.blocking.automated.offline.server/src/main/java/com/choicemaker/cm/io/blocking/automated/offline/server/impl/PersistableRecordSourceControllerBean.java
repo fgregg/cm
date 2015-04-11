@@ -45,7 +45,7 @@ public class PersistableRecordSourceControllerBean implements
 		ISerializableRecordSource retVal = null;
 		if (params != null) {
 			retVal =
-				getRecordSource(params.getStageRsId(), params.getStageRsType());
+				getRecordSource(params.getQueryRsId(), params.getQueryRsType());
 		}
 		return retVal;
 	}
@@ -56,8 +56,8 @@ public class PersistableRecordSourceControllerBean implements
 		ISerializableRecordSource retVal = null;
 		if (params != null) {
 			retVal =
-				getRecordSource(params.getMasterRsId(),
-						params.getMasterRsType());
+				getRecordSource(params.getReferenceRsId(),
+						params.getReferenceRsType());
 		}
 		return retVal;
 	}

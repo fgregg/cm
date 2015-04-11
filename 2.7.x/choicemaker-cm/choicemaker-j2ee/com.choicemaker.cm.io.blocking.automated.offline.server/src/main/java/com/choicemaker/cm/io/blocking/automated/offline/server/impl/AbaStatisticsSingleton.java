@@ -56,7 +56,7 @@ public class AbaStatisticsSingleton implements AbaStatisticsController {
 	@Override
 	public void updateMasterAbaStatistics(OabaParameters params)
 			throws DatabaseException {
-		final long rsId = params.getMasterRsId();
+		final long rsId = params.getReferenceRsId();
 		final String type = PersistableSqlRecordSource.TYPE;
 		PersistableSqlRecordSource rs =
 			this.getSqlRecordSourceController().find(rsId, type);

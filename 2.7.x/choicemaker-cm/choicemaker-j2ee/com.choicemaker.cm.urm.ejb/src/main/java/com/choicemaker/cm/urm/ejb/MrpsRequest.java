@@ -226,8 +226,8 @@ public class MrpsRequest implements IMrpsRequest {
 		PersistableRecordSource retVal = this.rsMaster;
 		if (retVal == null) {
 			OabaParameters bp = getBatchParameters(em);
-			long rsId = bp.getMasterRsId();
-			String rsType = bp.getMasterRsType();
+			long rsId = bp.getReferenceRsId();
+			String rsType = bp.getReferenceRsType();
 			this.rsMaster = prsc.find(rsId,rsType);
 			retVal = this.rsMaster;
 		}
@@ -241,8 +241,8 @@ public class MrpsRequest implements IMrpsRequest {
 		PersistableRecordSource retVal = this.rsStaging;
 		if (retVal == null) {
 			OabaParameters bp = getBatchParameters(em);
-			long rsId = bp.getMasterRsId();
-			String rsType = bp.getMasterRsType();
+			long rsId = bp.getReferenceRsId();
+			String rsType = bp.getReferenceRsType();
 			this.rsStaging = prsc.find(rsId,rsType);;
 			retVal = this.rsStaging;
 		}

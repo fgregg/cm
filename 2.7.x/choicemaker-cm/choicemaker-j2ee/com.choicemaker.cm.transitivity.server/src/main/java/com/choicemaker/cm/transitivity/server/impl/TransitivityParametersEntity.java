@@ -108,12 +108,12 @@ public class TransitivityParametersEntity extends AbstractParametersEntity
 						+ p.getModelConfigurationName());
 				pw.print(tag + ": Linkage task: " + task);
 				pw.println(" (deduplicating a single record source)");
-				pw.println(tag + ": Staging record source: " + p.getStageRsId());
+				pw.println(tag + ": Staging record source: " + p.getQueryRsId());
 				pw.println(tag + ": Staging record source type: "
-							+ p.getStageRsType());
-				pw.println(tag + ": Master record source: " + p.getMasterRsId());
+							+ p.getQueryRsType());
+				pw.println(tag + ": Master record source: " + p.getReferenceRsId());
 				pw.println(tag + ": Master record source type: "
-						+ p.getMasterRsType());
+						+ p.getReferenceRsType());
 			} else {
 				throw new IllegalArgumentException("unexpected task type: "
 						+ task);
@@ -154,8 +154,8 @@ public class TransitivityParametersEntity extends AbstractParametersEntity
 
 	public TransitivityParametersEntity(TransitivityParameters tp) {
 		super(DV_TRANS, tp.getModelConfigurationName(), tp.getLowThreshold(),
-				tp.getHighThreshold(), tp.getStageRsId(), tp.getStageRsType(),
-				tp.getMasterRsId(), tp.getMasterRsType(),
+				tp.getHighThreshold(), tp.getQueryRsId(), tp.getQueryRsType(),
+				tp.getReferenceRsId(), tp.getReferenceRsType(),
 				OabaLinkageType.TRANSITIVITY_ANALYSIS, tp
 						.getAnalysisResultFormat().name(), tp
 						.getGraphProperty().getName());
@@ -167,8 +167,8 @@ public class TransitivityParametersEntity extends AbstractParametersEntity
 	public TransitivityParametersEntity(OabaParameters p,
 			AnalysisResultFormat format, String graphPropertyName) {
 		super(DV_TRANS, p.getModelConfigurationName(), p.getLowThreshold(), p
-				.getHighThreshold(), p.getStageRsId(), p.getStageRsType(), p
-				.getMasterRsId(), p.getMasterRsType(),
+				.getHighThreshold(), p.getQueryRsId(), p.getQueryRsType(), p
+				.getReferenceRsId(), p.getReferenceRsType(),
 				OabaLinkageType.TRANSITIVITY_ANALYSIS, format.name(),
 				graphPropertyName);
 		if (graphPropertyName == null) {
@@ -182,23 +182,23 @@ public class TransitivityParametersEntity extends AbstractParametersEntity
 	}
 
 	@Override
-	public long getStageRsId() {
-		return this.stageRsId;
+	public long getQueryRsId() {
+		return this.queryRsId;
 	}
 
 	@Override
-	public String getStageRsType() {
-		return this.stageRsType;
+	public String getQueryRsType() {
+		return this.queryRsType;
 	}
 
 	@Override
-	public Long getMasterRsId() {
-		return this.masterRsId;
+	public Long getReferenceRsId() {
+		return this.referenceRsId;
 	}
 
 	@Override
-	public String getMasterRsType() {
-		return this.masterRsType;
+	public String getReferenceRsType() {
+		return this.referenceRsType;
 	}
 
 	@Override

@@ -5,11 +5,11 @@ import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.Abstr
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.CN_HIGH_THRESHOLD;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.CN_ID;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.CN_LOW_THRESHOLD;
-import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.CN_MASTER_RS;
-import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.CN_MASTER_RS_TYPE;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.CN_REFERENCE_RS;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.CN_REFERENCE_RS_TYPE;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.CN_MODEL;
-import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.CN_STAGE_RS;
-import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.CN_STAGE_RS_TYPE;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.CN_QUERY_RS;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.CN_QUERY_RS_TYPE;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.CN_TASK;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.CN_TYPE;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.DISCRIMINATOR_COLUMN;
@@ -47,7 +47,7 @@ import com.choicemaker.cm.core.base.ImmutableThresholds;
 @DiscriminatorColumn(name = DISCRIMINATOR_COLUMN,
 		discriminatorType = DiscriminatorType.STRING)
 @DiscriminatorValue(DV_ABSTRACT)
-public class AbstractParametersEntity extends AbstractPersistentObject
+public abstract class AbstractParametersEntity extends AbstractPersistentObject
 		implements Serializable {
 
 	private static final long serialVersionUID = 271L;
@@ -79,17 +79,17 @@ public class AbstractParametersEntity extends AbstractPersistentObject
 	@Column(name = CN_HIGH_THRESHOLD)
 	protected final float highThreshold;
 
-	@Column(name = CN_STAGE_RS)
-	protected final long stageRsId;
+	@Column(name = CN_QUERY_RS)
+	protected final long queryRsId;
 
-	@Column(name = CN_STAGE_RS_TYPE)
-	protected final String stageRsType;
+	@Column(name = CN_QUERY_RS_TYPE)
+	protected final String queryRsType;
 
-	@Column(name = CN_MASTER_RS)
-	protected final Long masterRsId;
+	@Column(name = CN_REFERENCE_RS)
+	protected final Long referenceRsId;
 
-	@Column(name = CN_MASTER_RS_TYPE)
-	protected final String masterRsType;
+	@Column(name = CN_REFERENCE_RS_TYPE)
+	protected final String referenceRsType;
 
 	@Column(name = CN_TASK)
 	protected final String task;
@@ -106,10 +106,10 @@ public class AbstractParametersEntity extends AbstractPersistentObject
 		this.modelConfigName = null;
 		this.lowThreshold = INVALID_THRESHOLD;
 		this.highThreshold = INVALID_THRESHOLD;
-		this.stageRsId = NONPERSISTENT_ID;
-		this.stageRsType = null;
-		this.masterRsId = null;
-		this.masterRsType = null;
+		this.queryRsId = NONPERSISTENT_ID;
+		this.queryRsType = null;
+		this.referenceRsId = null;
+		this.referenceRsType = null;
 		this.task = null;
 		this.format = null;
 		this.graph = null;
@@ -167,13 +167,13 @@ public class AbstractParametersEntity extends AbstractPersistentObject
 			throw new IllegalArgumentException("null task type");
 		}
 
-		// The masterRsId, masterRsType and taskType must be consistent.
-		// If the task type is STAGING_DEDUPLICATION, then the masterRsId
-		// and the masterRsType must be null.
+		// The referenceRsId, referenceRsType and taskType must be consistent.
+		// If the task type is STAGING_DEDUPLICATION, then the referenceRsId
+		// and the referenceRsType must be null.
 		// If the type is STAGING_TO_MASTER_LINKAGE or MASTER_TO_MASTER_LINKAGE,
-		// then the masterRsId and the masterRsType must be non-null.
-		// If the type is TRANSITIVITY_ANALYSIS, the masterRsId and the
-		// masterRsType must be consistent with one another, but they are
+		// then the referenceRsId and the referenceRsType must be non-null.
+		// If the type is TRANSITIVITY_ANALYSIS, the referenceRsId and the
+		// referenceRsType must be consistent with one another, but they are
 		// otherwise unconstrained.
 		if (taskType == OabaLinkageType.STAGING_DEDUPLICATION) {
 			if (mId != null) {
@@ -218,10 +218,10 @@ public class AbstractParametersEntity extends AbstractPersistentObject
 		this.modelConfigName = modelConfigurationName.trim();
 		this.lowThreshold = lowThreshold;
 		this.highThreshold = highThreshold;
-		this.stageRsId = sId;
-		this.stageRsType = sType;
-		this.masterRsId = mId;
-		this.masterRsType = mType;
+		this.queryRsId = sId;
+		this.queryRsType = sType;
+		this.referenceRsId = mId;
+		this.referenceRsType = mType;
 		this.task = taskType.name();
 		this.format = format;
 		this.graph = graph;
@@ -249,13 +249,13 @@ public class AbstractParametersEntity extends AbstractPersistentObject
 			throw new IllegalArgumentException("null task type");
 		}
 
-		// The masterRsId, masterRsType and taskType must be consistent.
-		// If the task type is STAGING_DEDUPLICATION, then the masterRsId
-		// and the masterRsType must be null.
+		// The referenceRsId, referenceRsType and taskType must be consistent.
+		// If the task type is STAGING_DEDUPLICATION, then the referenceRsId
+		// and the referenceRsType must be null.
 		// If the type is STAGING_TO_MASTER_LINKAGE or MASTER_TO_MASTER_LINKAGE,
-		// then the masterRsId and the masterRsType must be non-null.
-		// If the type is TRANSITIVITY_ANALYSIS, the masterRsId and the
-		// masterRsType must be consistent with one another, but they are
+		// then the referenceRsId and the referenceRsType must be non-null.
+		// If the type is TRANSITIVITY_ANALYSIS, the referenceRsId and the
+		// referenceRsType must be consistent with one another, but they are
 		// otherwise unconstrained.
 		if (taskType == OabaLinkageType.STAGING_DEDUPLICATION) {
 			if (mId != null) {
@@ -301,10 +301,10 @@ public class AbstractParametersEntity extends AbstractPersistentObject
 		this.modelConfigName = modelConfigurationName.trim();
 		this.lowThreshold = lowThreshold;
 		this.highThreshold = highThreshold;
-		this.stageRsId = sId;
-		this.stageRsType = sType;
-		this.masterRsId = mId;
-		this.masterRsType = mType;
+		this.queryRsId = sId;
+		this.queryRsType = sType;
+		this.referenceRsId = mId;
+		this.referenceRsType = mType;
 		this.task = taskType.name();
 		this.format = format;
 		this.graph = graph;
