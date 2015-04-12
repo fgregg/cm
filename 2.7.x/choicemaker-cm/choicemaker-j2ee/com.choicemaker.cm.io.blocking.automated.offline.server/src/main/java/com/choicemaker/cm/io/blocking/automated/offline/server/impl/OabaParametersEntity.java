@@ -39,7 +39,7 @@ public class OabaParametersEntity extends AbstractParametersEntity implements
 		Serializable, OabaParameters {
 
 	private static final long serialVersionUID = 271L;
-
+	
 	// private static final Logger logger = Logger
 	// .getLogger(OabaParametersEntity.class.getName());
 
@@ -71,7 +71,8 @@ public class OabaParametersEntity extends AbstractParametersEntity implements
 				pw.println(tag + ": Staging record source: " + p.getQueryRsId());
 				pw.println(tag + ": Staging record source type: "
 						+ p.getQueryRsType());
-				pw.println(tag + ": Master record source: " + p.getReferenceRsId());
+				pw.println(tag + ": Master record source: "
+						+ p.getReferenceRsId());
 				pw.println(tag + ": Master record source type: "
 						+ p.getReferenceRsType());
 			} else if (task == OabaLinkageType.MASTER_TO_MASTER_LINKAGE) {
@@ -107,8 +108,9 @@ public class OabaParametersEntity extends AbstractParametersEntity implements
 
 	public OabaParametersEntity(OabaParameters bp) {
 		this(bp.getModelConfigurationName(), bp.getLowThreshold(), bp
-				.getHighThreshold(), bp.getQueryRsId(), bp.getQueryRsType(), bp
-				.getReferenceRsId(), bp.getReferenceRsType(), bp.getOabaLinkageType());
+				.getHighThreshold(), bp.getQueryRsId(), bp.getQueryRsType(),
+				DEFAULT_QUERY_RS_IS_DEDUPLICATED, bp.getReferenceRsId(), bp
+						.getReferenceRsType(), bp.getOabaLinkageType());
 	}
 
 	public OabaParametersEntity(String modelConfigurationName,
@@ -116,9 +118,9 @@ public class OabaParametersEntity extends AbstractParametersEntity implements
 			PersistableRecordSource stageRs, PersistableRecordSource masterRs,
 			OabaLinkageType taskType) {
 		this(modelConfigurationName, lowThreshold, highThreshold, stageRs
-				.getId(), stageRs.getType(), masterRs == null ? null : masterRs
-				.getId(), masterRs == null ? null : masterRs.getType(),
-				taskType);
+				.getId(), stageRs.getType(), DEFAULT_QUERY_RS_IS_DEDUPLICATED,
+				masterRs == null ? null : masterRs.getId(),
+				masterRs == null ? null : masterRs.getType(), taskType);
 	}
 
 	/**
@@ -134,6 +136,10 @@ public class OabaParametersEntity extends AbstractParametersEntity implements
 	 *            persistence id of the staging record source
 	 * @param sType
 	 *            the type of the staging record source (FlatFile, XML, DB)
+	 * @param qIsDeduped
+	 *            if true, the query source is already deduplicated; if false,
+	 *            the query source should be deduplicated before it is matched
+	 *            against the reference source
 	 * @param mId
 	 *            the persistence id of the master record. Must be null if the
 	 *            <code>taskType</code> is STAGING_DEDUPLICATION; otherwise must
@@ -148,10 +154,10 @@ public class OabaParametersEntity extends AbstractParametersEntity implements
 	 *            two master sources.
 	 */
 	OabaParametersEntity(String modelConfigurationName, float lowThreshold,
-			float highThreshold, long sId, String sType, Long mId,
+			float highThreshold, long sId, String sType, boolean qIsDeduped, Long mId,
 			String mType, OabaLinkageType taskType) {
 		super(DV_OABA, modelConfigurationName, lowThreshold, highThreshold,
-				sId, sType, mId, mType, taskType, null, null);
+				sId, sType, qIsDeduped, mId, mType, taskType, null, null);
 	}
 
 	@Override
@@ -167,6 +173,11 @@ public class OabaParametersEntity extends AbstractParametersEntity implements
 	@Override
 	public String getQueryRsType() {
 		return queryRsType;
+	}
+
+	@Override
+	public boolean isQueryRsDeduplicated() {
+		return queryRsIsDeduplicated;
 	}
 
 	@Override

@@ -189,7 +189,8 @@ public class OabaServiceBean implements OabaService {
 			submittedParams =
 				new OabaParametersEntity(bp.getModelConfigurationName(),
 						bp.getLowThreshold(), bp.getHighThreshold(),
-						bp.getQueryRsId(), bp.getQueryRsType(), null, null,
+						bp.getQueryRsId(), bp.getQueryRsType(),
+						bp.isQueryRsDeduplicated(), null, null,
 						OabaLinkageType.STAGING_DEDUPLICATION);
 		}
 

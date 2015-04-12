@@ -22,6 +22,8 @@ public interface OabaParameters extends PersistentObject, Serializable {
 
 	long NONPERSISTENT_ID = 0;
 
+	boolean DEFAULT_QUERY_RS_IS_DEDUPLICATED = false;
+
 	long getId();
 
 	String getModelConfigurationName();
@@ -37,6 +39,12 @@ public interface OabaParameters extends PersistentObject, Serializable {
 
 	/** The query record source (and its type) is never null */
 	String getQueryRsType();
+	
+	/**
+	 * A flag indicating whether records from the query record source have
+	 * already been duplicated.
+	 */
+	boolean isQueryRsDeduplicated();
 
 	/** The reference record source (and its id) may be null */
 	Long getReferenceRsId();

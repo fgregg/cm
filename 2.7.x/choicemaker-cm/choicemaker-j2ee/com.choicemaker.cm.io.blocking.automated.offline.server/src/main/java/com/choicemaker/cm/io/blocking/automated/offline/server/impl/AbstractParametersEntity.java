@@ -10,6 +10,7 @@ import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.Abstr
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.CN_MODEL;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.CN_QUERY_RS;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.CN_QUERY_RS_TYPE;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.CN_QUERY_RS_DEDUPED;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.CN_TASK;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.CN_TYPE;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.DISCRIMINATOR_COLUMN;
@@ -47,7 +48,7 @@ import com.choicemaker.cm.core.base.ImmutableThresholds;
 @DiscriminatorColumn(name = DISCRIMINATOR_COLUMN,
 		discriminatorType = DiscriminatorType.STRING)
 @DiscriminatorValue(DV_ABSTRACT)
-public abstract class AbstractParametersEntity extends AbstractPersistentObject
+public class AbstractParametersEntity extends AbstractPersistentObject
 		implements Serializable {
 
 	private static final long serialVersionUID = 271L;
@@ -85,6 +86,9 @@ public abstract class AbstractParametersEntity extends AbstractPersistentObject
 	@Column(name = CN_QUERY_RS_TYPE)
 	protected final String queryRsType;
 
+	@Column(name = CN_QUERY_RS_DEDUPED)
+	protected final boolean queryRsIsDeduplicated;
+
 	@Column(name = CN_REFERENCE_RS)
 	protected final Long referenceRsId;
 
@@ -108,6 +112,7 @@ public abstract class AbstractParametersEntity extends AbstractPersistentObject
 		this.highThreshold = INVALID_THRESHOLD;
 		this.queryRsId = NONPERSISTENT_ID;
 		this.queryRsType = null;
+		this.queryRsIsDeduplicated = false;
 		this.referenceRsId = null;
 		this.referenceRsType = null;
 		this.task = null;
@@ -148,7 +153,8 @@ public abstract class AbstractParametersEntity extends AbstractPersistentObject
 	 */
 	protected AbstractParametersEntity(String type,
 			String modelConfigurationName, float lowThreshold,
-			float highThreshold, long sId, String sType, Long mId,
+			float highThreshold, long sId, String sType, boolean qIsDeduplicated,
+			Long mId,
 			String mType, OabaLinkageType taskType, String format, String graph) {
 
 		if (type == null || type.trim().isEmpty()) {
@@ -220,6 +226,7 @@ public abstract class AbstractParametersEntity extends AbstractPersistentObject
 		this.highThreshold = highThreshold;
 		this.queryRsId = sId;
 		this.queryRsType = sType;
+		this.queryRsIsDeduplicated = qIsDeduplicated;
 		this.referenceRsId = mId;
 		this.referenceRsType = mType;
 		this.task = taskType.name();
@@ -230,7 +237,7 @@ public abstract class AbstractParametersEntity extends AbstractPersistentObject
 	// HACK FIXME REMOVEME
 	protected AbstractParametersEntity(long persistenceId, String type,
 			String modelConfigurationName, float lowThreshold,
-			float highThreshold, long sId, String sType, Long mId,
+			float highThreshold, long sId, String sType, boolean qIsDeduplicated, Long mId,
 			String mType, OabaLinkageType taskType, String format, String graph) {
 
 		if (type == null || type.trim().isEmpty()) {
@@ -303,14 +310,14 @@ public abstract class AbstractParametersEntity extends AbstractPersistentObject
 		this.highThreshold = highThreshold;
 		this.queryRsId = sId;
 		this.queryRsType = sType;
+		this.queryRsIsDeduplicated = qIsDeduplicated;
 		this.referenceRsId = mId;
 		this.referenceRsType = mType;
 		this.task = taskType.name();
 		this.format = format;
 		this.graph = graph;
 	}
-
-	// HACK FIXME REMOVEME
+	// END HACK FIXME REMOVEME
 
 	public final long getId() {
 		return id;
