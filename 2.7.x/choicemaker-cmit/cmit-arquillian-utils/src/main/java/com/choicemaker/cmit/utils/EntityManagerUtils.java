@@ -23,6 +23,8 @@ public class EntityManagerUtils {
 
 	private static final String DEFAULT_EXTERNALID_TAG = "Random external id";
 	private static final String DEFAULT_MODEL_NAME = "FakeModelConfig";
+	private static final String DEFAULT_DB_CONFIG_NAME = "FakeDatabaseConfig";
+	private static final String DEFAULT_BLK_CONF_NAME = "FakeBlockingConfig";
 	private static final String COLON = ":";
 	private static final String SPACE = " ";
 	private static final String UNDERSCORE = "_";
@@ -60,6 +62,48 @@ public class EntityManagerUtils {
 		tag = tag.trim();
 		if (tag.isEmpty()) {
 			tag = DEFAULT_MODEL_NAME;
+		}
+		StringBuilder sb = new StringBuilder(tag);
+		if (!tag.endsWith(UNDERSCORE)) {
+			sb.append(UNDERSCORE);
+		}
+		sb.append(UUID.randomUUID().toString());
+		String retVal = sb.toString();
+		return retVal;
+	}
+
+	/**
+	 * Synthesizes the name of a fake modelId configuration using the specified
+	 * tag which may be null
+	 */
+	public static String createRandomDatabaseConfigurationName(String tag) {
+		if (tag == null) {
+			tag = DEFAULT_DB_CONFIG_NAME;
+		}
+		tag = tag.trim();
+		if (tag.isEmpty()) {
+			tag = DEFAULT_DB_CONFIG_NAME;
+		}
+		StringBuilder sb = new StringBuilder(tag);
+		if (!tag.endsWith(UNDERSCORE)) {
+			sb.append(UNDERSCORE);
+		}
+		sb.append(UUID.randomUUID().toString());
+		String retVal = sb.toString();
+		return retVal;
+	}
+
+	/**
+	 * Synthesizes the name of a fake modelId configuration using the specified
+	 * tag which may be null
+	 */
+	public static String createRandomBlockingConfigurationName(String tag) {
+		if (tag == null) {
+			tag = DEFAULT_BLK_CONF_NAME;
+		}
+		tag = tag.trim();
+		if (tag.isEmpty()) {
+			tag = DEFAULT_BLK_CONF_NAME;
 		}
 		StringBuilder sb = new StringBuilder(tag);
 		if (!tag.endsWith(UNDERSCORE)) {

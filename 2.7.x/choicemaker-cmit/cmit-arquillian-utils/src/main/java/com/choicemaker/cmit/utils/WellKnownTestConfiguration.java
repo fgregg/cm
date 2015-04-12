@@ -10,10 +10,6 @@ import com.choicemaker.e2.CMPluginRegistry;
 
 public interface WellKnownTestConfiguration {
 
-	String getDatabaseConfiguration();
-
-	PersistableRecordSource getMasterRecordSource();
-
 	ImmutableProbabilityModel getModel();
 
 	String getModelConfigurationName();
@@ -26,7 +22,19 @@ public interface WellKnownTestConfiguration {
 
 	int getSingleRecordMatchingThreshold();
 
-	PersistableRecordSource getStagingRecordSource();
+	PersistableRecordSource getQueryRecordSource();
+	
+	boolean isQueryRsDeduplicated();
+
+	String getQueryDatabaseConfiguration();
+
+	String getQueryBlockingConfiguration();
+
+	PersistableRecordSource getReferenceRecordSource();
+
+	String getReferenceDatabaseConfiguration();
+
+	String getReferenceBlockingConfiguration();
 
 	ImmutableThresholds getThresholds();
 

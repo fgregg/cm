@@ -46,9 +46,17 @@ public interface AbstractParametersJPA {
 
 	String CN_QUERY_RS_DEDUPED = "QUERY_RS_DEDUPED";
 
+	String CN_QUERY_RS_DBCONF = "QUERY_RS_DBCONF";
+
+	String  CN_Q2Q_BLOCKING = "Q2Q_BLOCKING";
+
 	String CN_REFERENCE_RS = "REF_RS_ID";
 
 	String CN_REFERENCE_RS_TYPE = "REF_RS_TYPE";
+
+	String  CN_REF_RS_DBCONF = "REF_RS_DBCONF";
+
+	String  CN_Q2R_BLOCKING = "Q2R_BLOCKING";
 
 	String CN_TASK = "TASK";
 

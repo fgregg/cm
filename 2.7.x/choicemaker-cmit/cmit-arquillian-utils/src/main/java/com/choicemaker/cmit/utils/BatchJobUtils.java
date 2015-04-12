@@ -113,11 +113,20 @@ public class BatchJobUtils {
 		OabaLinkageType task = EntityManagerUtils.createRandomOabaTask();
 		PersistableRecordSource master =
 			EntityManagerUtils.createFakeMasterRecordSource(tag, task);
+		final String dbConfig0 =
+			EntityManagerUtils.createRandomDatabaseConfigurationName(tag);
+		final String blkConf0 =
+			EntityManagerUtils.createRandomBlockingConfigurationName(tag);
+		final String dbConfig1 =
+			EntityManagerUtils.createRandomDatabaseConfigurationName(tag);
+		final String blkConf1 =
+			EntityManagerUtils.createRandomBlockingConfigurationName(tag);
 		OabaParametersEntity retVal =
 			new OabaParametersEntity(
 					EntityManagerUtils.createRandomModelConfigurationName(tag),
 					thresholds.getDifferThreshold(),
-					thresholds.getMatchThreshold(), stage, master, task);
+					thresholds.getMatchThreshold(), stage, dbConfig0, blkConf0,
+					master, dbConfig1, blkConf1, task);
 		te.add(retVal);
 		return retVal;
 	}

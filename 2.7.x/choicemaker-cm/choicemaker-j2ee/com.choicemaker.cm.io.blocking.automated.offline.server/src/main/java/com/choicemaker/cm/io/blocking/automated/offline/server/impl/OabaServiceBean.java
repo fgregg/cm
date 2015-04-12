@@ -10,6 +10,7 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
+import static com.choicemaker.cm.args.OabaLinkageType.STAGING_DEDUPLICATION;
 import static com.choicemaker.cm.args.OperationalPropertyNames.PN_CLEAR_RESOURCES;
 import static com.choicemaker.cm.args.OperationalPropertyNames.PN_OABA_CACHED_RESULTS_FILE;
 
@@ -115,7 +116,7 @@ public class OabaServiceBean implements OabaService {
 			if (bp.getQueryRsType() == null) {
 				validityErrors.add("null staging source type");
 			}
-			if (OabaLinkageType.STAGING_DEDUPLICATION == type) {
+			if (STAGING_DEDUPLICATION == type) {
 				if (bp.getReferenceRsId() != null || bp.getReferenceRsType() != null) {
 					validityErrors
 							.add("non-null master source parameter for a de-duplication task");
@@ -183,15 +184,17 @@ public class OabaServiceBean implements OabaService {
 		OabaParameters submittedParams;
 		final OabaLinkageType task = bp.getOabaLinkageType();
 		if (bp.getReferenceRsId() == null && bp.getReferenceRsType() == null
-				&& OabaLinkageType.STAGING_DEDUPLICATION == task) {
+				&& STAGING_DEDUPLICATION == task) {
 			submittedParams = bp;
 		} else {
 			submittedParams =
 				new OabaParametersEntity(bp.getModelConfigurationName(),
 						bp.getLowThreshold(), bp.getHighThreshold(),
 						bp.getQueryRsId(), bp.getQueryRsType(),
-						bp.isQueryRsDeduplicated(), null, null,
-						OabaLinkageType.STAGING_DEDUPLICATION);
+						bp.isQueryRsDeduplicated(),
+						bp.getQueryRsDatabaseConfiguration(),
+						bp.getQueryToQueryBlockingConfiguration(), null, null,
+						null, null, STAGING_DEDUPLICATION);
 		}
 
 		return startLinkage(externalID, submittedParams, oabaSettings,

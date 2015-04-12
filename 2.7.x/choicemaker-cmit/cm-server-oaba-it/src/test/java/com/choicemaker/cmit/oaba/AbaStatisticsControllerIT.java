@@ -129,17 +129,24 @@ public class AbaStatisticsControllerIT {
 		WellKnownTestConfiguration c = getTestConfiguration();
 
 		final PersistableRecordSource staging =
-			rsController.save(c.getStagingRecordSource());
+			rsController.save(c.getQueryRecordSource());
 		te.add(staging);
 
 		final PersistableRecordSource master =
-			rsController.save(c.getMasterRecordSource());
+			rsController.save(c.getReferenceRecordSource());
 		te.add(master);
+
+		final String dbConfig0 = c.getQueryDatabaseConfiguration();
+		final String blkConf0 = c.getQueryBlockingConfiguration();
+		final String dbConfig1 = c.getReferenceDatabaseConfiguration();
+		final String blkConf1 = c.getReferenceBlockingConfiguration();
 
 		final OabaParameters bp =
 			new OabaParametersEntity(c.getModelConfigurationName(), c
 					.getThresholds().getDifferThreshold(), c.getThresholds()
-					.getMatchThreshold(), staging, master, c.getOabaTask());
+					.getMatchThreshold(), staging, dbConfig0, blkConf0, master,
+					dbConfig1, blkConf1, c.getOabaTask());
+		te.add(bp);
 		final OabaParameters retVal = paramsController.save(bp);
 		te.add(retVal);
 

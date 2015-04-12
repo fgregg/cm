@@ -36,6 +36,9 @@ public class SimplePersonSqlServerTestConfiguration implements
 
 	public static final String DEFAULT_DATABASE_CONFIGURATION = "default";
 
+	public static final String DEFAULT_BLOCKING_CONFIGURATION =
+		"defaultAutomated";
+
 	public static final String DEFAULT_STAGING_SQL =
 		"SELECT RECORD_ID AS ID FROM PERSON WHERE LINKAGE_ROLE='S'";
 
@@ -64,9 +67,13 @@ public class SimplePersonSqlServerTestConfiguration implements
 	public static final int DEFAULT_RECORD_BUFFER_SIZE = 100000;
 
 	private final String dataSourceJndiName;
-	private final String databaseConfiguration;
-	private final String stagingSQL;
-	private final String masterSQL;
+	private final boolean queryRsIsDeduplicated = false;
+	private final String queryDatabaseConfiguration;
+	private final String queryToQueryBlockingConfiguration;
+	private final String querySQL;
+	private final String referenceSQL;
+	private final String referenceDatabaseConfiguration;
+	private final String queryToReferenceBlockingConfiguration;
 	private final String modelConfigurationId;
 	private final ImmutableThresholds thresholds;
 	private final int maxSingle;
@@ -84,6 +91,7 @@ public class SimplePersonSqlServerTestConfiguration implements
 
 	public SimplePersonSqlServerTestConfiguration() {
 		this(DEFAULT_DATASOURCE_JNDI_NAME, DEFAULT_DATABASE_CONFIGURATION,
+				DEFAULT_BLOCKING_CONFIGURATION,
 				DEFAULT_STAGING_SQL, DEFAULT_MASTER_SQL,
 				DEFAULT_MODEL_CONFIGURATION_ID, DEFAULT_THRESHOLDS,
 				DEFAULT_SINGLE_RECORD_MATCHING_THRESHOLD,
@@ -94,6 +102,7 @@ public class SimplePersonSqlServerTestConfiguration implements
 
 	public SimplePersonSqlServerTestConfiguration(boolean runTransitivity) {
 		this(DEFAULT_DATASOURCE_JNDI_NAME, DEFAULT_DATABASE_CONFIGURATION,
+				DEFAULT_BLOCKING_CONFIGURATION,
 				DEFAULT_STAGING_SQL, DEFAULT_MASTER_SQL,
 				DEFAULT_MODEL_CONFIGURATION_ID, DEFAULT_THRESHOLDS,
 				DEFAULT_SINGLE_RECORD_MATCHING_THRESHOLD, runTransitivity,
@@ -102,7 +111,7 @@ public class SimplePersonSqlServerTestConfiguration implements
 	}
 
 	public SimplePersonSqlServerTestConfiguration(String dsJndiName,
-			String dbConfig, String stagingSQL, String masterSQL, String mci,
+			String dbConfig, String blkConf, String stagingSQL, String masterSQL, String mci,
 			ImmutableThresholds t, int maxSingle, boolean runTransitivity,
 			AnalysisResultFormat arf, String gpn) {
 		if (dsJndiName == null || dsJndiName.trim().isEmpty()) {
@@ -113,6 +122,11 @@ public class SimplePersonSqlServerTestConfiguration implements
 		if (dbConfig == null || dbConfig.trim().isEmpty()) {
 			throw new IllegalArgumentException(
 					"null or blank database configuration");
+
+		}
+		if (blkConf == null || blkConf.trim().isEmpty()) {
+			throw new IllegalArgumentException(
+					"null or blank blocking configuration");
 
 		}
 		if (stagingSQL == null || stagingSQL.trim().isEmpty()) {
@@ -145,9 +159,12 @@ public class SimplePersonSqlServerTestConfiguration implements
 					"null or blank transitivity graph property");
 		}
 		this.dataSourceJndiName = dsJndiName;
-		this.databaseConfiguration = dbConfig;
-		this.stagingSQL = stagingSQL;
-		this.masterSQL = masterSQL;
+		this.queryDatabaseConfiguration = dbConfig;
+		this.queryToQueryBlockingConfiguration = blkConf;
+		this.querySQL = stagingSQL;
+		this.referenceDatabaseConfiguration = dbConfig;
+		this.queryToReferenceBlockingConfiguration = blkConf;
+		this.referenceSQL = masterSQL;
 		this.modelConfigurationId = mci;
 		this.thresholds = t;
 		this.maxSingle = maxSingle;
@@ -277,7 +294,7 @@ public class SimplePersonSqlServerTestConfiguration implements
 	}
 
 	@Override
-	public PersistableRecordSource getStagingRecordSource() {
+	public PersistableRecordSource getQueryRecordSource() {
 		invariant();
 		return new PersistableSqlRecordSource() {
 
@@ -347,7 +364,7 @@ public class SimplePersonSqlServerTestConfiguration implements
 	}
 
 	@Override
-	public PersistableRecordSource getMasterRecordSource() {
+	public PersistableRecordSource getReferenceRecordSource() {
 		invariant();
 		return new PersistableSqlRecordSource() {
 
@@ -428,8 +445,8 @@ public class SimplePersonSqlServerTestConfiguration implements
 	}
 
 	@Override
-	public String getDatabaseConfiguration() {
-		return databaseConfiguration;
+	public String getQueryDatabaseConfiguration() {
+		return queryDatabaseConfiguration;
 	}
 
 	@Override
@@ -484,13 +501,33 @@ public class SimplePersonSqlServerTestConfiguration implements
 	private ISerializableDbRecordSource createStagingRecordSource(
 			ImmutableProbabilityModel model) throws Exception {
 		return createRecordSource(model, dataSourceJndiName,
-				databaseConfiguration, stagingSQL);
+				queryDatabaseConfiguration, querySQL);
 	}
 
 	private ISerializableDbRecordSource createMasterRecordSource(
 			ImmutableProbabilityModel model) throws Exception {
 		return createRecordSource(model, dataSourceJndiName,
-				databaseConfiguration, masterSQL);
+				queryDatabaseConfiguration, referenceSQL);
+	}
+
+	@Override
+	public boolean isQueryRsDeduplicated() {
+		return queryRsIsDeduplicated;
+	}
+
+	@Override
+	public String getQueryBlockingConfiguration() {
+		return queryToQueryBlockingConfiguration;
+	}
+
+	@Override
+	public String getReferenceDatabaseConfiguration() {
+		return referenceDatabaseConfiguration;
+	}
+
+	@Override
+	public String getReferenceBlockingConfiguration() {
+		return queryToReferenceBlockingConfiguration;
 	}
 
 }

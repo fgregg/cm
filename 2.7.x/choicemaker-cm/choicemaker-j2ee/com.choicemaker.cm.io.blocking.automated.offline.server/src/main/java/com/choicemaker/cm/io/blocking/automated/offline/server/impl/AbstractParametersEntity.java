@@ -1,6 +1,6 @@
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
-import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.CN_FORMAT;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.*;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.CN_GRAPH;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.CN_HIGH_THRESHOLD;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.CN_ID;
@@ -89,11 +89,23 @@ public class AbstractParametersEntity extends AbstractPersistentObject
 	@Column(name = CN_QUERY_RS_DEDUPED)
 	protected final boolean queryRsIsDeduplicated;
 
+	@Column(name = CN_QUERY_RS_DBCONF)
+	protected final String queryRsDatabaseConfiguration;
+
+	@Column(name = CN_Q2Q_BLOCKING)
+	protected final String queryToQueryBlockingConfiguration;
+
 	@Column(name = CN_REFERENCE_RS)
 	protected final Long referenceRsId;
 
 	@Column(name = CN_REFERENCE_RS_TYPE)
 	protected final String referenceRsType;
+
+	@Column(name = CN_REF_RS_DBCONF)
+	protected final String referenceRsDatabaseConfiguration;
+
+	@Column(name = CN_Q2R_BLOCKING)
+	protected final String queryToReferenceBlockingConfiguration;
 
 	@Column(name = CN_TASK)
 	protected final String task;
@@ -113,8 +125,12 @@ public class AbstractParametersEntity extends AbstractPersistentObject
 		this.queryRsId = NONPERSISTENT_ID;
 		this.queryRsType = null;
 		this.queryRsIsDeduplicated = false;
+		this.queryRsDatabaseConfiguration = null;
+		this.queryToQueryBlockingConfiguration = null;
 		this.referenceRsId = null;
 		this.referenceRsType = null;
+		this.referenceRsDatabaseConfiguration = null;
+		this.queryToReferenceBlockingConfiguration = null;
 		this.task = null;
 		this.format = null;
 		this.graph = null;
@@ -153,9 +169,11 @@ public class AbstractParametersEntity extends AbstractPersistentObject
 	 */
 	protected AbstractParametersEntity(String type,
 			String modelConfigurationName, float lowThreshold,
-			float highThreshold, long sId, String sType, boolean qIsDeduplicated,
-			Long mId,
-			String mType, OabaLinkageType taskType, String format, String graph) {
+			float highThreshold, long sId, String sType,
+			boolean qIsDeduplicated, String queryRsDbConfig,
+			String queryToQueryBlocking, Long mId, String mType,
+			String refRsDbConfig, String queryToRefBlocking,
+			OabaLinkageType taskType, String format, String graph) {
 
 		if (type == null || type.trim().isEmpty()) {
 			throw new IllegalArgumentException("null or blank type");
@@ -227,8 +245,12 @@ public class AbstractParametersEntity extends AbstractPersistentObject
 		this.queryRsId = sId;
 		this.queryRsType = sType;
 		this.queryRsIsDeduplicated = qIsDeduplicated;
+		this.queryRsDatabaseConfiguration = queryRsDbConfig;
+		this.queryToQueryBlockingConfiguration = queryToQueryBlocking;
 		this.referenceRsId = mId;
 		this.referenceRsType = mType;
+		this.referenceRsDatabaseConfiguration = refRsDbConfig;
+		this.queryToReferenceBlockingConfiguration = queryToRefBlocking;
 		this.task = taskType.name();
 		this.format = format;
 		this.graph = graph;
@@ -237,8 +259,9 @@ public class AbstractParametersEntity extends AbstractPersistentObject
 	// HACK FIXME REMOVEME
 	protected AbstractParametersEntity(long persistenceId, String type,
 			String modelConfigurationName, float lowThreshold,
-			float highThreshold, long sId, String sType, boolean qIsDeduplicated, Long mId,
-			String mType, OabaLinkageType taskType, String format, String graph) {
+			float highThreshold, long sId, String sType, boolean qIsDeduplicated,
+			String queryRsDbConfig, String queryToQueryBlocking, Long mId,
+			String mType, String refRsDbConfig, String queryToRefBlocking, OabaLinkageType taskType, String format, String graph) {
 
 		if (type == null || type.trim().isEmpty()) {
 			throw new IllegalArgumentException("null or blank type");
@@ -311,8 +334,12 @@ public class AbstractParametersEntity extends AbstractPersistentObject
 		this.queryRsId = sId;
 		this.queryRsType = sType;
 		this.queryRsIsDeduplicated = qIsDeduplicated;
+		this.queryRsDatabaseConfiguration = queryRsDbConfig;
+		this.queryToQueryBlockingConfiguration = queryToQueryBlocking;
 		this.referenceRsId = mId;
 		this.referenceRsType = mType;
+		this.referenceRsDatabaseConfiguration = refRsDbConfig;
+		this.queryToReferenceBlockingConfiguration = queryToRefBlocking;
 		this.task = taskType.name();
 		this.format = format;
 		this.graph = graph;

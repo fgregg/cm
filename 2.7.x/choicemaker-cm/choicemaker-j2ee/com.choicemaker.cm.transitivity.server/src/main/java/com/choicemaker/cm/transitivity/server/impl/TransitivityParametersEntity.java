@@ -134,22 +134,30 @@ public class TransitivityParametersEntity extends AbstractParametersEntity
 
 	public TransitivityParametersEntity(String modelConfigurationName,
 			float differThreshold, float matchThreshold,
-			PersistableRecordSource stage, PersistableRecordSource master) {
+			PersistableRecordSource stage, String queryRsDbConfig,
+			String queryToQueryBlocking, PersistableRecordSource master,
+			String refRsDbConfig, String queryToRefBlocking) {
 		this(modelConfigurationName, differThreshold, matchThreshold, stage,
-				DEFAULT_QUERY_RS_IS_DEDUPLICATED, master,
-				DEFAULT_RESULT_FORMAT, DEFAULT_GRAPH_PROPERTY_NAME);
+				DEFAULT_QUERY_RS_IS_DEDUPLICATED, queryRsDbConfig,
+				queryToQueryBlocking, master, refRsDbConfig,
+				queryToRefBlocking, DEFAULT_RESULT_FORMAT,
+				DEFAULT_GRAPH_PROPERTY_NAME);
 	}
 
 	public TransitivityParametersEntity(String modelConfigurationName,
 			float differThreshold, float matchThreshold,
-			PersistableRecordSource stage, boolean isQueryRsDeduped, PersistableRecordSource master,
-			AnalysisResultFormat format, String graphPropertyName) {
+			PersistableRecordSource stage, boolean isQueryRsDeduped,
+			String queryRsDbConfig, String queryToQueryBlocking,
+			PersistableRecordSource master, String refRsDbConfig,
+			String queryToRefBlocking, AnalysisResultFormat format,
+			String graphPropertyName) {
 		super(DV_TRANS, modelConfigurationName, differThreshold,
-				matchThreshold, stage.getId(), stage.getType(),isQueryRsDeduped,
+				matchThreshold, stage.getId(), stage.getType(),
+				isQueryRsDeduped, queryRsDbConfig, queryToQueryBlocking,
 				master == null ? null : master.getId(), master == null ? null
-						: master.getType(),
-				TRANSITIVITY_ANALYSIS, format == null ? null
-						: format.name(), graphPropertyName);
+						: master.getType(), refRsDbConfig, queryToRefBlocking,
+				TRANSITIVITY_ANALYSIS, format == null ? null : format.name(),
+				graphPropertyName);
 		if (format == null) {
 			throw new IllegalArgumentException("null analysis-result format");
 		}
@@ -161,9 +169,13 @@ public class TransitivityParametersEntity extends AbstractParametersEntity
 	public TransitivityParametersEntity(TransitivityParameters tp) {
 		super(DV_TRANS, tp.getModelConfigurationName(), tp.getLowThreshold(),
 				tp.getHighThreshold(), tp.getQueryRsId(), tp.getQueryRsType(),
-				tp.isQueryRsDeduplicated(), tp.getReferenceRsId(), tp
-						.getReferenceRsType(),
-				TRANSITIVITY_ANALYSIS, tp
+				tp.isQueryRsDeduplicated(), tp
+						.getQueryRsDatabaseConfiguration(), tp
+						.getQueryToQueryBlockingConfiguration(), tp
+						.getReferenceRsId(), tp
+						.getReferenceRsDatabaseConfiguration(), tp
+						.getQueryToReferenceBlockingConfiguration(), tp
+						.getReferenceRsType(), TRANSITIVITY_ANALYSIS, tp
 						.getAnalysisResultFormat().name(), tp
 						.getGraphProperty().getName());
 		if (tp.getGraphProperty() == null) {
@@ -175,9 +187,12 @@ public class TransitivityParametersEntity extends AbstractParametersEntity
 			AnalysisResultFormat format, String graphPropertyName) {
 		super(DV_TRANS, p.getModelConfigurationName(), p.getLowThreshold(), p
 				.getHighThreshold(), p.getQueryRsId(), p.getQueryRsType(), p
-				.isQueryRsDeduplicated(), p.getReferenceRsId(), p
-				.getReferenceRsType(), TRANSITIVITY_ANALYSIS, format.name(),
-				graphPropertyName);
+				.isQueryRsDeduplicated(), p.getQueryRsDatabaseConfiguration(),
+				p.getQueryToQueryBlockingConfiguration(), p.getReferenceRsId(),
+				p.getReferenceRsType(),
+				p.getReferenceRsDatabaseConfiguration(), p
+						.getQueryToReferenceBlockingConfiguration(),
+				TRANSITIVITY_ANALYSIS, format.name(), graphPropertyName);
 		if (graphPropertyName == null) {
 			throw new IllegalArgumentException("null graph-property");
 		}
@@ -204,6 +219,16 @@ public class TransitivityParametersEntity extends AbstractParametersEntity
 	}
 
 	@Override
+	public String getQueryRsDatabaseConfiguration() {
+		return queryRsDatabaseConfiguration;
+	}
+
+	@Override
+	public String getQueryToQueryBlockingConfiguration() {
+		return queryToQueryBlockingConfiguration;
+	}
+
+	@Override
 	public Long getReferenceRsId() {
 		return this.referenceRsId;
 	}
@@ -211,6 +236,16 @@ public class TransitivityParametersEntity extends AbstractParametersEntity
 	@Override
 	public String getReferenceRsType() {
 		return this.referenceRsType;
+	}
+
+	@Override
+	public String getReferenceRsDatabaseConfiguration() {
+		return referenceRsDatabaseConfiguration;
+	}
+
+	@Override
+	public String getQueryToReferenceBlockingConfiguration() {
+		return queryToReferenceBlockingConfiguration;
 	}
 
 	@Override

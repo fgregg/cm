@@ -55,7 +55,7 @@ public class OabaTestUtils {
 		final WellKnownTestConfiguration c = test.getTestConfiguration();
 
 		final PersistableRecordSource staging =
-			test.getRecordSourceController().save(c.getStagingRecordSource());
+			test.getRecordSourceController().save(c.getQueryRecordSource());
 		assertTrue(staging.isPersistent());
 		te.add(staging);
 
@@ -65,7 +65,7 @@ public class OabaTestUtils {
 		} else {
 			master =
 				test.getRecordSourceController()
-						.save(c.getMasterRecordSource());
+						.save(c.getReferenceRecordSource());
 			assertTrue(master.isPersistent());
 			te.add(master);
 		}
@@ -126,7 +126,11 @@ public class OabaTestUtils {
 		final OabaParameters bp =
 			new OabaParametersEntity(c.getModelConfigurationName(), c
 					.getThresholds().getDifferThreshold(), c.getThresholds()
-					.getMatchThreshold(), staging, master, c.getOabaTask());
+					.getMatchThreshold(), staging,
+					c.getQueryDatabaseConfiguration(),
+					c.getQueryBlockingConfiguration(), master,
+					c.getReferenceDatabaseConfiguration(),
+					c.getReferenceBlockingConfiguration(), c.getOabaTask());
 		te.add(bp);
 
 		final OabaService batchQuery = test.getOabaService();

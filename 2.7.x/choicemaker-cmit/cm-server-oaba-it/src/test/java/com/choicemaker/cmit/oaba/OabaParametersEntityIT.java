@@ -157,6 +157,10 @@ public class OabaParametersEntityIT {
 		Thresholds thresholds = EntityManagerUtils.createRandomThresholds();
 		PersistableRecordSource stage = new FakePersistableRecordSource(tag);
 		OabaLinkageType task = EntityManagerUtils.createRandomOabaTask();
+		String dbConfig0 = EntityManagerUtils.createRandomDatabaseConfigurationName(tag);
+		String blkConf0 = EntityManagerUtils.createRandomBlockingConfigurationName(tag);
+		String dbConfig1 = EntityManagerUtils.createRandomDatabaseConfigurationName(tag);
+		String blkConf1 = EntityManagerUtils.createRandomBlockingConfigurationName(tag);
 		PersistableRecordSource master =
 			EntityManagerUtils.createFakeMasterRecordSource(tag, task);
 		String modelConfig =
@@ -164,7 +168,8 @@ public class OabaParametersEntityIT {
 		OabaParametersEntity retVal =
 			new OabaParametersEntity(modelConfig,
 					thresholds.getDifferThreshold(),
-					thresholds.getMatchThreshold(), stage, master, task);
+					thresholds.getMatchThreshold(), stage, dbConfig0, blkConf0,
+					master, dbConfig1, blkConf1, task);
 		paramsController.save(retVal);
 		te.add(retVal);
 		return retVal;
@@ -204,10 +209,19 @@ public class OabaParametersEntityIT {
 		final OabaLinkageType task = EntityManagerUtils.createRandomOabaTask();
 		final PersistableRecordSource master =
 			EntityManagerUtils.createFakeMasterRecordSource(METHOD, task);
+		final String dbConfig0 =
+			EntityManagerUtils.createRandomDatabaseConfigurationName(METHOD);
+		final String blkConf0 =
+			EntityManagerUtils.createRandomBlockingConfigurationName(METHOD);
+		final String dbConfig1 =
+			EntityManagerUtils.createRandomDatabaseConfigurationName(METHOD);
+		final String blkConf1 =
+			EntityManagerUtils.createRandomBlockingConfigurationName(METHOD);
 		final String v1 = EntityManagerUtils.createExternalId(METHOD);
 		OabaParameters params =
 			new OabaParametersEntity(v1, thresholds.getDifferThreshold(),
-					thresholds.getMatchThreshold(), stage, master, task);
+					thresholds.getMatchThreshold(), stage, dbConfig0, blkConf0,
+					master, dbConfig1, blkConf1, task);
 		te.add(params);
 
 		// Save the parameters
