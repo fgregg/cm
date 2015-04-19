@@ -1,5 +1,5 @@
 /*
- * GroupMatchType.java       Revision: 2.5  Date: Sep 9, 2005 2:53:25 PM 
+ * GroupMatchType.java       Revision: 2.5  Date: Sep 9, 2005 2:53:25 PM
  *
  * Copyright (c) 2001 ChoiceMaker Technologies, Inc.
  * 48 Wall Street, 11th Floor, New York, NY 10005
@@ -16,6 +16,7 @@ package com.choicemaker.cm.args;
  * <li>Deduplication of a single record source (the staging source)</li>
  * <li>Linkage of a staging source to a master source</li>
  * <li>Linkage of a master source to another master source</li>
+ * <li>Transitivity analysis (<em>TA</em>) of the above OABA job types</li>
  * </ul>
  * <p><strong>Staging deduplication</strong></p>
  * <p>
@@ -41,6 +42,32 @@ package com.choicemaker.cm.args;
 public enum OabaLinkageType {
 
 	STAGING_DEDUPLICATION, STAGING_TO_MASTER_LINKAGE, MASTER_TO_MASTER_LINKAGE,
-	TRANSITIVITY_ANALYSIS;
+	TA_STAGING_DEDUPLICATION, TA_STAGING_TO_MASTER_LINKAGE,
+	TA_MASTER_TO_MASTER_LINKAGE;
+
+	public static OabaLinkageType transitivityAnalysis(OabaLinkageType oaba) {
+		if (oaba == null) {
+			throw new IllegalArgumentException("null linkage type");
+		}
+
+		OabaLinkageType retVal = null;
+		switch(oaba) {
+		case STAGING_DEDUPLICATION:
+			retVal = TA_STAGING_DEDUPLICATION;
+			break;
+		case STAGING_TO_MASTER_LINKAGE:
+			retVal = TA_STAGING_TO_MASTER_LINKAGE;
+			break;
+		case MASTER_TO_MASTER_LINKAGE:
+			retVal = TA_MASTER_TO_MASTER_LINKAGE;
+			break;
+		default:
+			retVal = oaba;
+			break;
+		}
+		assert retVal != null;
+
+		return retVal;
+	}
 
 }

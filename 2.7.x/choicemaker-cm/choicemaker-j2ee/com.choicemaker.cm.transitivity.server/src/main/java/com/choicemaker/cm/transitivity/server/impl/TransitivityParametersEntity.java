@@ -1,9 +1,5 @@
 package com.choicemaker.cm.transitivity.server.impl;
 
-import static com.choicemaker.cm.args.OabaLinkageType.MASTER_TO_MASTER_LINKAGE;
-import static com.choicemaker.cm.args.OabaLinkageType.STAGING_DEDUPLICATION;
-import static com.choicemaker.cm.args.OabaLinkageType.STAGING_TO_MASTER_LINKAGE;
-import static com.choicemaker.cm.args.OabaLinkageType.TRANSITIVITY_ANALYSIS;
 import static com.choicemaker.cm.transitivity.server.impl.TransitivityParametersJPA.DV_TRANS;
 import static com.choicemaker.cm.transitivity.server.impl.TransitivityParametersJPA.JPQL_TRANSPARAMETERS_FIND_ALL;
 import static com.choicemaker.cm.transitivity.server.impl.TransitivityParametersJPA.QN_TRANSPARAMETERS_FIND_ALL;
@@ -43,7 +39,7 @@ public class TransitivityParametersEntity extends AbstractParametersEntity
 	/**
 	 * Dumps the transitivity parameters and the parameters of an associated
 	 * OABA job.
-	 * 
+	 *
 	 * @param tp
 	 *            must be non-null
 	 * @param batchJob
@@ -98,28 +94,34 @@ public class TransitivityParametersEntity extends AbstractParametersEntity
 			OabaParametersEntity.dump(tag, p);
 		} else {
 			final OabaLinkageType task = p.getOabaLinkageType();
-			if (task == STAGING_DEDUPLICATION) {
+			switch(task) {
+
+			case STAGING_DEDUPLICATION:
+			case STAGING_TO_MASTER_LINKAGE:
+			case MASTER_TO_MASTER_LINKAGE:
 				OabaParametersEntity.dump(tag, p);
-			} else if (task == STAGING_TO_MASTER_LINKAGE) {
-				OabaParametersEntity.dump(tag, p);
-			} else if (task == MASTER_TO_MASTER_LINKAGE) {
-				OabaParametersEntity.dump(tag, p);
-			} else if (task == TRANSITIVITY_ANALYSIS) {
+				break;
+
+			case TA_STAGING_DEDUPLICATION:
+			case TA_STAGING_TO_MASTER_LINKAGE:
+			case TA_MASTER_TO_MASTER_LINKAGE:
 				pw.println("Transitivity parameters (" + tag + ")");
 				pw.println(tag + ": DIFFER threshold: " + p.getLowThreshold());
 				pw.println(tag + ": MATCH threshold: " + p.getHighThreshold());
 				pw.println(tag + ": Model configuration name: "
 						+ p.getModelConfigurationName());
-				pw.print(tag + ": Linkage task: " + task);
-				pw.println(" (deduplicating a single record source)");
-				pw.println(tag + ": Staging record source: " + p.getQueryRsId());
-				pw.println(tag + ": Staging record source type: "
+				pw.println(tag + ": Linkage task: " + task);
+				pw.println(tag + ": Query record source: " + p.getQueryRsId());
+				pw.println(tag + ": Query record source type: "
 						+ p.getQueryRsType());
-				pw.println(tag + ": Master record source: "
+				pw.println(tag + ": Reference record source: "
 						+ p.getReferenceRsId());
-				pw.println(tag + ": Master record source type: "
+				pw.println(tag + ": Reference record source type: "
 						+ p.getReferenceRsType());
-			} else {
+				OabaParametersEntity.dump(tag, p);
+				break;
+
+			default:
 				throw new IllegalArgumentException("unexpected task type: "
 						+ task);
 			}
@@ -136,11 +138,11 @@ public class TransitivityParametersEntity extends AbstractParametersEntity
 			float differThreshold, float matchThreshold,
 			PersistableRecordSource stage, String queryRsDbConfig,
 			String queryToQueryBlocking, PersistableRecordSource master,
-			String refRsDbConfig, String queryToRefBlocking) {
+			String refRsDbConfig, String queryToRefBlocking, OabaLinkageType linkageType) {
 		this(modelConfigurationName, differThreshold, matchThreshold, stage,
 				DEFAULT_QUERY_RS_IS_DEDUPLICATED, queryRsDbConfig,
 				queryToQueryBlocking, master, refRsDbConfig,
-				queryToRefBlocking, DEFAULT_RESULT_FORMAT,
+				queryToRefBlocking, linkageType, DEFAULT_RESULT_FORMAT,
 				DEFAULT_GRAPH_PROPERTY_NAME);
 	}
 
@@ -149,14 +151,14 @@ public class TransitivityParametersEntity extends AbstractParametersEntity
 			PersistableRecordSource stage, boolean isQueryRsDeduped,
 			String queryRsDbConfig, String queryToQueryBlocking,
 			PersistableRecordSource master, String refRsDbConfig,
-			String queryToRefBlocking, AnalysisResultFormat format,
-			String graphPropertyName) {
+			String queryToRefBlocking, OabaLinkageType linkageType,
+			AnalysisResultFormat format, String graphPropertyName) {
 		super(DV_TRANS, modelConfigurationName, differThreshold,
 				matchThreshold, stage.getId(), stage.getType(),
 				isQueryRsDeduped, queryRsDbConfig, queryToQueryBlocking,
 				master == null ? null : master.getId(), master == null ? null
 						: master.getType(), refRsDbConfig, queryToRefBlocking,
-				TRANSITIVITY_ANALYSIS, format == null ? null : format.name(),
+				linkageType, format == null ? null : format.name(),
 				graphPropertyName);
 		if (format == null) {
 			throw new IllegalArgumentException("null analysis-result format");
@@ -173,9 +175,9 @@ public class TransitivityParametersEntity extends AbstractParametersEntity
 						.getQueryRsDatabaseConfiguration(), tp
 						.getQueryToQueryBlockingConfiguration(), tp
 						.getReferenceRsId(), tp
+						.getReferenceRsType(), tp
 						.getReferenceRsDatabaseConfiguration(), tp
-						.getQueryToReferenceBlockingConfiguration(), tp
-						.getReferenceRsType(), TRANSITIVITY_ANALYSIS, tp
+						.getQueryToReferenceBlockingConfiguration(), tp.getOabaLinkageType(), tp
 						.getAnalysisResultFormat().name(), tp
 						.getGraphProperty().getName());
 		if (tp.getGraphProperty() == null) {
@@ -192,7 +194,8 @@ public class TransitivityParametersEntity extends AbstractParametersEntity
 				p.getReferenceRsType(),
 				p.getReferenceRsDatabaseConfiguration(), p
 						.getQueryToReferenceBlockingConfiguration(),
-				TRANSITIVITY_ANALYSIS, format.name(), graphPropertyName);
+				OabaLinkageType.transitivityAnalysis(p.getOabaLinkageType()),
+				format.name(), graphPropertyName);
 		if (graphPropertyName == null) {
 			throw new IllegalArgumentException("null graph-property");
 		}

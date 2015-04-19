@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -39,7 +39,7 @@ public class OabaParametersEntity extends AbstractParametersEntity implements
 		Serializable, OabaParameters {
 
 	private static final long serialVersionUID = 271L;
-	
+
 	// private static final Logger logger = Logger
 	// .getLogger(OabaParametersEntity.class.getName());
 
@@ -61,31 +61,41 @@ public class OabaParametersEntity extends AbstractParametersEntity implements
 					+ p.getModelConfigurationName());
 			final OabaLinkageType task = p.getOabaLinkageType();
 			pw.print(tag + ": Linkage task: " + task);
-			if (task == OabaLinkageType.STAGING_DEDUPLICATION) {
+			switch(task) {
+			case STAGING_DEDUPLICATION:
+			case TA_STAGING_DEDUPLICATION:
 				pw.println(" (deduplicating a single record source)");
-				pw.println(tag + ": Staging record source: " + p.getQueryRsId());
-				pw.println(tag + ": Staging record source type: "
+				pw.println(tag + ": Query record source: " + p.getQueryRsId());
+				pw.println(tag + ": Query record source type: "
 						+ p.getQueryRsType());
-			} else if (task == OabaLinkageType.STAGING_TO_MASTER_LINKAGE) {
-				pw.println(" (linking a staging source to a master source)");
-				pw.println(tag + ": Staging record source: " + p.getQueryRsId());
-				pw.println(tag + ": Staging record source type: "
+				break;
+
+			case STAGING_TO_MASTER_LINKAGE:
+			case TA_STAGING_TO_MASTER_LINKAGE:
+				pw.println(" (linking a query source to a reference source)");
+				pw.println(tag + ": Query record source: " + p.getQueryRsId());
+				pw.println(tag + ": Query record source type: "
 						+ p.getQueryRsType());
-				pw.println(tag + ": Master record source: "
+				pw.println(tag + ": Reference record source: "
 						+ p.getReferenceRsId());
-				pw.println(tag + ": Master record source type: "
+				pw.println(tag + ": Reference record source type: "
 						+ p.getReferenceRsType());
-			} else if (task == OabaLinkageType.MASTER_TO_MASTER_LINKAGE) {
-				pw.println(" (linking a master source to a master source)");
-				pw.println(tag + ": Master record source 1: "
+				break;
+
+			case MASTER_TO_MASTER_LINKAGE:
+			case TA_MASTER_TO_MASTER_LINKAGE:
+				pw.println(" (linking a reference source to a reference source)");
+				pw.println(tag + ": Reference record source 1: "
 						+ p.getQueryRsId());
-				pw.println(tag + ": Master record source 1 type: "
+				pw.println(tag + ": Reference record source 1 type: "
 						+ p.getQueryRsType());
-				pw.println(tag + ": Master record source 2: "
+				pw.println(tag + ": Reference record source 2: "
 						+ p.getReferenceRsId());
-				pw.println(tag + ": Master record source 2 type: "
+				pw.println(tag + ": Reference record source 2 type: "
 						+ p.getReferenceRsType());
-			} else {
+				break;
+
+			default:
 				throw new IllegalArgumentException("unexpected task type: "
 						+ task);
 			}
@@ -134,7 +144,7 @@ public class OabaParametersEntity extends AbstractParametersEntity implements
 
 	/**
 	 * A internal constructor that allows field values to be set directly.
-	 * 
+	 *
 	 * @param modelConfigurationName
 	 *            model configuration name
 	 * @param lowThreshold

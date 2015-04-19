@@ -1,5 +1,8 @@
 package com.choicemaker.cmit.trans;
 
+import static com.choicemaker.cm.args.OabaLinkageType.MASTER_TO_MASTER_LINKAGE;
+import static com.choicemaker.cm.args.OabaLinkageType.STAGING_DEDUPLICATION;
+import static com.choicemaker.cm.args.OabaLinkageType.STAGING_TO_MASTER_LINKAGE;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Date;
@@ -73,10 +76,10 @@ public class TransitivityParametersEntityIT {
 	@EJB
 	private OabaSettingsController oabaSettingsController;
 
-	@EJB(beanName="OabaProcessingControllerBean")
+	@EJB(beanName = "OabaProcessingControllerBean")
 	private ProcessingController oabaProcessingController;
 
-	@EJB(beanName="TransitivityProcessingControllerBean")
+	@EJB(beanName = "TransitivityProcessingControllerBean")
 	private ProcessingController transProcessingController;
 
 	@EJB
@@ -141,7 +144,7 @@ public class TransitivityParametersEntityIT {
 		final OabaLinkageType task = EntityManagerUtils.createRandomOabaTask();
 		final PersistableRecordSource master =
 			EntityManagerUtils.createFakeMasterRecordSource(METHOD, task);
-		
+
 		final String dbConfig0 =
 			EntityManagerUtils.createRandomDatabaseConfigurationName(METHOD);
 		final String blkConf0 =
@@ -183,19 +186,27 @@ public class TransitivityParametersEntityIT {
 	}
 
 	protected TransitivityParametersEntity createTransitivityParameters(
-			String tag, TestEntityCounts te) {
-		if (te == null) {
-			throw new IllegalArgumentException("null test entities");
+			final String tag, final TestEntityCounts te,
+			final OabaLinkageType task) {
+		if (te == null || task == null) {
+			throw new IllegalArgumentException(
+					"null test entities or OABA linkage type");
+		}
+		// Quick and dirty test if task is a transitivity analysis task
+		if (task == OabaLinkageType.transitivityAnalysis(task)) {
+			String msg =
+				"Invalid OABA task '" + task
+						+ "' must not be TRANSITIVITY_ANALYSIS";
+			throw new IllegalArgumentException(msg);
 		}
 		// Create the OABA parameters of a parent job
 		final Thresholds thresholds =
 			EntityManagerUtils.createRandomThresholds();
 		final PersistableRecordSource stage =
 			new FakePersistableRecordSource(tag);
-		final OabaLinkageType task = EntityManagerUtils.createRandomOabaTask();
 		final PersistableRecordSource master =
 			EntityManagerUtils.createFakeMasterRecordSource(tag, task);
-		
+
 		final String dbConfig0 =
 			EntityManagerUtils.createRandomDatabaseConfigurationName(tag);
 		final String blkConf0 =
@@ -222,12 +233,10 @@ public class TransitivityParametersEntityIT {
 		return retVal;
 	}
 
-	@Test
-	public void testEqualsHashCode() {
-		final String METHOD = "testEqualsHashCode";
-
+	public void testEqualsHashCode(final String METHOD,
+			final OabaLinkageType task) {
 		final TransitivityParameters p1 =
-			createTransitivityParameters(METHOD, te);
+			createTransitivityParameters(METHOD, te, task);
 		assertTrue(te.contains(p1));
 		final int h1 = p1.hashCode();
 
@@ -244,6 +253,24 @@ public class TransitivityParametersEntityIT {
 		assertTrue(te.contains(p1));
 
 		checkCounts();
+	}
+
+	@Test
+	public void testEqualsHashCodeStagingDeduplication() {
+		final String METHOD = "testEqualsHashCodeStagingDeduplication";
+		testEqualsHashCode(METHOD, STAGING_DEDUPLICATION);
+	}
+
+	@Test
+	public void testEqualsHashCodeStagingMasterLinkage() {
+		final String METHOD = "testEqualsHashCodeStagingMasterLinkage";
+		testEqualsHashCode(METHOD, STAGING_TO_MASTER_LINKAGE);
+	}
+
+	@Test
+	public void testEqualsHashCodeMasterMasterLinkage() {
+		final String METHOD = "testEqualsHashCodeMasterMasterLinkage";
+		testEqualsHashCode(METHOD, MASTER_TO_MASTER_LINKAGE);
 	}
 
 }

@@ -1,16 +1,20 @@
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
-import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.*;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.CN_FORMAT;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.CN_GRAPH;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.CN_HIGH_THRESHOLD;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.CN_ID;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.CN_LOW_THRESHOLD;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.CN_MODEL;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.CN_Q2Q_BLOCKING;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.CN_Q2R_BLOCKING;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.CN_QUERY_RS;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.CN_QUERY_RS_DBCONF;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.CN_QUERY_RS_DEDUPED;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.CN_QUERY_RS_TYPE;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.CN_REFERENCE_RS;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.CN_REFERENCE_RS_TYPE;
-import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.CN_MODEL;
-import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.CN_QUERY_RS;
-import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.CN_QUERY_RS_TYPE;
-import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.CN_QUERY_RS_DEDUPED;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.CN_REF_RS_DBCONF;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.CN_TASK;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.CN_TYPE;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.DISCRIMINATOR_COLUMN;
@@ -137,7 +141,7 @@ public class AbstractParametersEntity extends AbstractPersistentObject
 	}
 
 	/**
-	 * 
+	 *
 	 * @param modelConfigurationName
 	 *            model configuration name
 	 * @param lowThreshold
@@ -199,7 +203,9 @@ public class AbstractParametersEntity extends AbstractPersistentObject
 		// If the type is TRANSITIVITY_ANALYSIS, the referenceRsId and the
 		// referenceRsType must be consistent with one another, but they are
 		// otherwise unconstrained.
-		if (taskType == OabaLinkageType.STAGING_DEDUPLICATION) {
+		switch(taskType) {
+		case STAGING_DEDUPLICATION:
+		case TA_STAGING_DEDUPLICATION:
 			if (mId != null) {
 				String msg =
 					"non-null master source id '" + mId + "' (taskType is '"
@@ -212,8 +218,12 @@ public class AbstractParametersEntity extends AbstractPersistentObject
 							+ "' (taskType is '" + taskType + "')";
 				throw new IllegalArgumentException(msg);
 			}
-		} else if (taskType == OabaLinkageType.STAGING_TO_MASTER_LINKAGE
-				|| taskType == OabaLinkageType.MASTER_TO_MASTER_LINKAGE) {
+			break;
+
+		case STAGING_TO_MASTER_LINKAGE:
+		case MASTER_TO_MASTER_LINKAGE:
+		case TA_STAGING_TO_MASTER_LINKAGE:
+		case TA_MASTER_TO_MASTER_LINKAGE:
 			if (mId == null) {
 				String msg =
 					"null master source id '" + mId + "' (taskType is '"
@@ -226,16 +236,10 @@ public class AbstractParametersEntity extends AbstractPersistentObject
 							+ taskType + "')";
 				throw new IllegalArgumentException(msg);
 			}
-		} else {
-			assert taskType == OabaLinkageType.TRANSITIVITY_ANALYSIS;
-			if ((mType == null && mId != null)
-					|| (mType != null && mId == null)) {
-				String msg =
-					"inconsistent master source id '" + mId
-							+ "' and master source type '" + mType
-							+ "' (taskType is '" + taskType + "')";
-				throw new IllegalArgumentException(msg);
-			}
+			break;
+
+		default:
+			throw new Error("Unexpected task type: " + taskType);
 		}
 
 		this.type = type;
@@ -287,7 +291,9 @@ public class AbstractParametersEntity extends AbstractPersistentObject
 		// If the type is TRANSITIVITY_ANALYSIS, the referenceRsId and the
 		// referenceRsType must be consistent with one another, but they are
 		// otherwise unconstrained.
-		if (taskType == OabaLinkageType.STAGING_DEDUPLICATION) {
+		switch(taskType) {
+		case STAGING_DEDUPLICATION:
+		case TA_STAGING_DEDUPLICATION:
 			if (mId != null) {
 				String msg =
 					"non-null master source id '" + mId + "' (taskType is '"
@@ -300,8 +306,12 @@ public class AbstractParametersEntity extends AbstractPersistentObject
 							+ "' (taskType is '" + taskType + "')";
 				throw new IllegalArgumentException(msg);
 			}
-		} else if (taskType == OabaLinkageType.STAGING_TO_MASTER_LINKAGE
-				|| taskType == OabaLinkageType.MASTER_TO_MASTER_LINKAGE) {
+			break;
+
+		case STAGING_TO_MASTER_LINKAGE:
+		case MASTER_TO_MASTER_LINKAGE:
+		case TA_STAGING_TO_MASTER_LINKAGE:
+		case TA_MASTER_TO_MASTER_LINKAGE:
 			if (mId == null) {
 				String msg =
 					"null master source id '" + mId + "' (taskType is '"
@@ -314,16 +324,10 @@ public class AbstractParametersEntity extends AbstractPersistentObject
 							+ taskType + "')";
 				throw new IllegalArgumentException(msg);
 			}
-		} else {
-			assert taskType == OabaLinkageType.TRANSITIVITY_ANALYSIS;
-			if ((mType == null && mId != null)
-					|| (mType != null && mId == null)) {
-				String msg =
-					"inconsistent master source id '" + mId
-							+ "' and master source type '" + mType
-							+ "' (taskType is '" + taskType + "')";
-				throw new IllegalArgumentException(msg);
-			}
+			break;
+
+		default:
+			throw new Error("Unexpected task type: " + taskType);
 		}
 
 		this.id = persistenceId;

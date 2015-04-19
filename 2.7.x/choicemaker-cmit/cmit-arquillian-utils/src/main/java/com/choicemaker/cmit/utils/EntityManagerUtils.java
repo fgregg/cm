@@ -161,11 +161,13 @@ public class EntityManagerUtils {
 		PersistableRecordSource retVal;
 		switch (task) {
 		case STAGING_DEDUPLICATION:
+		case TA_STAGING_DEDUPLICATION:
 			retVal = null;
 			break;
 		case STAGING_TO_MASTER_LINKAGE:
 		case MASTER_TO_MASTER_LINKAGE:
-		case TRANSITIVITY_ANALYSIS:
+		case TA_STAGING_TO_MASTER_LINKAGE:
+		case TA_MASTER_TO_MASTER_LINKAGE:
 			retVal = new FakePersistableRecordSource(tag);
 			break;
 		default:
