@@ -52,6 +52,8 @@ public class TransitivityMdbTestProcedures {
 	private static final Logger logger = Logger
 			.getLogger(TransitivityMdbTestProcedures.class.getName());
 
+	public static final long HACK_3X_LONG_TIMEOUT = 10 * LONG_TIMEOUT_MILLIS;
+
 	public static boolean isValidConfigurationClass(Class<?> c) {
 		boolean retVal = false;
 		if (c != null && WellKnownTestConfiguration.class.isAssignableFrom(c)) {
@@ -273,7 +275,8 @@ public class TransitivityMdbTestProcedures {
 			} else if (transPhase == BatchProcessingPhase.FINAL) {
 				transNotification =
 					JmsUtils.receiveFinalBatchProcessingNotification(transJob,
-							LOG_SOURCE, transListener, LONG_TIMEOUT_MILLIS);
+							// LOG_SOURCE, transListener, LONG_TIMEOUT_MILLIS);
+							LOG_SOURCE, transListener, HACK_3X_LONG_TIMEOUT);
 			} else {
 				throw new Error("unexpected phase: " + transPhase);
 			}
