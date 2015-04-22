@@ -105,7 +105,7 @@ public interface BatchJobJPA {
 	 */
 	String QN_BATCHJOB_FIND_BY_JOBID = "anyBatchJobFindByJobId";
 
-	/** JPQL used to implement {@link #QN_OABAJOB_FIND_ALL} */
+	/** JPQL used to implement {@link #QN_BATCHJOB_FIND_BY_JOBID} */
 	String JPQL_BATCHJOB_FIND_BY_JOBID =
 		"Select j from BatchJobEntity j where j.id = :jobId";
 
