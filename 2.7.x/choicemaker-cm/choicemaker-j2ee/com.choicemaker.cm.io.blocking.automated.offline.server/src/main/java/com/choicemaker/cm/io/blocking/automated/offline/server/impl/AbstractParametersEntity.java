@@ -62,6 +62,7 @@ public class AbstractParametersEntity extends AbstractPersistentObject
 	protected static final float INVALID_THRESHOLD = -1f;
 
 	public static final String DEFAULT_DUMP_TAG = "BP";
+
 	@Id
 	@Column(name = CN_ID)
 	@TableGenerator(name = ID_GENERATOR_NAME, table = ID_GENERATOR_TABLE,
