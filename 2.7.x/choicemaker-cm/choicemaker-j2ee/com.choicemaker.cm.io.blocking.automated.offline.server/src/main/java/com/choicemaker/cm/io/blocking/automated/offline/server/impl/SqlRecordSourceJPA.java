@@ -24,7 +24,7 @@ public interface SqlRecordSourceJPA extends BaseRecordSourceJPA {
 	 */
 	String DISCRIMINATOR_VALUE = PersistableSqlRecordSource.TYPE;
 
-	String CN_CLASSNAME = "CLASS";
+	String CN_CM_IO_CLASS = "CLASS";
 
 	String CN_DATASOURCE = "DATA_SOURCE";
 

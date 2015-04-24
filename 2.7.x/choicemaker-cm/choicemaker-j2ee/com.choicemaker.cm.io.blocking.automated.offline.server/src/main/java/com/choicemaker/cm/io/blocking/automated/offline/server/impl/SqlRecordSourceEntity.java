@@ -1,6 +1,6 @@
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
-import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.SqlRecordSourceJPA.CN_CLASSNAME;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.SqlRecordSourceJPA.CN_CM_IO_CLASS;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.SqlRecordSourceJPA.CN_DATASOURCE;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.SqlRecordSourceJPA.CN_DBCONFIG;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.SqlRecordSourceJPA.CN_MODEL;
@@ -29,7 +29,7 @@ public class SqlRecordSourceEntity extends BaseRecordSourceEntity implements
 
 	// -- Instance data
 
-	@Column(name = CN_CLASSNAME)
+	@Column(name = CN_CM_IO_CLASS)
 	protected final String className;
 
 	@Column(name = CN_DATASOURCE)
