@@ -89,7 +89,7 @@ public class ReflectionTestUtils {
 		Method retVal = null;
 		try {
 			final String accessorName;
-			if (Boolean.class.isAssignableFrom(p)) {
+			if (Boolean.class.isAssignableFrom(p) || boolean.class.isAssignableFrom(p)) {
 				accessorName = IS + pn;
 			} else {
 				accessorName = GET + pn;
