@@ -4,7 +4,7 @@ import java.lang.reflect.Method;
 import java.util.Random;
 import java.util.UUID;
 
-public class ReflectionTestUtils {
+public class ReflectionUtils {
 
 	private static final Random random = new Random();
 
@@ -12,7 +12,7 @@ public class ReflectionTestUtils {
 	public static final String IS = "is";
 	public static final String SET = "set";
 
-	private ReflectionTestUtils() {
+	private ReflectionUtils() {
 	}
 
 	/** Copied from org.junit.Assert to avoid JUnit dependence in production code */
@@ -121,16 +121,32 @@ public class ReflectionTestUtils {
 		return retVal;
 	}
 
+	public static Object getProperty(final Object nce, final Class p,
+			final String pn) {
+		assertTrue("Object must be non-null", nce != null);
+		assertTrue("Property value class must be non-null", p != null);
+	
+		Object retVal = null;
+		try {
+			final Class c = nce.getClass();
+			final Method accessor = getAccessor(c, p, pn);
+			retVal = (Object) accessor.invoke(nce, (Object[]) null);
+		} catch (Exception e) {
+			fail(e.toString());
+		}
+		return retVal;
+	}
+
 	public static  void setProperty(final Object nce, final Class p,
-			final String _pn, final Object pv) {
+			final String pn, final Object pv) {
 		assertTrue("Object must be non-null", nce != null);
 		assertTrue("Property value class must be non-null", p != null);
 		assertTrue("Property value must not be null", pv != null);
 	
 		try {
 			final Class c = nce.getClass();
-			final Method accessor = getAccessor(c, p, _pn);
-			final Method manipulator = getManipulator(c, p, _pn);
+			final Method accessor = getAccessor(c, p, pn);
+			final Method manipulator = getManipulator(c, p, pn);
 	
 			// Confirm the existing value is different from the new value
 			// @SuppressWarnings("unchecked")
@@ -145,15 +161,15 @@ public class ReflectionTestUtils {
 	}
 
 	public static  void testProperty(final Object nce, final Class p,
-			final String _pn, final Object pv) {
+			final String pn, final Object pv) {
 		assertTrue("Object must be non-null", nce != null);
 		try {
 			// Set the property value
-			setProperty(nce, p, _pn, pv);
+			setProperty(nce, p, pn, pv);
 	
 			// Check the property value
 			final Class c = nce.getClass();
-			final Method accessor = getAccessor(c, p, _pn);
+			final Method accessor = getAccessor(c, p, pn);
 			// @SuppressWarnings("unchecked")
 			Object value = (Object) accessor.invoke(nce, (Object[]) null);
 			assertTrue(pv.equals(value));
