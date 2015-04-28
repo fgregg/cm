@@ -103,23 +103,33 @@ public class TransitivityServiceBean implements TransitivityService {
 
 	@Override
 	public long startTransitivity(String externalID, TransitivityParameters tp,
-			BatchJob batchJob, OabaSettings settings, ServerConfiguration serverConfiguration)
+			BatchJob batchJob, OabaSettings settings,
+			ServerConfiguration serverConfiguration)
 			throws ServerConfigurationException {
+		return startTransitivity(externalID, tp, batchJob, settings,
+				serverConfiguration, null);
+	}
+
+	@Override
+	public long startTransitivity(String externalID,
+			TransitivityParameters batchParams, BatchJob batchJob,
+			OabaSettings settings, ServerConfiguration serverConfiguration,
+			BatchJob urmJob) throws ServerConfigurationException {
 
 		final String METHOD = "startTransitivity";
 		log.entering(SOURCE_CLASS, METHOD);
 
-		validateStartParameters(externalID, tp, batchJob, serverConfiguration);
+		validateStartParameters(externalID, batchParams, batchJob, serverConfiguration);
 
 		OabaParameters oabaParams =
 			oabaParamsController.findOabaParametersByBatchJobId(batchJob.getId());
-		logStartParameters(externalID, tp, batchJob, oabaParams,
+		logStartParameters(externalID, batchParams, batchJob, oabaParams,
 				serverConfiguration);
 
 		// Create and persist a transitivity job and its associated objects
 		BatchJob transJob =
-			jobController.createPersistentTransitivityJob(externalID, tp,
-					batchJob, settings, serverConfiguration);
+			jobController.createPersistentTransitivityJob(externalID, batchParams,
+					batchJob, settings, serverConfiguration, urmJob);
 		assert transJob.isPersistent();
 		final long retVal = transJob.getId();
 		log.info("Started transitivity analysis (job id: " + retVal + ")");

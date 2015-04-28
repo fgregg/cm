@@ -81,7 +81,8 @@ public class BatchJobUtils {
 			} else {
 				extId = s;
 			}
-			retVal = new OabaJobEntity(params, settings, sc, extId);
+			final BatchJob urmJob = null;
+			retVal = new OabaJobEntity(params, settings, sc, urmJob, extId);
 			te.add(retVal);
 			utx.commit();
 		} catch (Exception x) {
@@ -224,8 +225,10 @@ public class BatchJobUtils {
 			} else {
 				extId = s;
 			}
+			final BatchJob urmJob = null;
 			retVal =
-				new TransitivityJobEntity(params, settings, sc, batchJob, extId);
+				new TransitivityJobEntity(params, settings, sc, batchJob,
+						urmJob, extId);
 			te.add(retVal);
 			utx.commit();
 		} catch (Exception x) {

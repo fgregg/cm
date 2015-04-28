@@ -15,13 +15,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.logging.Logger;
 
-import javax.ejb.CreateException;
-import javax.ejb.FinderException;
-import javax.jms.JMSException;
-import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
 import com.choicemaker.cm.urm.base.IRecordCollection;
 import com.choicemaker.cm.urm.base.JobStatus;
@@ -55,7 +50,7 @@ public class BatchMatchAnalyzerBean extends BatchMatchBaseBean {
 	private EntityManager em;
 
 	// @EJB
-	private OabaService batchQuery;
+//	private OabaService batchQuery;
 
 	// @EJB
 //	private OperationalPropertyController propController;
@@ -239,28 +234,31 @@ public class BatchMatchAnalyzerBean extends BatchMatchBaseBean {
 											RemoteException
 		
 	{
-		try {
-			UrmStepJob batchStep = Single.getInst().findStepJobByUrmAndIndex(urmJobId,BatchMatchAnalyzerBean.BATCH_MATCH_STEP_INDEX);					
-			long batchJobId  = batchStep.getStepJobId().longValue();		
-			log.fine("batch job jd = "+batchJobId);
-			boolean ret = batchQuery.removeDir(batchJobId);
-			Single.getInst().removeUrmJob(em, urmJobId);
-			return ret;
-		} catch (NamingException e) {
-			log.severe(e.toString());
-			throw new ConfigException(e.toString());
-		} catch (CreateException e) {
-			log.severe(e.toString());
-			throw new ConfigException(e.toString());
-		} catch (JMSException e) {
-			log.severe(e.toString());
-			throw new ConfigException(e.toString());
-		} catch (FinderException e) {
-			log.severe(e.toString());
-			throw new CmRuntimeException(e.toString());
-		}		
+		// FIXME
+		// try {
+		UrmStepJob batchStep =
+			Single.getInst().findStepJobByUrmAndIndex(urmJobId,
+					BatchMatchAnalyzerBean.BATCH_MATCH_STEP_INDEX);
+		long batchJobId = batchStep.getStepJobId().longValue();
+		log.fine("batch job jd = " + batchJobId);
+		// boolean ret = batchQuery.removeDir(batchJobId);
+		Single.getInst().removeUrmJob(em, urmJobId);
+		// return ret;
+		return false;
+		// } catch (NamingException e) {
+		// log.severe(e.toString());
+		// throw new ConfigException(e.toString());
+		// } catch (CreateException e) {
+		// log.severe(e.toString());
+		// throw new ConfigException(e.toString());
+		// } catch (JMSException e) {
+		// log.severe(e.toString());
+		// throw new ConfigException(e.toString());
+		// } catch (FinderException e) {
+		// log.severe(e.toString());
+		// throw new CmRuntimeException(e.toString());
+		// }
 	}
-
 		
 	/**
 	 * Copies the matching result  

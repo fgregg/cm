@@ -15,8 +15,13 @@ public interface OabaJobController extends BatchJobController {
 			OabaSettings settings, ServerConfiguration sc)
 			throws ServerConfigurationException;
 
+	BatchJob createPersistentOabaJob(String externalID,
+			OabaParameters batchParams, OabaSettings oabaSettings,
+			ServerConfiguration serverConfiguration, BatchJob urmJob)
+			throws ServerConfigurationException;
+
 	BatchJob findOabaJob(long id);
 
-//	OabaJobEntity save(OabaJobEntity job);
+	// OabaJobEntity save(OabaJobEntity job);
 
 }

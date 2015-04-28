@@ -19,12 +19,17 @@ public interface TransitivityJobController extends BatchJobController {
 			OabaSettings settings, ServerConfiguration sc)
 			throws ServerConfigurationException;
 
+	BatchJob createPersistentTransitivityJob(String externalID,
+			TransitivityParameters batchParams, BatchJob batchJob,
+			OabaSettings settings, ServerConfiguration serverConfiguration,
+			BatchJob urmJob) throws ServerConfigurationException;
+
 	List<BatchJob> findAllByOabaJobId(long oabaJobId);
 
 	BatchJob findTransitivityJob(long id);
 
 	List<BatchJob> findAllTransitivityJobs();
 
-//	TransitivityJobEntity save(TransitivityJobEntity job);
+	// TransitivityJobEntity save(TransitivityJobEntity job);
 
 }

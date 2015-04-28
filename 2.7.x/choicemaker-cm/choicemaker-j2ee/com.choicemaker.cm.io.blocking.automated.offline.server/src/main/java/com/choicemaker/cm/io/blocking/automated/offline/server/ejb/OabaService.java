@@ -34,7 +34,7 @@ public interface OabaService {
 
 	String DEFAULT_EJB_REF_NAME = "ejb/OabaService";
 	String DEFAULT_JNDI_COMP_NAME = "java:comp/env/" + DEFAULT_EJB_REF_NAME;
-	
+
 	long INVALID_JOB_ID = Long.MIN_VALUE;
 
 	/**
@@ -61,6 +61,10 @@ public interface OabaService {
 			OabaParameters batchParams, OabaSettings oabaSettings,
 			ServerConfiguration serverConfiguration)
 			throws ServerConfigurationException;
+
+	public long startDeduplication(String externalID, OabaParameters bp,
+			OabaSettings oabaSettings, ServerConfiguration serverConfiguration,
+			BatchJob urmJob) throws ServerConfigurationException;
 
 	/**
 	 * This method starts the Offline Automated Blocking Algorithm to compare
@@ -93,6 +97,10 @@ public interface OabaService {
 	public long startLinkage(String externalID, OabaParameters batchParams,
 			OabaSettings oabaSettings, ServerConfiguration serverConfiguration)
 			throws ServerConfigurationException;
+
+	public long startLinkage(String externalID, OabaParameters batchParams,
+			OabaSettings oabaSettings, ServerConfiguration serverConfiguration,
+			BatchJob urmJob) throws ServerConfigurationException;
 
 	/**
 	 * This method attempts to abort a job.
@@ -167,16 +175,7 @@ public interface OabaService {
 			JMSException, FinderException;
 
 	/**
-	 * This method removes the temp directory associated with this jobID.
-	 * 
-	 * @param jobID
-	 * @return boolean - true if the directory was successfully deleted.
-	 */
-	public boolean removeDir(long jobID) throws RemoteException,
-			CreateException, NamingException, JMSException, FinderException;
-
-	/**
-	 * This method tries to resume a stop job.
+	 * This method tries to resume a suspended job.
 	 * 
 	 * @param jobID
 	 *            - job id of the job you want to resume

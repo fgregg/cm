@@ -61,18 +61,19 @@ public class TransitivityJobEntity extends BatchJobEntity implements IControl {
 
 	public TransitivityJobEntity(TransitivityParameters params,
 			OabaSettings settings, ServerConfiguration sc, BatchJob parent,
-			String externalId) {
+			BatchJob urmJob, String externalId) {
 		this(DISCRIMINATOR_VALUE, params.getId(), settings.getId(), sc.getId(),
 				externalId, randomTransactionId(), parent.getId(),
-				NONPERSISTENT_ID, BatchJob.DEFAULT_RIGOR);
+				urmJob == null ? NONPERSISTENT_ID : urmJob.getId(),
+				BatchJob.DEFAULT_RIGOR);
 	}
 
 	public TransitivityJobEntity(TransitivityParameters params,
 			OabaSettings settings, ServerConfiguration sc, BatchJob parent,
-			String externalId, BatchJobRigor bjr) {
+			BatchJob urmJob, String externalId, BatchJobRigor bjr) {
 		this(DISCRIMINATOR_VALUE, params.getId(), settings.getId(), sc.getId(),
 				externalId, randomTransactionId(), parent.getId(),
-				NONPERSISTENT_ID, bjr);
+				urmJob == null ? NONPERSISTENT_ID : urmJob.getId(), bjr);
 	}
 
 	public TransitivityJobEntity(BatchJob o) {

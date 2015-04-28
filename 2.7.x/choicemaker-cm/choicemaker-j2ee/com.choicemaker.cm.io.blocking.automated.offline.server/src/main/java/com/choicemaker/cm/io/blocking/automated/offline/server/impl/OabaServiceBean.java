@@ -117,12 +117,14 @@ public class OabaServiceBean implements OabaService {
 				validityErrors.add("null staging source type");
 			}
 			if (STAGING_DEDUPLICATION == type) {
-				if (bp.getReferenceRsId() != null || bp.getReferenceRsType() != null) {
+				if (bp.getReferenceRsId() != null
+						|| bp.getReferenceRsType() != null) {
 					validityErrors
 							.add("non-null master source parameter for a de-duplication task");
 				}
 			} else {
-				if (bp.getReferenceRsId() == null || bp.getReferenceRsType() == null) {
+				if (bp.getReferenceRsId() == null
+						|| bp.getReferenceRsType() == null) {
 					validityErrors
 							.add("null master source parameter for a linkage task");
 				}
@@ -177,6 +179,14 @@ public class OabaServiceBean implements OabaService {
 	public long startDeduplication(String externalID, OabaParameters bp,
 			OabaSettings oabaSettings, ServerConfiguration serverConfiguration)
 			throws ServerConfigurationException {
+		return startDeduplication(externalID, bp, oabaSettings,
+				serverConfiguration, null);
+	}
+
+	@Override
+	public long startDeduplication(String externalID, OabaParameters bp,
+			OabaSettings oabaSettings, ServerConfiguration serverConfiguration,
+			BatchJob urmJob) throws ServerConfigurationException {
 		if (bp == null) {
 			throw new IllegalArgumentException("null batch parameters");
 		}
@@ -198,13 +208,21 @@ public class OabaServiceBean implements OabaService {
 		}
 
 		return startLinkage(externalID, submittedParams, oabaSettings,
-				serverConfiguration);
+				serverConfiguration, urmJob);
 	}
 
 	@Override
 	public long startLinkage(String externalID, OabaParameters batchParams,
 			OabaSettings oabaSettings, ServerConfiguration serverConfiguration)
 			throws ServerConfigurationException {
+		return startLinkage(externalID, batchParams, oabaSettings,
+				serverConfiguration, null);
+	}
+
+	@Override
+	public long startLinkage(String externalID, OabaParameters batchParams,
+			OabaSettings oabaSettings, ServerConfiguration serverConfiguration,
+			BatchJob urmJob) throws ServerConfigurationException {
 
 		final String METHOD = "startOABA";
 		logger.entering(SOURCE_CLASS, METHOD);
@@ -217,7 +235,7 @@ public class OabaServiceBean implements OabaService {
 		// Create and persist the job and its associated objects
 		BatchJob oabaJob =
 			jobController.createPersistentOabaJob(externalID, batchParams,
-					oabaSettings, serverConfiguration);
+					oabaSettings, serverConfiguration, urmJob);
 		final long retVal = oabaJob.getId();
 		assert oabaJob.isPersistent();
 		logger.info("Started offline matching (job id: " + retVal + ")");
@@ -271,8 +289,7 @@ public class OabaServiceBean implements OabaService {
 		return oabaJob.getStatus().name();
 	}
 
-	@Override
-	public boolean removeDir(long jobID) throws RemoteException,
+	public boolean removeWorkingDirectory(long jobID) throws RemoteException,
 			CreateException, NamingException, JMSException, FinderException {
 		BatchJob job = jobController.findBatchJob(jobID);
 		return BatchJobFileUtils.removeTempDir(job);

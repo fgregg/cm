@@ -42,6 +42,11 @@ public interface TransitivityService {
 			ServerConfiguration serverConfiguration)
 			throws ServerConfigurationException;
 
+	long startTransitivity(String externalID,
+			TransitivityParameters batchParams, BatchJob batchJob,
+			OabaSettings settings, ServerConfiguration serverConfiguration,
+			BatchJob urmJob) throws ServerConfigurationException;
+
 	public BatchJob getTransitivityJob(long jobId);
 
 }

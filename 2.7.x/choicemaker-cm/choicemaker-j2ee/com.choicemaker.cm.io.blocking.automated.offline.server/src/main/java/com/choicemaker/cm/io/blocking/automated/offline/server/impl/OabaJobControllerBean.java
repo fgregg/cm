@@ -96,7 +96,14 @@ public class OabaJobControllerBean implements OabaJobController {
 	public BatchJob createPersistentOabaJob(String externalID,
 			OabaParameters params, OabaSettings settings, ServerConfiguration sc)
 			throws ServerConfigurationException {
+		return createPersistentOabaJob(externalID, params, settings, sc, null);
+	}
 
+	@Override
+	public BatchJob createPersistentOabaJob(String externalID,
+			OabaParameters params, OabaSettings settings,
+			ServerConfiguration sc, BatchJob urmJob)
+			throws ServerConfigurationException {
 		if (params == null || settings == null || sc == null) {
 			throw new IllegalArgumentException("null argument");
 		}
@@ -107,7 +114,7 @@ public class OabaJobControllerBean implements OabaJobController {
 		serverManager.save(sc);
 
 		OabaJobEntity retVal =
-			new OabaJobEntity(params, settings, sc, externalID);
+			new OabaJobEntity(params, settings, sc, urmJob, externalID);
 		em.persist(retVal);
 		assert retVal.isPersistent();
 

@@ -30,7 +30,6 @@ import com.choicemaker.cm.batch.OperationalPropertyController;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.MatchRecord2CompositeSource;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobEntity;
 import com.choicemaker.cm.urm.base.DbRecordCollection;
 import com.choicemaker.cm.urm.base.IRecordCollection;
 import com.choicemaker.cm.urm.base.JobStatus;
@@ -242,10 +241,13 @@ public class BatchRecordMatcherBean extends BatchMatchBaseBean {
 	 */
 	public boolean cleanJob(long jobID) throws CmRuntimeException {
 		try {
-			boolean ret = batchQuery.removeDir(jobID);
-			BatchJob bj = Single.getInst().findBatchJobById(em, OabaJobEntity.class, jobID);
-			Single.getInst().deleteBatchJob(em, bj);
-			return ret;
+			// FIXME
+			// boolean ret = batchQuery.removeDir(jobID);
+			// BatchJob bj = Single.getInst().findBatchJobById(em,
+			// OabaJobEntity.class, jobID);
+			// Single.getInst().deleteBatchJob(em, bj);
+			// return ret;
+			return false;
 		} catch (Exception e) {
 			log.severe(e.toString());
 			throw new CmRuntimeException(e.toString());

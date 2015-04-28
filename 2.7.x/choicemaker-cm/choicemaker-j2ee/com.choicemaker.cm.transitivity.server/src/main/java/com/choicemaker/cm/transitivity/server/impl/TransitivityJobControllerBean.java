@@ -96,6 +96,15 @@ public class TransitivityJobControllerBean implements TransitivityJobController 
 			TransitivityParameters params, BatchJob batchJob,
 			OabaSettings settings, ServerConfiguration sc)
 			throws ServerConfigurationException {
+		return createPersistentTransitivityJob(externalID, params, batchJob,
+				settings, sc, null);
+	}
+
+	@Override
+	public BatchJob createPersistentTransitivityJob(String externalID,
+			TransitivityParameters params, BatchJob batchJob,
+			OabaSettings settings, ServerConfiguration sc, BatchJob urmJob)
+			throws ServerConfigurationException {
 
 		if (params == null || sc == null || batchJob == null) {
 			throw new IllegalArgumentException("null argument");
@@ -106,8 +115,9 @@ public class TransitivityJobControllerBean implements TransitivityJobController 
 			throw new IllegalArgumentException("non-persistent OABA job");
 		}
 		BatchJobStatus oabaStatus = batchJob.getStatus();
-		String msg0 = "Precedessor OABA (job " + batchJob.getId() + ") status: "
-				+ oabaStatus;
+		String msg0 =
+			"Precedessor OABA (job " + batchJob.getId() + ") status: "
+					+ oabaStatus;
 		logger.info(msg0);
 		if (BatchJobStatus.COMPLETED != oabaStatus) {
 			String msg = "INVALID: " + msg0;
@@ -121,20 +131,21 @@ public class TransitivityJobControllerBean implements TransitivityJobController 
 		serverManager.save(sc);
 
 		TransitivityJobEntity retVal =
-			new TransitivityJobEntity(params, settings, sc, batchJob, externalID);
+			new TransitivityJobEntity(params, settings, sc, batchJob, urmJob,
+					externalID);
 		em.persist(retVal);
 		assert retVal.isPersistent();
 
 		// Create a new processing entry
-//		ProcessingEventLog processing =
-//			processingController.getProcessingLog(retVal);
+		// ProcessingEventLog processing =
+		// processingController.getProcessingLog(retVal);
 		// Create a new entry in the processing log and check it
 		TransitivityProcessingControllerBean.updateStatusWithNotification(em,
-				jmsContext, transStatusTopic, retVal, BatchProcessingEvent.INIT,
-				new Date(), null);
+				jmsContext, transStatusTopic, retVal,
+				BatchProcessingEvent.INIT, new Date(), null);
 		BatchJobProcessingEvent ope =
-				TransitivityProcessingControllerBean.getCurrentBatchProcessingEvent(em,
-					retVal);
+			TransitivityProcessingControllerBean
+					.getCurrentBatchProcessingEvent(em, retVal);
 		ProcessingEvent currentProcessingEvent = ope.getProcessingEvent();
 		assert currentProcessingEvent.getEventId() == BatchProcessingEvent.INIT
 				.getEventId();
