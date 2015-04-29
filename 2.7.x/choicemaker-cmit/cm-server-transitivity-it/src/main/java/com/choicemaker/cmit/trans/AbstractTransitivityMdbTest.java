@@ -51,8 +51,7 @@ import com.choicemaker.e2.ejb.EjbPlatform;
  * @param <T>
  *            A Well-Known Test Configuration
  */
-public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfiguration>
-		/* implements TransitivityTestParameters */ {
+public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfiguration> {
 
 	// -- Read-write instance data
 
@@ -168,10 +167,10 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 
 	@Resource(lookup = "choicemaker/urm/jms/transMatchDedupQueue")
 	private Queue transMatchDedupQueue;
-	
+
 	@Resource(lookup = "choicemaker/urm/jms/transSerializationQueue")
 	private Queue transSerializationQueue;
-	
+
 	@Inject
 	private JMSContext jmsContext;
 
@@ -339,7 +338,8 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 
 	// -- Pseudo accessors
 
-	public final TransitivityTestParameters getTestParameters(OabaLinkageType linkage) {
+	public final TransitivityTestParameters getTestParameters(
+			OabaLinkageType linkage) {
 		return new TestParametersDelegate(this, linkage);
 	}
 
@@ -361,7 +361,7 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 	protected final Class<T> getTestConfigurationClass() {
 		return configurationClass;
 	}
-	
+
 	protected final BatchProcessingPhase getProcessingPhase() {
 		return oabaPhase;
 	}
@@ -501,7 +501,7 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 	protected final Queue getTransMatchSchedulerQueue() {
 		return transMatchSchedulerQueue;
 	}
-	
+
 	protected final Queue getTransMatchDedupQueue() {
 		return transMatchDedupQueue;
 	}
@@ -514,164 +514,205 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 		return utx;
 	}
 
-	protected class TestParametersDelegate implements TransitivityTestParameters {
+	protected class TestParametersDelegate implements
+			TransitivityTestParameters {
 		private final AbstractTransitivityMdbTest<T> d;
 		private final OabaLinkageType lt;
-		TestParametersDelegate(AbstractTransitivityMdbTest<T> delegate, OabaLinkageType linkageType) {
+
+		TestParametersDelegate(AbstractTransitivityMdbTest<T> delegate,
+				OabaLinkageType linkageType) {
 			assert delegate != null;
 			assert linkageType != null;
 			this.d = delegate;
 			this.lt = linkageType;
 		}
+
 		@Override
 		public OabaLinkageType getLinkageType() {
 			return lt;
 		}
+
 		@Override
 		public Queue getResultQueue() {
 			return d.getResultQueue();
 		}
+
 		@Override
 		public String toString() {
 			return d.toString();
 		}
+
 		@Override
 		public final T getTestConfiguration() {
 			OabaLinkageType _lt = this.getLinkageType();
 			return d.getTestConfiguration(_lt);
 		}
+
 		@Override
 		public final BatchProcessingPhase getProcessingPhase() {
 			return d.getProcessingPhase();
 		}
+
 		@Override
 		public final EjbPlatform getE2service() {
 			return d.getE2service();
 		}
+
 		@Override
 		public final OabaService getOabaService() {
 			return d.getOabaService();
 		}
+
 		@Override
 		public final Queue getBlockQueue() {
 			return d.getBlockQueue();
 		}
+
 		@Override
 		public final Queue getChunkQueue() {
 			return d.getChunkQueue();
 		}
+
 		@Override
 		public final Queue getDedupQueue() {
 			return d.getDedupQueue();
 		}
+
 		@Override
 		public final EntityManager getEm() {
 			return d.getEm();
 		}
+
 		@Override
 		public final JMSContext getJmsContext() {
 			return d.getJmsContext();
 		}
+
 		@Override
 		public final OabaJobController getOabaJobController() {
 			return d.getOabaJobController();
 		}
+
 		@Override
 		public final Logger getLogger() {
 			return d.getLogger();
 		}
+
 		@Override
 		public final Queue getMatchDedupQueue() {
 			return d.getMatchDedupQueue();
 		}
+
 		@Override
 		public final Queue getMatchSchedulerQueue() {
 			return d.getMatchSchedulerQueue();
 		}
+
 		@Override
 		public final JMSConsumer getTransitivityStatusConsumer() {
 			return d.getTransitivityStatusConsumer();
 		}
+
 		@Override
 		public final JMSConsumer getOabaStatusConsumer() {
 			return d.getOabaStatusConsumer();
 		}
+
 		@Override
 		public final Topic getOabaStatusTopic() {
 			return d.getOabaStatusTopic();
 		}
+
 		@Override
 		public OabaParametersController getOabaParamsController() {
 			return d.getOabaParamsController();
 		}
+
 		@Override
 		public final OperationalPropertyController getOpPropController() {
 			return d.getOpPropController();
 		}
+
 		@Override
 		public final RecordIdController getRecordIdController() {
 			return d.getRecordIdController();
 		}
+
 		@Override
 		public final ProcessingController getOabaProcessingController() {
 			return d.getOabaProcessingController();
 		}
+
 		@Override
 		public final ProcessingController getTransitivityProcessingController() {
 			return d.getTransitivityProcessingController();
 		}
+
 		@Override
 		public final RecordSourceController getRecordSourceController() {
 			return d.getRecordSourceController();
 		}
+
 		@Override
 		public final int getResultEventId() {
 			return d.getResultEventId();
 		}
+
 		@Override
 		public final float getResultPercentComplete() {
 			return d.getResultPercentComplete();
 		}
+
 		@Override
 		public final ServerConfigurationController getServerController() {
 			return d.getServerController();
 		}
+
 		@Override
 		public final OabaSettingsController getSettingsController() {
 			return d.getSettingsController();
 		}
+
 		@Override
 		public final Queue getSingleMatchQueue() {
 			return d.getSingleMatchQueue();
 		}
+
 		@Override
 		public final String getSourceName() {
 			return d.getSourceName();
 		}
+
 		@Override
 		public final Queue getStartQueue() {
 			return d.getStartQueue();
 		}
+
 		@Override
 		public TestEntityCounts getTestEntityCounts() {
 			return d.getTestEntityCounts();
 		}
+
 		@Override
 		public final Queue getTransitivityQueue() {
 			return d.getTransitivityQueue();
 		}
+
 		@Override
 		public final Queue getTransMatchSchedulerQueue() {
 			return d.getTransMatchSchedulerQueue();
 		}
+
 		@Override
 		public final Queue getTransMatchDedupQueue() {
 			return d.getTransMatchDedupQueue();
 		}
+
 		@Override
 		public final Queue getTransSerializationQueue() {
 			return d.getTransSerializationQueue();
 		}
+
 		@Override
 		public final UserTransaction getUtx() {
 			return d.getUtx();
@@ -679,4 +720,3 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 	}
 
 }
-

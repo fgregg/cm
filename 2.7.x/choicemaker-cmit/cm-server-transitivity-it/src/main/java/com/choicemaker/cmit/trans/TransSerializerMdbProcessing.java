@@ -1,4 +1,4 @@
-package com.choicemaker.cmit.oaba;
+package com.choicemaker.cmit.trans;
 
 import static com.choicemaker.cm.args.BatchProcessing.EVT_DONE;
 import static com.choicemaker.cm.args.BatchProcessing.PCT_DONE;
@@ -12,23 +12,23 @@ import com.choicemaker.cmit.testconfigs.SimplePersonSqlServerTestConfiguration;
 import com.choicemaker.cmit.utils.BatchProcessingPhase;
 
 /**
- * This class is reused in other modules to perform a test of linkage or
- * deduplication. It differs from {@link MatchDedupMdbIT} only in that it lacks
+ * This class is reused in other modules to perform a test of transitivity
+ * analysis. It differs from {@link TransSerializerMdbIT} only in that it lacks
  * an Arquillian shrink-wrap method and an Arquillian <code>RunWith</code>
  * directive.
  * 
  * @author rphall
  */
-public class MatchDedupMdbProcessing extends
-		AbstractOabaMdbTest<SimplePersonSqlServerTestConfiguration> {
+public class TransSerializerMdbProcessing extends
+		AbstractTransitivityMdbTest<SimplePersonSqlServerTestConfiguration> {
 
-	public static final String LOG_SOURCE = MatchDedupMdbProcessing.class
+	public static final String LOG_SOURCE = TransSerializerMdbProcessing.class
 			.getSimpleName();
 
-	private static final Logger logger = Logger.getLogger(MatchDedupMdbProcessing.class
+	private static final Logger logger = Logger.getLogger(TransSerializerMdbProcessing.class
 			.getName());
 
-	public MatchDedupMdbProcessing() {
+	public TransSerializerMdbProcessing() {
 		super(LOG_SOURCE, logger, EVT_DONE, PCT_DONE,
 				SimplePersonSqlServerTestConfiguration.class,
 				BatchProcessingPhase.FINAL);
