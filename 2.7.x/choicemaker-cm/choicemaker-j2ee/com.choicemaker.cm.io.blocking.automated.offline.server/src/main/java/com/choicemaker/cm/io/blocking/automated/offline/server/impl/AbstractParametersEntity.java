@@ -25,7 +25,9 @@ import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.Abstr
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.ID_GENERATOR_TABLE;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.ID_GENERATOR_VALUE_COLUMN_NAME;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.JPQL_PARAMETERS_FIND_ALL;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.JPQL_PARAMETERS_FIND_BY_ID;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.QN_PARAMETERS_FIND_ALL;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.QN_PARAMETERS_FIND_BY_ID;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.TABLE_NAME;
 
 import java.io.Serializable;
@@ -38,6 +40,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
@@ -46,7 +49,9 @@ import com.choicemaker.cm.args.OabaLinkageType;
 import com.choicemaker.cm.batch.impl.AbstractPersistentObject;
 import com.choicemaker.cm.core.base.ImmutableThresholds;
 
-@NamedQuery(name = QN_PARAMETERS_FIND_ALL, query = JPQL_PARAMETERS_FIND_ALL)
+@NamedQueries({
+@NamedQuery(name = QN_PARAMETERS_FIND_ALL, query = JPQL_PARAMETERS_FIND_ALL),
+@NamedQuery(name = QN_PARAMETERS_FIND_BY_ID, query = JPQL_PARAMETERS_FIND_BY_ID) })
 @Entity
 @Table(/* schema = "CHOICEMAKER", */name = TABLE_NAME)
 @DiscriminatorColumn(name = DISCRIMINATOR_COLUMN,

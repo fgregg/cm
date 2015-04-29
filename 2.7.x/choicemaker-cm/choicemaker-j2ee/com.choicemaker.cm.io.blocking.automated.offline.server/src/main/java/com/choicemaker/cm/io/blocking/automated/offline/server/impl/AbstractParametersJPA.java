@@ -48,15 +48,15 @@ public interface AbstractParametersJPA {
 
 	String CN_QUERY_RS_DBCONF = "QUERY_RS_DBCONF";
 
-	String  CN_Q2Q_BLOCKING = "Q2Q_BLOCKING";
+	String CN_Q2Q_BLOCKING = "Q2Q_BLOCKING";
 
 	String CN_REFERENCE_RS = "REF_RS_ID";
 
 	String CN_REFERENCE_RS_TYPE = "REF_RS_TYPE";
 
-	String  CN_REF_RS_DBCONF = "REF_RS_DBCONF";
+	String CN_REF_RS_DBCONF = "REF_RS_DBCONF";
 
-	String  CN_Q2R_BLOCKING = "Q2R_BLOCKING";
+	String CN_Q2R_BLOCKING = "Q2R_BLOCKING";
 
 	String CN_TASK = "TASK";
 
@@ -85,7 +85,17 @@ public interface AbstractParametersJPA {
 
 	/** JPQL used to implement {@link #QN_PARAMETERS_FIND_ALL} */
 	String JPQL_PARAMETERS_FIND_ALL =
-		"Select p from AbstractParametersEntity p";
+		"Select p from AbstractParametersEntity p where type(p) in "
+				+ "(AbstractParametersEntity, OabaParametersEntity, TransitivityParametersEntity)";
+
+	public static final String QN_PARAMETERS_FIND_BY_ID =
+		"abstractParametersFindById";
+
+	public static final String JPQL_PARAMETERS_FIND_BY_ID =
+		"Select p from AbstractParametersEntity p where p.id = :id and type(p) in "
+				+ "(AbstractParametersEntity, OabaParametersEntity, TransitivityParametersEntity)";;
+
+	public static final String PN_PARAMETERS_FIND_BY_ID_P1 = "id";
 
 	/**
 	 * Name of the query that finds all persistent OABA parameter instances

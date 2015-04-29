@@ -2,6 +2,10 @@ package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
 import static com.choicemaker.cm.batch.impl.BatchJobJPA.PN_BATCHJOB_FIND_BY_JOBID_P1;
 import static com.choicemaker.cm.batch.impl.BatchJobJPA.QN_BATCHJOB_FIND_BY_JOBID;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.PN_PARAMETERS_FIND_BY_ID_P1;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.QN_OABAPARAMETERS_FIND_ALL;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.QN_PARAMETERS_FIND_ALL;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.QN_PARAMETERS_FIND_BY_ID;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,6 +89,26 @@ public class OabaParametersControllerBean implements OabaParametersController {
 		return p;
 	}
 
+	/** Finds any instance of AbstractParametersEntity */
+	@Override
+	public AbstractParametersEntity findParameters(long id) {
+		AbstractParametersEntity retVal = null;
+		Query query = em.createNamedQuery(QN_PARAMETERS_FIND_BY_ID);
+		query.setParameter(PN_PARAMETERS_FIND_BY_ID_P1, id);
+		@SuppressWarnings("unchecked")
+		List<AbstractParametersEntity> entries = query.getResultList();
+		if (entries != null && entries.size() > 1) {
+			String msg = "Violates primary key constraint: " + entries.size();
+			logger.severe(msg);
+			throw new IllegalStateException(msg);
+		}
+		if (entries != null && !entries.isEmpty()) {
+			assert entries.size() == 1;
+			retVal = entries.get(0);
+		}
+		return retVal;
+	}
+
 	@Override
 	public OabaParameters findOabaParametersByBatchJobId(long jobId) {
 		OabaParameters retVal = null;
@@ -101,19 +125,39 @@ public class OabaParametersControllerBean implements OabaParametersController {
 			assert entries.size() == 1;
 			BatchJob batchJob = entries.get(0);
 			long paramsId = batchJob.getParametersId();
-			retVal = findOabaParameters(paramsId);
+			AbstractParametersEntity ape = findParameters(paramsId);
+			if (ape != null && !(ape instanceof OabaParameters)) {
+				String msg =
+					"Invalid instance: " + paramsId + ", "
+							+ ape.getClass().getName();
+				logger.severe(msg);
+				throw new IllegalStateException(msg);
+			} else {
+				retVal = (OabaParameters) ape;
+			}
 		}
 		return retVal;
 	}
 
 	@Override
 	public List<OabaParameters> findAllOabaParameters() {
-		Query query =
-			em.createNamedQuery(AbstractParametersJPA.QN_OABAPARAMETERS_FIND_ALL);
+		Query query = em.createNamedQuery(QN_OABAPARAMETERS_FIND_ALL);
 		@SuppressWarnings("unchecked")
 		List<OabaParameters> entries = query.getResultList();
 		if (entries == null) {
 			entries = new ArrayList<OabaParameters>();
+		}
+		return entries;
+	}
+
+	/** Finds all subclasses of AbstractParametersEntity */
+	@Override
+	public List<AbstractParametersEntity> findAllParameters() {
+		Query query = em.createNamedQuery(QN_PARAMETERS_FIND_ALL);
+		@SuppressWarnings("unchecked")
+		List<AbstractParametersEntity> entries = query.getResultList();
+		if (entries == null) {
+			entries = new ArrayList<AbstractParametersEntity>();
 		}
 		return entries;
 	}
