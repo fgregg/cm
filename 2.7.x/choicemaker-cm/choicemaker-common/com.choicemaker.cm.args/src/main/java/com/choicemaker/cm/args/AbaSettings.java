@@ -39,6 +39,8 @@ public interface AbaSettings extends Serializable {
 	 */
 	long getId();
 
+	boolean isPersistent();
+
 	/**
 	 * The maximum of size of a blocking set before it must be refined by
 	 * qualifying it with additional blocking values.

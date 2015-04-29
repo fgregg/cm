@@ -164,6 +164,11 @@ public class ServerConfigurationEntity implements MutableServerConfiguration {
 	}
 
 	@Override
+	public boolean isPersistent() {
+		return isPersistent(this);
+	}
+
+	@Override
 	public String getName() {
 		return name;
 	}

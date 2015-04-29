@@ -13,6 +13,8 @@ public interface ServerConfiguration extends Serializable {
 
 	long getId();
 
+	boolean isPersistent();
+
 	/**
 	 * A memorable name for a configuration. A configuration name must be unique
 	 * within the database used to store configuration information.
