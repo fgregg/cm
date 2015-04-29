@@ -107,11 +107,23 @@ public class OabaJobControllerBean implements OabaJobController {
 		if (params == null || settings == null || sc == null) {
 			throw new IllegalArgumentException("null argument");
 		}
+		if (params != null && !params.isPersistent()) {
+			params = paramsController.save(params);
+			logger.info("Non-persistent OabaParameters have been saved: " + params.getId());
+		}
+		if (settings != null && !settings.isPersistent()) {
+			settings = oabaSettingsController.save(settings);
+			logger.info("Non-persistent OabaSettings have been saved: " + settings.getId());
+		}
+		if (sc != null && !sc.isPersistent()) {
+			sc = serverManager.save(sc);
+			logger.info("Non-persistent ServerConfiguration has been saved: " + sc.getId());
+		}
+		if (urmJob != null && !urmJob.isPersistent()) {
+			logger.warning("Non-persistent URM job");
+		}
 
 		// Save the parameters
-		paramsController.save(params);
-		oabaSettingsController.save(settings);
-		serverManager.save(sc);
 
 		OabaJobEntity retVal =
 			new OabaJobEntity(params, settings, sc, urmJob, externalID);
