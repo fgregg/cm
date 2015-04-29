@@ -39,65 +39,18 @@ public interface OabaService {
 
 	/**
 	 * This method starts the Offline Automated Blocking Algorithm to compare a
-	 * set of records against themselves. Transitivity analysis is conditionally
-	 * run depending on the value of <code>runTransitivity</code>
-	 * 
-	 * @param externalID
-	 *            - an id tracker
-	 * @param recordSource
-	 *            - staging records
-	 * @param lowThreshold
-	 *            - probability under which a pair is considered "differ".
-	 * @param highThreshold
-	 *            - probability above which a pair is considered "match".
-	 * @param modelConfigurationName
-	 *            - probability accessProvider of the stage record source.
-	 * @param maxSingle
-	 *            - The number of staging records below which single record
-	 *            matching is used. If set to 0, OABA is used.
-	 * @return long - id of this job
+	 * set of records against themselves.
+	 * @param urmJob may be null
 	 */
-	public long startDeduplication(String externalID,
-			OabaParameters batchParams, OabaSettings oabaSettings,
-			ServerConfiguration serverConfiguration)
-			throws ServerConfigurationException;
-
 	public long startDeduplication(String externalID, OabaParameters bp,
 			OabaSettings oabaSettings, ServerConfiguration serverConfiguration,
 			BatchJob urmJob) throws ServerConfigurationException;
 
 	/**
 	 * This method starts the Offline Automated Blocking Algorithm to compare
-	 * staging records against themselves or against master records. (The OABA
-	 * does not compare master records against themselves.) Transitivity
-	 * analysis is conditionally run depending on the value of
-	 * <code>runTransitivity</code>
-	 * 
-	 * @param externalID
-	 *            - an id tracker
-	 * @param staging
-	 *            - staging records
-	 * @param master
-	 *            - master records.
-	 * @param lowThreshold
-	 *            - probability under which a pair is considered "differ".
-	 * @param highThreshold
-	 *            - probability above which a pair is considered "match".
-	 * @param modelConfigurationName
-	 *            - probability accessProvider of the stage record source.
-	 * @param maxSingle
-	 *            - The number of staging records below which single record
-	 *            matching is used. If set to 0, OABA is used.
-	 * @param runTransitivity
-	 *            - set this to true if you want to run the Transitivity Engine
-	 *            when OABA completes.
-	 * @return long - id of this job
-	 * @throws ServerConfigurationException
+	 * staging records against themselves or against master records.
+	 * @param urmJob may be null
 	 */
-	public long startLinkage(String externalID, OabaParameters batchParams,
-			OabaSettings oabaSettings, ServerConfiguration serverConfiguration)
-			throws ServerConfigurationException;
-
 	public long startLinkage(String externalID, OabaParameters batchParams,
 			OabaSettings oabaSettings, ServerConfiguration serverConfiguration,
 			BatchJob urmJob) throws ServerConfigurationException;

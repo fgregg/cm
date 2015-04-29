@@ -141,7 +141,7 @@ public class OabaTestUtils {
 				logger.info(tag + ": invoking OabaService.startDeduplication");
 				jobId =
 					batchQuery.startDeduplication(externalId, bp, updatedSettings,
-							serverConfiguration);
+							serverConfiguration, null);
 				logger.info(tag + ": returned jobId '" + jobId
 						+ "' from OabaService.startDeduplication");
 				break;
@@ -150,7 +150,7 @@ public class OabaTestUtils {
 				logger.info(tag + ": invoking OabaService.startLinkage");
 				jobId =
 					batchQuery.startLinkage(externalId, bp, updatedSettings,
-							serverConfiguration);
+							serverConfiguration, null);
 				logger.info(tag + ": returned jobId '" + jobId
 						+ "' from OabaService.startLinkage");
 				break;

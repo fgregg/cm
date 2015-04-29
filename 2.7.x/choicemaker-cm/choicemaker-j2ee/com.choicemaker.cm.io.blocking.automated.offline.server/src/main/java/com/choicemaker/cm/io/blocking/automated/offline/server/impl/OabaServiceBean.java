@@ -177,14 +177,6 @@ public class OabaServiceBean implements OabaService {
 
 	@Override
 	public long startDeduplication(String externalID, OabaParameters bp,
-			OabaSettings oabaSettings, ServerConfiguration serverConfiguration)
-			throws ServerConfigurationException {
-		return startDeduplication(externalID, bp, oabaSettings,
-				serverConfiguration, null);
-	}
-
-	@Override
-	public long startDeduplication(String externalID, OabaParameters bp,
 			OabaSettings oabaSettings, ServerConfiguration serverConfiguration,
 			BatchJob urmJob) throws ServerConfigurationException {
 		if (bp == null) {
@@ -209,14 +201,6 @@ public class OabaServiceBean implements OabaService {
 
 		return startLinkage(externalID, submittedParams, oabaSettings,
 				serverConfiguration, urmJob);
-	}
-
-	@Override
-	public long startLinkage(String externalID, OabaParameters batchParams,
-			OabaSettings oabaSettings, ServerConfiguration serverConfiguration)
-			throws ServerConfigurationException {
-		return startLinkage(externalID, batchParams, oabaSettings,
-				serverConfiguration, null);
 	}
 
 	@Override

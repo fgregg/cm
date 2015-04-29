@@ -200,7 +200,7 @@ public class TransitivityMdbTestProcedures {
 					+ ": invoking TransitivityService.startTransitivity");
 			jobId =
 				transitivityService.startTransitivity(extId, transParams,
-						oabaJob, settings, serverConfiguration);
+						oabaJob, settings, serverConfiguration, null);
 			logger.info(tag
 					+ ": returned from TransitivityService.startTransitivity");
 		} catch (ServerConfigurationException e) {

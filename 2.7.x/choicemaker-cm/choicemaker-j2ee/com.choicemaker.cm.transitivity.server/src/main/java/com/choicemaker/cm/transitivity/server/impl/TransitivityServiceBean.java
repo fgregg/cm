@@ -102,15 +102,6 @@ public class TransitivityServiceBean implements TransitivityService {
 	private JMSContext context;
 
 	@Override
-	public long startTransitivity(String externalID, TransitivityParameters tp,
-			BatchJob batchJob, OabaSettings settings,
-			ServerConfiguration serverConfiguration)
-			throws ServerConfigurationException {
-		return startTransitivity(externalID, tp, batchJob, settings,
-				serverConfiguration, null);
-	}
-
-	@Override
 	public long startTransitivity(String externalID,
 			TransitivityParameters batchParams, BatchJob batchJob,
 			OabaSettings settings, ServerConfiguration serverConfiguration,

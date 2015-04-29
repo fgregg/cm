@@ -34,14 +34,10 @@ public interface TransitivityService {
 	/**
 	 * This method starts transitivity analysis of the specified OABA job. The
 	 * OABA job must have completed successfully.
+	 * @urmJob may be null
 	 * 
 	 * @throws ServerConfigurationException
 	 */
-	public long startTransitivity(String externalID,
-			TransitivityParameters batchParams, BatchJob batchJob,OabaSettings settings,
-			ServerConfiguration serverConfiguration)
-			throws ServerConfigurationException;
-
 	long startTransitivity(String externalID,
 			TransitivityParameters batchParams, BatchJob batchJob,
 			OabaSettings settings, ServerConfiguration serverConfiguration,
