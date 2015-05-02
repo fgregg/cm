@@ -74,11 +74,14 @@ public class OabaParametersControllerBean implements OabaParametersController {
 	}
 
 	OabaParametersEntity save(OabaParametersEntity p) {
+		logger.fine("Saving " + p);
 		if (p.getId() == 0) {
 			em.persist(p);
+			logger.fine("Saved " + p);
 		} else {
 			p = em.merge(p);
 			em.flush();
+			logger.fine("Merged " + p);
 		}
 		return p;
 	}

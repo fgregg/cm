@@ -31,6 +31,7 @@ public class SqlRecordSourceControllerBean implements SqlRecordSourceController 
 
 	@Override
 	public PersistableSqlRecordSource save(final PersistableRecordSource rs) {
+		logger.fine("Saving " + rs);
 		if (rs == null) {
 			throw new IllegalArgumentException("null settings");
 		}
@@ -72,7 +73,7 @@ public class SqlRecordSourceControllerBean implements SqlRecordSourceController 
 			em.persist(retVal);
 			assert retVal.isPersistent();
 			String msg =
-				"The record source is persistent in the database with id = "
+				"Saved record source in the database with id = "
 						+ retVal.getId();
 			logger.info(msg);
 		}

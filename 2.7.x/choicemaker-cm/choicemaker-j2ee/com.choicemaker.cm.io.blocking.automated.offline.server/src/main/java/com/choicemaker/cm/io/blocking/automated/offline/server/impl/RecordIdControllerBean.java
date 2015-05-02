@@ -379,6 +379,7 @@ public class RecordIdControllerBean implements RecordIdController {
 			BatchJob job, ImmutableRecordIdTranslatorImpl impl)
 			throws BlockingException {
 
+		logger.fine("Saving " + job + " / " + impl);
 		ImmutableRecordIdTranslatorImpl retVal = null;
 		// Check if the translations already exist in the database
 		List<AbstractRecordIdTranslationEntity<T>> translations =
@@ -402,12 +403,15 @@ public class RecordIdControllerBean implements RecordIdController {
 			switch (dataType) {
 			case TYPE_INTEGER:
 				saveIntegerTranslations(job, impl);
+				logger.fine("Saved " + job + " / " + impl);
 				break;
 			case TYPE_LONG:
 				saveLongTranslations(job, impl);
+				logger.fine("Saved " + job + " / " + impl);
 				break;
 			case TYPE_STRING:
 				saveStringTranslations(job, impl);
+				logger.fine("Saved " + job + " / " + impl);
 				break;
 			default:
 				throw new Error("unexpected record source type: " + dataType);

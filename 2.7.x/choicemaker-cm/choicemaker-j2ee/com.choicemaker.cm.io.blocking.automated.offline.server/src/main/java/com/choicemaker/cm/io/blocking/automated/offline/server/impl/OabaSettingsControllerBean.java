@@ -30,6 +30,7 @@ public class OabaSettingsControllerBean implements OabaSettingsController {
 
 	@Override
 	public AbaSettings save(final AbaSettings settings) {
+		logger.fine("Saving " + settings);
 		if (settings == null) {
 			throw new IllegalArgumentException("null settings");
 		}
@@ -68,6 +69,7 @@ public class OabaSettingsControllerBean implements OabaSettingsController {
 		}
 		assert retVal != null;
 		assert retVal.getId() != AbaSettings.NONPERSISTENT_ABA_SETTINGS_ID;
+		logger.fine("Saved " + retVal);
 
 		return retVal;
 	}

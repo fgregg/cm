@@ -50,6 +50,7 @@ public class OperationalPropertyControllerBean implements
 
 	@Override
 	public OperationalProperty save(OperationalProperty p) {
+		logger.fine("Saving " + p);
 		if (p == null) {
 			throw new IllegalArgumentException("null settings");
 		}
@@ -103,6 +104,7 @@ public class OperationalPropertyControllerBean implements
 		}
 		assert retVal != null;
 		assert retVal.isPersistent();
+		logger.fine("Saved " + retVal);
 
 		return retVal;
 	}

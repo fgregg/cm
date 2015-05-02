@@ -172,13 +172,16 @@ public class TransitivityJobControllerBean implements TransitivityJobController 
 	}
 
 	public TransitivityJobEntity save(TransitivityJobEntity job) {
+		logger.fine("Saving " + job);
 		if (job == null) {
 			throw new IllegalArgumentException("null job");
 		}
 		if (!job.isPersistent()) {
 			em.persist(job);
+			logger.fine("Saved " + job);
 		} else {
 			job = em.merge(job);
+			logger.fine("Merged " + job);
 		}
 		return job;
 	}

@@ -224,6 +224,7 @@ public class ServerConfigurationControllerBean implements
 	@Override
 	public ServerConfiguration save(ServerConfiguration sc)
 			throws ServerConfigurationException {
+		logger.fine("Saving " + sc);
 		if (sc == null) {
 			throw new IllegalArgumentException("null configuration");
 		}
@@ -259,6 +260,7 @@ public class ServerConfigurationControllerBean implements
 		if (retVal == null) {
 			em.persist(scb);
 			retVal = scb;
+			logger.fine("Saved " + retVal);
 		}
 
 		assert retVal != null;

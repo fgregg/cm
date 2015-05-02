@@ -64,6 +64,7 @@ public class PersistableRecordSourceControllerBean implements
 
 	@Override
 	public PersistableRecordSource save(final PersistableRecordSource psrs) {
+		logger.fine("Saving " + psrs);
 		if (psrs == null) {
 			throw new IllegalArgumentException("null settings");
 		}
@@ -74,6 +75,7 @@ public class PersistableRecordSourceControllerBean implements
 			PersistableSqlRecordSource sqlRs =
 				(PersistableSqlRecordSource) psrs;
 			retVal = sqlRsController.save(sqlRs);
+			logger.fine("Saved " + retVal);
 		} else if (PersistableFlatFileRecordSource.TYPE.equals(type)) {
 			throw new Error("not yet implemented for record source type: '"
 					+ type + "'");
