@@ -10,7 +10,7 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
-import static com.choicemaker.cm.args.OabaLinkageType.STAGING_DEDUPLICATION;
+import static com.choicemaker.cm.args.OabaLinkageType.*;
 import static com.choicemaker.cm.args.OperationalPropertyNames.PN_CLEAR_RESOURCES;
 import static com.choicemaker.cm.args.OperationalPropertyNames.PN_OABA_CACHED_RESULTS_FILE;
 
@@ -116,17 +116,20 @@ public class OabaServiceBean implements OabaService {
 			if (bp.getQueryRsType() == null) {
 				validityErrors.add("null staging source type");
 			}
-			if (STAGING_DEDUPLICATION == type) {
+			if (STAGING_DEDUPLICATION == type
+					|| TA_STAGING_DEDUPLICATION == type) {
 				if (bp.getReferenceRsId() != null
 						|| bp.getReferenceRsType() != null) {
-					validityErrors
-							.add("non-null master source parameter for a de-duplication task");
+					// Not an error, just a warning
+					String msg =
+						"non-null master source parameter for a de-duplication task";
+					logger.warning(msg);
 				}
 			} else {
 				if (bp.getReferenceRsId() == null
 						|| bp.getReferenceRsType() == null) {
 					validityErrors
-							.add("null master source parameter for a linkage task");
+							.add("null master source parameter for linkage type: " + type);
 				}
 			}
 			if (bp.getLowThreshold() < 0f || bp.getLowThreshold() > 1.0f) {
@@ -183,23 +186,24 @@ public class OabaServiceBean implements OabaService {
 			throw new IllegalArgumentException("null batch parameters");
 		}
 
-		OabaParameters submittedParams;
-		final OabaLinkageType task = bp.getOabaLinkageType();
-		if (bp.getReferenceRsId() == null && bp.getReferenceRsType() == null
-				&& STAGING_DEDUPLICATION == task) {
-			submittedParams = bp;
-		} else {
-			submittedParams =
-				new OabaParametersEntity(bp.getModelConfigurationName(),
-						bp.getLowThreshold(), bp.getHighThreshold(),
-						bp.getQueryRsId(), bp.getQueryRsType(),
-						bp.isQueryRsDeduplicated(),
-						bp.getQueryRsDatabaseConfiguration(),
-						bp.getQueryToQueryBlockingConfiguration(), null, null,
-						null, null, STAGING_DEDUPLICATION);
-		}
+		// FIXME REMOVEME
+//		OabaParameters submittedParams;
+//		final OabaLinkageType task = bp.getOabaLinkageType();
+//		if (bp.getReferenceRsId() == null && bp.getReferenceRsType() == null
+//				&& STAGING_DEDUPLICATION == task) {
+//			submittedParams = bp;
+//		} else {
+//			submittedParams =
+//				new OabaParametersEntity(bp.getModelConfigurationName(),
+//						bp.getLowThreshold(), bp.getHighThreshold(),
+//						bp.getQueryRsId(), bp.getQueryRsType(),
+//						bp.isQueryRsDeduplicated(),
+//						bp.getQueryRsDatabaseConfiguration(),
+//						bp.getQueryToQueryBlockingConfiguration(), null, null,
+//						null, null, STAGING_DEDUPLICATION);
+//		}
 
-		return startLinkage(externalID, submittedParams, oabaSettings,
+		return startLinkage(externalID, bp, oabaSettings,
 				serverConfiguration, urmJob);
 	}
 
