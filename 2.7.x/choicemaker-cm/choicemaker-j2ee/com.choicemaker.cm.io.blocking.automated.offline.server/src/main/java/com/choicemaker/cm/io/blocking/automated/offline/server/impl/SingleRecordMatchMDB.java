@@ -340,6 +340,7 @@ public class SingleRecordMatchMDB extends AbstractOabaMDB {
 		final String modelConfigId = params.getModelConfigurationName();
 		ImmutableProbabilityModel model =
 			PMManager.getModelInstance(modelConfigId);
+
 		if (model == null) {
 			String msg = "Invalid probability accessProvider: " + modelConfigId;
 			log.severe(msg);
@@ -516,8 +517,13 @@ public class SingleRecordMatchMDB extends AbstractOabaMDB {
 		}
 
 		// mark as done
+		batchJob.markAsCompleted();
 		sendToUpdateStatus(batchJob, BatchProcessingEvent.DONE, new Date(),
 				null);
+		final ProcessingEventLog processingEntry =
+			getProcessingController().getProcessingLog(batchJob);
+		processingEntry.setCurrentProcessingEvent(BatchProcessingEvent.DONE);
+
 	}
 
 	private void sendToUpdateStatus(BatchJob job, ProcessingEvent event,
