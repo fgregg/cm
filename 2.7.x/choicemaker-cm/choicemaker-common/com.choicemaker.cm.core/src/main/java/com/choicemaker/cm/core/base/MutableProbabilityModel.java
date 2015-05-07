@@ -725,15 +725,17 @@ public class MutableProbabilityModel implements IProbabilityModel {
 	public String getDatabaseConfigurationName() {
 		String retVal = databaseConfigurationName;
 		if (retVal == null) {
-			throw new IllegalStateException("Database configuration has not been set.");
+			logger.warning("Database configuration has not been set.");
 		}
 		return retVal;
 	}
 
 	public void setBlockingConfigurationName(String bc) {
+		/*
 		if (bc == null || bc.trim().isEmpty()) {
 			throw new IllegalArgumentException("null or blank blocking configuration");
 		}
+		*/
 		this.blockingConfigurationName = bc;
 	}
 
@@ -746,9 +748,11 @@ public class MutableProbabilityModel implements IProbabilityModel {
 	}
 
 	public void setDatabaseConfigurationName(String dbc) {
+		/*
 		if (dbc == null || dbc.trim().isEmpty()) {
 			logger.warning("null or blank database configuration");
 		}
+		*/
 		this.databaseConfigurationName = dbc;
 	}
 
