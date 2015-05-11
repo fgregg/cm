@@ -15,11 +15,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.attribute.FileAttribute;
-import java.nio.file.attribute.PosixFilePermission;
-import java.nio.file.attribute.PosixFilePermissions;
 import java.text.DecimalFormat;
-import java.util.Set;
 
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.batch.BatchJob;
@@ -44,11 +40,12 @@ public class BatchJobFileUtils {
 
 	public static final String TEXT_SUFFIX = "txt";
 
-	/**
-	 * Restricted permissions since the working directory may contain
-	 * confidential or sensitive information.
-	 */
-	public static final String WORKING_DIR_POSIX_PERMISSIONS = "rwx------";
+	// FIXME REMOVEME Doesn't work for Windows
+	// /**
+	// * Restricted permissions since the working directory may contain
+	// * confidential or sensitive information.
+	// */
+	// public static final String WORKING_DIR_POSIX_PERMISSIONS = "rwx------";
 
 	public static String computeWorkingDirectoryName(BatchJob job) {
 		return computeWorkingDirectoryName(DEFAULT_PREFIX, job);
@@ -72,40 +69,68 @@ public class BatchJobFileUtils {
 	 * directory cannot be created in either location, throws an
 	 * IllegalStateException.
 	 * 
-	 * @return a non-null directory with permissions specified by
-	 *         {@link WORKING_DIR_POSIX_PERMISSIONS}
+	 * @return a non-null directory
+	 *
 	 * @throws IllegalStateException
 	 *             if a directory cannot be created.
 	 */
 	public static File createDefaultWorkingDir() {
 		File retVal = null;
-		Set<PosixFilePermission> permissions =
-			PosixFilePermissions.fromString(WORKING_DIR_POSIX_PERMISSIONS);
-		FileAttribute<Set<PosixFilePermission>> attrs =
-			PosixFilePermissions.asFileAttribute(permissions);
+		// Set<PosixFilePermission> permissions =
+		// PosixFilePermissions.fromString(WORKING_DIR_POSIX_PERMISSIONS);
+		// FileAttribute<Set<PosixFilePermission>> attrs =
+		// PosixFilePermissions.asFileAttribute(permissions);
 		try {
 			String userHome = System.getProperty(SystemPropertyUtils.USER_HOME);
 			Path userPath = Paths.get(userHome);
 			retVal =
-				Files.createTempDirectory(userPath, TEMP_WORKING_DIR_PREFIX,
-						attrs).toFile();
+				Files.createTempDirectory(userPath, TEMP_WORKING_DIR_PREFIX)
+						.toFile();
 		} catch (IOException e) {
 			assert retVal == null;
 		}
 		if (retVal == null) {
 			try {
 				retVal =
-					Files.createTempDirectory(TEMP_WORKING_DIR_PREFIX, attrs)
-							.toFile();
+					Files.createTempDirectory(TEMP_WORKING_DIR_PREFIX).toFile();
 			} catch (IOException e) {
 				throw new IllegalStateException(e.toString());
 			}
 		}
 		assert retVal != null;
 		assert retVal.isDirectory();
-		assert retVal.canRead();
-		assert retVal.canWrite();
+
+		setFilePermissions(retVal);
+
 		return retVal;
+	}
+
+	/**
+	 * Sets restricted permissions since the specified file or directory may
+	 * contain confidential or sensitive information.
+	 */
+	public static void setFilePermissions(File f) {
+		if (f == null) {
+			throw new IllegalArgumentException("null file");
+		}
+
+		// For owners and non-owners, remove all permissions
+		boolean isAllowed = false;
+		boolean isOwnerOnly = false;
+		f.setExecutable(isAllowed, isOwnerOnly);
+		f.setReadable(isAllowed, isOwnerOnly);
+		f.setWritable(isAllowed, isOwnerOnly);
+
+		// For owners, restore read and write permissions
+		isAllowed = true;
+		isOwnerOnly = true;
+		f.setReadable(isAllowed, isOwnerOnly);
+		f.setWritable(isAllowed, isOwnerOnly);
+
+		// For directories, set executable so that owners can list contents
+		if (f.isDirectory()) {
+			f.setExecutable(isAllowed, isOwnerOnly);
+		}
 	}
 
 	/**
@@ -133,23 +158,23 @@ public class BatchJobFileUtils {
 			throw new IllegalArgumentException(msg);
 		}
 
-		Set<PosixFilePermission> permissions =
-			PosixFilePermissions.fromString(WORKING_DIR_POSIX_PERMISSIONS);
-		FileAttribute<Set<PosixFilePermission>> attrs =
-			PosixFilePermissions.asFileAttribute(permissions);
+		// Set<PosixFilePermission> permissions =
+		// PosixFilePermissions.fromString(WORKING_DIR_POSIX_PERMISSIONS);
+		// FileAttribute<Set<PosixFilePermission>> attrs =
+		// PosixFilePermissions.asFileAttribute(permissions);
 		String wd = computeWorkingDirectoryName(batchJob);
 		File d = new File(parentDir, wd);
 		File retVal = null;
 		try {
 			Path p = d.toPath();
-			retVal = Files.createDirectory(p, attrs).toFile();
+			retVal = Files.createDirectory(p).toFile();
 		} catch (IOException e) {
 			throw new IllegalStateException(e.toString());
 		}
 		assert retVal != null;
 		assert retVal.isDirectory();
-		assert retVal.canRead();
-		assert retVal.canWrite();
+
+		setFilePermissions(retVal);
 
 		return retVal;
 	}
