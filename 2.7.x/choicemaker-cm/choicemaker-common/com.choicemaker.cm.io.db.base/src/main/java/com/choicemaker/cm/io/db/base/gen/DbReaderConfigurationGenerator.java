@@ -433,13 +433,28 @@ public class DbReaderConfigurationGenerator {
 	}
 
 	private DbField getOrderField(Id id, String defaultTable, List keyTables) {
+		if (id.field == null) {
+			String sKeyTables = defaultTable;
+			if (keyTables != null && keyTables.size() > 0) {
+				Object o = keyTables.get(0);
+				if (o != null) {
+					sKeyTables = o.toString();
+				}
+			}
+			String msg =
+				"No field of type '" + id.type + "' for field '" + id.name
+						+ "' in table '" + sKeyTables + "'";
+			g.error(msg);
+			throw new IllegalStateException(msg);
+		}
 		String column = id.field.getAttributeValue("name");
 		Element dbf = GeneratorHelper.getFld(conf, id.field, "db");
 		if (dbf != null) {
 			column = ifNotNull(column, dbf.getAttributeValue("name"));
 		}
 		String table = getTableName(defaultTable, column, keyTables);
-		return new DbField(table, column);
+		DbField retVal = new DbField(table, column);
+		return retVal;
 	}
 
 	private DbField getDbField(Element fld, String defaultTable, List keyTables) {
