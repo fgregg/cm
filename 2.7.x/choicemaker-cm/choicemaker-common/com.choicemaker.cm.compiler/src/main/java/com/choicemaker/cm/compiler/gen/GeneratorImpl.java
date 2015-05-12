@@ -287,6 +287,10 @@ public class GeneratorImpl implements IGenerator {
 		logger.warning(message);
 	}
 
+	public void info(String message) {
+		logger.info(message);
+	}
+
 	public boolean hasErrors() {
 		return cu.getErrors() > 0;
 	}

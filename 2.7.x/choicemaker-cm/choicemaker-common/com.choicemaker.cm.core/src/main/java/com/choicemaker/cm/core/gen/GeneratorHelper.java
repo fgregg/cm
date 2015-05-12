@@ -445,6 +445,9 @@ public class GeneratorHelper {
 		if (keyField != null) {
 			return new Id(keyField.getAttributeValue("type"), keyField.getAttributeValue("name"), keyField);
 		} else {
+			// Return a placeholder and hope that it will be replaced
+			String msg = "Using placeholder key field 'key' of type 'int'.";
+			g.info(msg);
 			return new Id("int", "key", null);
 		}
 	}
