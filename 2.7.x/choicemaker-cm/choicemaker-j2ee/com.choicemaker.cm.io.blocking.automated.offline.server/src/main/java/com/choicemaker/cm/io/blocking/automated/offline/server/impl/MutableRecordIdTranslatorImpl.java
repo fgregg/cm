@@ -14,7 +14,9 @@ import static com.choicemaker.cm.io.blocking.automated.offline.core.ImmutableRec
 import static com.choicemaker.cm.io.blocking.automated.offline.core.ImmutableRecordIdTranslator.MINIMUM_VALID_INDEX;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.SortedMap;
 import java.util.logging.Logger;
 
@@ -147,6 +149,8 @@ class MutableRecordIdTranslatorImpl implements MutableRecordIdTranslatorLocal {
 	 */
 	private int splitIndex = NOT_SPLIT;
 
+	private final Map<Comparable, Integer> seen = new HashMap<>();
+
 	MutableRecordIdTranslatorImpl(BatchJob job,
 			IRecordIdSinkSourceFactory factory, IRecordIdSink s1,
 			IRecordIdSink s2) throws BlockingException {
@@ -192,6 +196,7 @@ class MutableRecordIdTranslatorImpl implements MutableRecordIdTranslatorLocal {
 	@Override
 	public void close() throws BlockingException {
 		log.fine("close(): translatorState == " + translatorState);
+		seen.clear();
 		if (!isClosed()) {
 			// Check first sink
 			if (getSink1().exists() && sink1State == SINK_STATE.OPEN) {
@@ -244,12 +249,14 @@ class MutableRecordIdTranslatorImpl implements MutableRecordIdTranslatorLocal {
 		getSink1().open();
 		sink1State = SINK_STATE.OPEN;
 		_setSplitIndex(NOT_SPLIT);
+		seen.clear();
 	}
 
 	@Override
 	public void split() throws BlockingException {
 		if (getSplitIndex() == NOT_SPLIT) {
 			_setSplitIndex(currentIndex + 1);
+			seen.clear();
 			log.info("Writing ids to sink1: " + count1);
 			getSink1().flush();
 			log.info("Closing sink1: " + getSink1());
@@ -273,26 +280,35 @@ class MutableRecordIdTranslatorImpl implements MutableRecordIdTranslatorLocal {
 			retVal = INVALID_INDEX;
 			log.warning("translating null record id to an invalid internal index ("
 					+ retVal + ")");
+
 		} else {
-			currentIndex++;
-			retVal = currentIndex;
+			Integer i = seen.get(o);
+			if (i != null) {
+				retVal = i.intValue();
 
-			// figure out the id type for the sinks
-			if (currentIndex == 0) {
-				_setRecordIdType(RECORD_ID_TYPE.fromInstance(o));
-				getSink1().setRecordIDType(getRecordIdType());
-				getSink2().setRecordIDType(getRecordIdType());
-			}
-			assert getRecordIdType() == RECORD_ID_TYPE.fromInstance(o);
-			assert getRecordIdType() == getSink1().getRecordIdType();
-			assert getRecordIdType() == getSink2().getRecordIdType();
-
-			if (getSplitIndex() == NOT_SPLIT) {
-				getSink1().writeRecordID(o);
-				++count1;
 			} else {
-				getSink2().writeRecordID(o);
-				++count2;
+				currentIndex++;
+				retVal = currentIndex;
+				seen.put(o, retVal);
+
+				// figure out the id type for the sinks
+				if (currentIndex == 0) {
+					_setRecordIdType(RECORD_ID_TYPE.fromInstance(o));
+					getSink1().setRecordIDType(getRecordIdType());
+					getSink2().setRecordIDType(getRecordIdType());
+				}
+				assert getRecordIdType() == RECORD_ID_TYPE.fromInstance(o);
+				assert getRecordIdType() == getSink1().getRecordIdType();
+				assert getRecordIdType() == getSink2().getRecordIdType();
+
+				if (getSplitIndex() == NOT_SPLIT) {
+					getSink1().writeRecordID(o);
+					++count1;
+				} else {
+					getSink2().writeRecordID(o);
+					++count2;
+				}
+
 			}
 		}
 		return retVal;
