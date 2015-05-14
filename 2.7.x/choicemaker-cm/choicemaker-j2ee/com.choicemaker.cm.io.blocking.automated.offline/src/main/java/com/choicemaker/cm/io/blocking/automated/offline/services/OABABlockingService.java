@@ -607,13 +607,13 @@ public class OABABlockingService {
 					String msg =
 						"No values for column " + col + ", record id " + j
 								+ ", source " + rvSource;
-					log.finer(msg);
+					log.fine(msg);
 				} else {
 					// Also usually boring or non-informative
 					String msg =
 						values.size() + " values for column " + col
 								+ ", record id " + j + ", source " + rvSource;
-					log.finer(msg);
+					log.fine(msg);
 				}
 				for (int i = 0; i < values.size(); i++) {
 					Integer val = new Integer(values.get(i));
@@ -636,7 +636,7 @@ public class OABABlockingService {
 				String msg =
 					"Null values for column " + col + ", record id " + j
 							+ ", source " + rvSource;
-				log.finer(msg);
+				log.fine(msg);
 			}
 
 		} // end for

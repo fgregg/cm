@@ -193,7 +193,7 @@ public class RecValService3 {
 			}
 
 		} else {
-			log.info("Skipping RecValService2.runService()");
+			log.info("Skipping RecValService3.runService()");
 
 		}
 		time = System.currentTimeMillis() - time;
