@@ -10,7 +10,10 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.utils;
 
+import static java.util.logging.Level.FINE;
+
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecValSource;
@@ -32,6 +35,11 @@ import com.choicemaker.util.IntArrayList;
 @SuppressWarnings({
 		"rawtypes", "unchecked" })
 public class RecordValue2 {
+
+	private static final Logger logger = Logger.getLogger(RecordValue2.class
+			.getName());
+
+	private static final int DEBUG_INTERVAL = 1000;
 
 	private ArrayList recordList = null;
 
@@ -62,48 +70,94 @@ public class RecordValue2 {
 
 	/**
 	 * This method reads the ArrayList from a binary file. This assumes that the
-	 * record ids coming in from the file is sorted.
+	 * record ids coming in from the file is sorted in non-decreasing order.
 	 *
 	 * @param fileName
 	 * @return ArrayList - array containing rec_id, val_id pairs.
 	 */
 	public static ArrayList readColumnList(IRecValSource rvSource)
 			throws BlockingException {
-		ArrayList list = new ArrayList(1000);
 
-		// 2014-04-24 rphall: Commented out unused local variables.
-		// int count = 0;
-		// int padCount = 0;
+		ArrayList list = new ArrayList(1000);
 		int current = 0;
 
 		rvSource.open();
-
 		while (rvSource.hasNext()) {
-			// count ++;
+			// Invariant
+			assert list.size() == 0
+					|| (list.size() == current + 1 && list.get(current) != null);
 
+			// getNextRecID() and getNextValues() must be invoked together
 			int row = (int) rvSource.getNextRecID();
 			IntArrayList values = rvSource.getNextValues();
 
-			// pad the array list with null;
-			if (row > current) {
-				for (int i = current; i < row; i++) {
-					// padCount ++;
-					list.add(null);
-					current++;
-				}
+			if (values == null) {
+				// Nothing to do
+				continue;
 			}
 
-			list.add(values);
+			if (row < current) {
+				// Abort on illegal ordering
+				String msg =
+					"Illegal ordering for a record-value source:  (translated) "
+							+ "record ids must be sorted in non-decreasing order. "
+							+ "Current id: " + current + ", Next id: " + row;
+				logger.severe(msg);
+				throw new IllegalStateException(msg);
 
-			current++;
+			} else if (row == current) {
+				// Handle stacking on the primary key (virtual root)
+				if (list.size() > 0) {
+					assert list.size() == current + 1;
+					IntArrayList previousValues =
+						(IntArrayList) list.get(current);
+					assert previousValues != null;
+					values.addAll(previousValues);
+					list.add(current, values);
+				} else {
+					assert list.size() == 0;
+					list.add(values);
+				}
+				assert row == current;
+				assert list.size() == current + 1;
+				assert list.get(current) != null;
+				debugRecordValues(current, values);
+
+			} else {
+				assert row > current;
+
+				if (row > current + 1) {
+					// Pad missing values
+					for (int i = current; i < row - 1; i++) {
+						current++;
+						list.add(null);
+					}
+				}
+				assert row == current + 1;
+
+				current++;
+				list.add(values);
+				assert row == current;
+				assert list.size() == current + 1;
+				assert list.get(current) != null;
+				debugRecordValues(current, values);
+			}
+			
+			// Invariant tightens as soon as execution completes one loop
+			assert row == current;
+			assert list.size() == current + 1 && list.get(current) != null;
 		}
-
 		rvSource.close();
 
-		// System.out.println ("reading count " + count + " padCount " +
-		// padCount);
-
 		return list;
+	}
+
+	private static void debugRecordValues(int current, IntArrayList values) {
+		if (current % DEBUG_INTERVAL == 0 && logger.isLoggable(FINE)) {
+			String msg =
+				"Record id: " + current + ", values: " + values.toString();
+			logger.fine(msg);
+		}
 	}
 
 }
