@@ -387,7 +387,9 @@ public class RecValService2 {
 			sinks[C.intValue()].writeRecordValue((long) internal,
 					(IntArrayList) values.get(C));
 
-			// log.info("id " + internal + " C " + C + " " + values.get(C));
+//			if (internal%DEBUG_INTERVAL == 0) {
+//				log.fine("id " + internal + " C " + C + " " + values.get(C));
+//			}
 		}
 	}
 

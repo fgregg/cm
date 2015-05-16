@@ -64,6 +64,8 @@ public class RecValService3 {
 	private static final Logger log = Logger.getLogger(RecValService3.class
 			.getName());
 
+	private static final int DEBUG_INTERVAL = 1000;
+
 	private RecordSource master;
 	private RecordSource stage;
 	private ImmutableProbabilityModel model;
@@ -370,7 +372,9 @@ public class RecValService3 {
 			sinks[C.intValue()].writeRecordValue((long) internal,
 					(IntArrayList) values.get(C));
 
-			log.fine("id " + internal + " C " + C + " " + values.get(C));
+			if (internal%DEBUG_INTERVAL == 0) {
+				log.fine("id " + internal + " C " + C + " " + values.get(C));
+			}
 		}
 	}
 
