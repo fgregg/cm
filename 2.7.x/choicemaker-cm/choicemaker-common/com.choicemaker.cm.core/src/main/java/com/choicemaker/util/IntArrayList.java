@@ -16,18 +16,17 @@ import java.util.Arrays;
 /**
  * List of int elements. Similar to java.lang.List or
  * java.util.ArrayList, but it stores primitive int values.
- * Generic collections for primitive types whould remove the
+ * Generic collections for primitive types should remove the
  * need for IntArrayList. I implemented only those methods
- * that I acually need.
+ * that I actually need.
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/27 21:17:47 $
+ * @author    rphall (added toList() method)
  */
 
 public class IntArrayList implements Serializable, Cloneable {
 
-	/* As of 2010-03-10 */
-	static final long serialVersionUID = 6780043823734796732L;
+	static final long serialVersionUID = 271L;
 
 	/** Storage for elements. */
 	private int[] data;
@@ -47,6 +46,9 @@ public class IntArrayList implements Serializable, Cloneable {
 		size = 0;
 	}
 
+	public IntArrayList(int[] dataInit) {
+		this(dataInit.length,dataInit);
+	}
 
 	public IntArrayList(int sizeInit, int[] dataInit) {
 		size = sizeInit;
@@ -285,4 +287,163 @@ public class IntArrayList implements Serializable, Cloneable {
 		
 		return buff.toString();
 	}
+	
+//	/**
+//	 * Converts to a list of Integer values. A bridge method to allow
+//	 * incremental replacement of IntArrayClass by generic ArrayList<Integer>
+//	 * and List<Integer> instances.
+//	 */
+//	public List toList() {
+//		return new List() {
+//			final IntArrayList d = IntArrayList.this;
+//
+//			public Object clone() {
+//				return d.clone();
+//			}
+//
+//			public boolean equals(Object obj) {
+//				return d.equals(obj);
+//			}
+//
+//			public int hashCode() {
+//				return d.hashCode();
+//			}
+//
+//			public Object get(int idx) {
+//				return Integer.valueOf(d.get(idx));
+//			}
+//
+//			public void clear() {
+//				d.clear();
+//			}
+//
+//			public int size() {
+//				return d.size();
+//			}
+//
+//			public boolean isEmpty() {
+//				return d.isEmpty();
+//			}
+//
+//			public String toString() {
+//				return d.toString();
+//			}
+//
+//			public boolean contains(Object o) {
+//				boolean retVal = false;
+//				if (o instanceof Integer) {
+//					int i = ((Integer) o).intValue();
+//					retVal = d.contains(i);
+//				}
+//				return retVal;
+//			}
+//
+//			public Object[] toArray() {
+//				return toArray(new Integer[d.size]);
+//			}
+//
+//			public Object[] toArray(Object[] a) {
+//				Integer[] aI = (Integer[]) a;
+//				int[] ia = d.toArray();
+//				if (ia.length > aI.length) {
+//					aI = new Integer[ia.length];
+//				}
+//				for (int i = 0; i < ia.length; i++) {
+//					aI[i] = Integer.valueOf(ia[i]);
+//				}
+//				return aI;
+//			}
+//
+//			public boolean add(Object e) {
+//				int i = ((Integer) e).intValue();
+//				d.add(i);
+//				return true;
+//			}
+//
+//			public void add(int index, Object element) {
+//				int i = ((Integer) element).intValue();
+//				d.add(index, i);
+//			}
+//
+//			public boolean addAll(Collection c) {
+//				boolean retVal = false;
+//				for (Iterator it = c.iterator(); it.hasNext();) {
+//					Integer I = (Integer) it.next();
+//					retVal = retVal || add(I);
+//				}
+//				return retVal;
+//			}
+//
+//			public Object set(int index, Object element) {
+//				Object retVal = get(index);
+//				int ele = ((Integer) element).intValue();
+//				d.set(index, ele);
+//				return retVal;
+//			}
+//
+//			public boolean remove(Object o) {
+//				Integer I = (Integer) o;
+//				int i = I.intValue();
+//				boolean retVal = d.contains(i);
+//				if (retVal) {
+//					d.remove(i);
+//				}
+//				return retVal;
+//			}
+//
+//			public Object remove(int index) {
+//				int i = d.get(index);
+//				Integer retVal = Integer.valueOf(i);
+//				d.remove(index);
+//				return retVal;
+//			}
+//
+//			public int indexOf(Object o) {
+//				int retVal = -1;
+//				if (o instanceof Integer) {
+//					int i = ((Integer) o).intValue();
+//					retVal = d.indexOf(i);
+//				}
+//				return retVal;
+//			}
+//
+//			public Iterator iterator() {
+//				throw new Error("not implemented");
+//			}
+//
+//			public boolean addAll(int index, Collection c) {
+//				throw new Error("not implemented");
+//			}
+//
+//			public boolean containsAll(Collection c) {
+//				throw new Error("not implemented");
+//			}
+//
+//			public boolean removeAll(Collection c) {
+//				throw new Error("not implemented");
+//			}
+//
+//			public boolean retainAll(Collection c) {
+//				throw new Error("not implemented");
+//			}
+//
+//			public int lastIndexOf(Object o) {
+//				throw new Error("not implemented");
+//			}
+//
+//			public ListIterator listIterator() {
+//				throw new Error("not implemented");
+//			}
+//
+//			public ListIterator listIterator(int index) {
+//				throw new Error("not implemented");
+//			}
+//
+//			public List subList(int fromIndex, int toIndex) {
+//				throw new Error("not implemented");
+//			}
+//
+//		};
+//	}
+
 }

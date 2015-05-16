@@ -11,9 +11,9 @@
 package com.choicemaker.cm.io.blocking.automated.offline.services;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.StringTokenizer;
 import java.util.logging.Logger;
 
@@ -33,7 +33,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessingEvent
 import com.choicemaker.cm.io.blocking.automated.offline.impl.OversizedGroup;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.RecValSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.ControlChecker;
-import com.choicemaker.cm.io.blocking.automated.offline.utils.RecordValue2;
+import com.choicemaker.cm.io.blocking.automated.offline.utils.RecordValuesMap;
 import com.choicemaker.util.IntArrayList;
 import com.choicemaker.util.LongArrayList;
 
@@ -525,7 +525,7 @@ public class OABABlockingService {
 			throws BlockingException {
 		osIDs = removeDups(osIDs);
 
-		RecordValue2 recVal = new RecordValue2(rvSource);
+		RecordValuesMap recVal = new RecordValuesMap(rvSource);
 
 		IRecValSink sink = rvFactory.getSink(rvSource);
 		sink.open();
@@ -535,7 +535,7 @@ public class OABABlockingService {
 
 		// only keep those id in osIDs in the rec_id, val_id file.
 		for (int i = 0; i < osIDs.size(); i++) {
-			IntArrayList list = (IntArrayList) recVal.get(osIDs.get(i));
+			IntArrayList list = (IntArrayList) recVal.getValues(osIDs.get(i));
 			sink.writeRecordValue(osIDs.get(i), list);
 			// count ++;
 		}
@@ -585,15 +585,15 @@ public class OABABlockingService {
 		// this keeps track of oversized block IDs
 		osIDs = new LongArrayList(100);
 
-		RecordValue2 records = new RecordValue2(rvSource);
-		if (records.size() == 0) {
+		RecordValuesMap rvMap = new RecordValuesMap(rvSource);
+		if (rvMap.size() == 0) {
 			// Egregious -- useless blocking field or something may be wrong
 			String msg =
 				"No records for column " + col + ", source " + rvSource;
 			log.warning(msg);
 		}
 
-		ArrayList recordList = records.getList();
+		List<IntArrayList> recordList = rvMap.getIndexedValues();
 
 		for (int j = 0; j < recordList.size() && !stop; j++) {
 			stop = ControlChecker.checkStop(control, j);
@@ -735,7 +735,7 @@ public class OABABlockingService {
 	 *            - map of record source.
 	 * @return
 	 */
-	private static HashMap findMatching(BlockSet bs, RecordValue2 record) {
+	private static HashMap findMatching(BlockSet bs, RecordValuesMap record) {
 		HashMap match = new HashMap();
 
 		LongArrayList recs = bs.getRecordIDs();
@@ -748,7 +748,7 @@ public class OABABlockingService {
 			long row = recs.get(i);
 
 			// get the values of the given row
-			IntArrayList values = (IntArrayList) record.get(row);
+			IntArrayList values = (IntArrayList) record.getValues(row);
 
 			if (values != null) {
 
@@ -810,7 +810,7 @@ public class OABABlockingService {
 
 		for (int j = numField; j < rvSources.length && !stop; j++) {
 
-			RecordValue2 records = new RecordValue2(rvSources[j]);
+			RecordValuesMap records = new RecordValuesMap(rvSources[j]);
 
 			// compare map to all Oversized blocks on field k < j.
 			for (int k = 0; k < j && !stop; k++) {
