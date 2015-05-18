@@ -34,10 +34,11 @@ import com.choicemaker.util.IntArrayList;
  * @author pcheung
  *
  */
-public class RecordValuesMap /* implements Map<Integer, List<Integer>>*/ {
-	
+public class RecordValuesMap /* implements Map<Integer, List<Integer>> */{
+
 	public static interface ITranslatedRecordIdValueHashes {
 		int getTranslatedRecordId();
+
 		List<Integer> getValueHashes();
 	}
 
@@ -79,7 +80,7 @@ public class RecordValuesMap /* implements Map<Integer, List<Integer>>*/ {
 			public int size() {
 				return RecordValuesMap.this.size();
 			}
-			
+
 		};
 	}
 
@@ -133,13 +134,16 @@ public class RecordValuesMap /* implements Map<Integer, List<Integer>>*/ {
 				// Handle stacking on the primary key (virtual root)
 				if (!list.isEmpty()) {
 					assert list.size() == cid + 1 : sizeMsg(list, cid + 1);
-					IntArrayList previousValues = (IntArrayList) list.remove(cid);
+					IntArrayList previousValues =
+						(IntArrayList) list.remove(cid);
 					assert previousValues != null;
 					values.addAll(previousValues);
+					values = sortDedup(values);
 					list.add(cid, values);
 				} else {
 					assert list.isEmpty();
 					assert cid == 0;
+					values = sortDedup(values);
 					list.add(values);
 					assert list.size() == cid + 1 : sizeMsg(list, cid + 1);
 				}
@@ -172,13 +176,14 @@ public class RecordValuesMap /* implements Map<Integer, List<Integer>>*/ {
 						// Loose invariant partially violated
 						assert list.get(cid) == null;
 					}
-					assert nextId == cid + 1: expectedId(nextId, cid + 1);
+					assert nextId == cid + 1 : expectedId(nextId, cid + 1);
 					// Loose invariant partially honored
 					assert list.size() == cid + 1 : sizeMsg(list, cid + 1);
 				}
+				values = sortDedup(values);
 				list.add(values);
 				cid++;
-				
+
 				// Invariant tightened
 				assert list.size() == cid + 1 : sizeMsg(list, cid + 1);
 				assert list.get(cid) != null : contentMsg(list, cid);
@@ -198,10 +203,24 @@ public class RecordValuesMap /* implements Map<Integer, List<Integer>>*/ {
 		return list;
 	}
 
+	public static IntArrayList sortDedup(IntArrayList ial) {
+		IntArrayList retVal = new IntArrayList();
+		int max = Integer.MIN_VALUE;
+		ial.sort();
+		for (int j = 0; j < ial.size(); j++) {
+			int i = ial.get(j);
+			if (i > max || j == 0) {
+				retVal.add(i);
+				max = i;
+			}
+		}
+		return retVal;
+	}
+
 	private static String expectedId(int row, int expected) {
 		String msg =
-			"Invariant violated: row (" + row + ") is not expected (" + expected
-					+ ")";
+			"Invariant violated: row (" + row + ") is not expected ("
+					+ expected + ")";
 		return msg;
 	}
 
