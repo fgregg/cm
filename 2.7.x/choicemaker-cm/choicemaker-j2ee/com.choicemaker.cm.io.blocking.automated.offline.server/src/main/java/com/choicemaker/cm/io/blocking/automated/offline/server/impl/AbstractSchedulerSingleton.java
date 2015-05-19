@@ -283,10 +283,14 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 			}
 
 			final String _latestChunkProcessed =
+			// getPropertyController().getJobProperty(batchJob,
+			// PN_CHUNK_FILE_COUNT);
 				getPropertyController().getJobProperty(batchJob,
-						PN_CHUNK_FILE_COUNT);
+						PN_CURRENT_CHUNK_INDEX);
 			final int latestChunkProcessed =
 				Integer.valueOf(_latestChunkProcessed);
+			getLogger().info(
+					"Current chunk: " + currentChunk);
 			getLogger().info(
 					"Chunk " + latestChunkProcessed + " tree " + mwd.treeIndex
 							+ " is done.");
