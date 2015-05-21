@@ -145,23 +145,29 @@ public class TransMatcherMDB extends AbstractMatcher implements MessageListener 
 	protected void writeMatches(OabaJobMessage data, List<MatchRecord2> matches)
 			throws BlockingException {
 
-		// first figure out the correct file for this processor
-		final long jobId = data.jobID;
-		BatchJob batchJob = getJobController().findBatchJob(jobId);
-		IMatchRecord2Sink mSink =
-			OabaFileUtils.getMatchChunkFactory(batchJob).getSink(data.treeIndex);
-		IComparableSink sink = new ComparableMRSink(mSink);
-		
-		 //write matches to this file.
-		 sink.append();
-		 sink.writeComparables(matches.iterator());
-		
-		 //write the separator
-		 MatchRecord2 mr = (MatchRecord2) matches.get(0);
-		 mr = MatchRecord2Factory.getSeparator(mr.getRecordID1());
-		 sink.writeComparable(mr);
-		
-		 sink.close();
+		assert data != null;
+		assert matches != null;
+
+		if (!matches.isEmpty()) {
+			// first figure out the correct file for this processor
+			final long jobId = data.jobID;
+			BatchJob batchJob = getJobController().findBatchJob(jobId);
+			IMatchRecord2Sink mSink =
+				OabaFileUtils.getMatchChunkFactory(batchJob).getSink(
+						data.treeIndex);
+			IComparableSink sink = new ComparableMRSink(mSink);
+
+			// write matches to this file.
+			sink.append();
+			sink.writeComparables(matches.iterator());
+
+			// write the separator
+			MatchRecord2 mr = (MatchRecord2) matches.get(0);
+			mr = MatchRecord2Factory.getSeparator(mr.getRecordID1());
+			sink.writeComparable(mr);
+
+			sink.close();
+		}
 	}
 
 	@Override
