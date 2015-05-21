@@ -14,7 +14,9 @@ import static com.choicemaker.cm.args.OperationalPropertyNames.PN_CURRENT_CHUNK_
 import static com.choicemaker.cm.args.OperationalPropertyNames.PN_RECORD_ID_TYPE;
 import static com.choicemaker.cm.args.OperationalPropertyNames.PN_REGULAR_CHUNK_FILE_COUNT;
 
+import java.io.PrintWriter;
 import java.io.Serializable;
+import java.io.StringWriter;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
@@ -137,7 +139,7 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 					final ServerConfiguration serverConfig =
 						getServerController().findServerConfigurationByJobId(
 								jobId);
-					
+
 					if (batchJob == null || params == null
 							|| oabaSettings == null || serverConfig == null) {
 						String s0 =
@@ -188,14 +190,23 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 			}
 
 		} catch (Exception e) {
-			getLogger().severe(e.toString());
+			String msg0 = throwableToString(e);
+			getLogger().severe(msg0);
 			if (batchJob != null) {
 				batchJob.markAsFailed();
 			}
-			// mdc.setRollbackOnly();
 		}
 		getJMSTrace()
 				.info("Exiting onMessage for " + this.getClass().getName());
+	}
+
+	protected String throwableToString(Throwable throwable) {
+		StringWriter sw = new StringWriter();
+		PrintWriter pw = new PrintWriter(sw);
+		pw.println(throwable.toString());
+		throwable.printStackTrace(pw);
+		pw.close();
+		return sw.toString();
 	}
 
 	protected final void handleMatching(OabaJobMessage data,
@@ -433,7 +444,7 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 
 	/**
 	 * This method compares two records and returns a MatchRecord2 object.
-	 * 
+	 *
 	 * @param q
 	 *            - first record
 	 * @param m

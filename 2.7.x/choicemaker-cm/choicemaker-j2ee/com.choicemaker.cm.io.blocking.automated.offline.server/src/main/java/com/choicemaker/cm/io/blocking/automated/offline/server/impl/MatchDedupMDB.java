@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -12,7 +12,9 @@ package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
 import static com.choicemaker.cm.args.OperationalPropertyNames.PN_OABA_CACHED_RESULTS_FILE;
 
+import java.io.PrintWriter;
 import java.io.Serializable;
+import java.io.StringWriter;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -63,14 +65,14 @@ import com.choicemaker.cm.io.blocking.automated.offline.services.GenericDedupSer
 
 /**
  * This message bean deduplicates match records.
- * 
+ *
  * This version loads one chunk data into memory and different processors handle
  * different trees of the same chunk. There are N matches files, where N is the
  * number of processors.
- * 
+ *
  * For each of the N files, we need to dedup it, then merge all the dedup files
  * together.
- * 
+ *
  * @author pcheung
  *
  */
@@ -120,7 +122,7 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see javax.jms.MessageListener#onMessage(javax.jms.Message)
 	 */
 	@Override
@@ -167,12 +169,22 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 			}
 
 		} catch (Exception e) {
-			log.severe(e.toString());
+			String msg0 = throwableToString(e);
+			log.severe(msg0);
 			if (batchJob != null) {
 				batchJob.markAsFailed();
 			}
 		}
 		jmsTrace.info("Exiting onMessage for " + this.getClass().getName());
+	}
+
+	protected String throwableToString(Throwable throwable) {
+		StringWriter sw = new StringWriter();
+		PrintWriter pw = new PrintWriter(sw);
+		pw.println(throwable.toString());
+		throwable.printStackTrace(pw);
+		pw.close();
+		return sw.toString();
 	}
 
 	/**
@@ -203,13 +215,16 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 			MessageBeanUtils.stopJob(batchJob, propController, processingEntry);
 
 		} else {
-			processingEntry.setCurrentProcessingEvent(OabaProcessingEvent.MERGE_DEDUP_MATCHES);
+			processingEntry
+					.setCurrentProcessingEvent(OabaProcessingEvent.MERGE_DEDUP_MATCHES);
 			mergeMatches(numProcessors, jobId, batchJob);
 
 			// mark as done
 			batchJob.markAsCompleted();
-			sendToUpdateStatus(batchJob, BatchProcessingEvent.DONE, new Date(), null);
-			processingEntry.setCurrentProcessingEvent(BatchProcessingEvent.DONE);
+			sendToUpdateStatus(batchJob, BatchProcessingEvent.DONE, new Date(),
+					null);
+			processingEntry
+					.setCurrentProcessingEvent(BatchProcessingEvent.DONE);
 			// publishStatus(d.jobID);
 		}
 	}
