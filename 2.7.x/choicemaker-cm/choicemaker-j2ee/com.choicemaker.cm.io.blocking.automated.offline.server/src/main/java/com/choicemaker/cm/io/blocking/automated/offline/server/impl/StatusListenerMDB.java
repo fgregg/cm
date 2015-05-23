@@ -1,16 +1,18 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
+import java.io.PrintWriter;
 import java.io.Serializable;
+import java.io.StringWriter;
 import java.util.logging.Logger;
 
 import javax.ejb.ActivationConfigProperty;
@@ -54,12 +56,21 @@ public class StatusListenerMDB implements MessageListener, Serializable {
 			} else
 				log.warning("received unexpected message: " + inMessage);
 		} catch (Exception e) {
-			log.severe(e.toString());
+			String msg0 = throwableToString(e);
+			log.severe(msg0);
 		}
 
 		log.fine("... finished onMessage");
 		jmsTrace.info("Exiting onMessage for " + this.getClass().getName());
-		return;
+	}
+
+	protected String throwableToString(Throwable throwable) {
+		StringWriter sw = new StringWriter();
+		PrintWriter pw = new PrintWriter(sw);
+		pw.println(throwable.toString());
+		throwable.printStackTrace(pw);
+		pw.close();
+		return sw.toString();
 	}
 
 } // StatusListenerMDB

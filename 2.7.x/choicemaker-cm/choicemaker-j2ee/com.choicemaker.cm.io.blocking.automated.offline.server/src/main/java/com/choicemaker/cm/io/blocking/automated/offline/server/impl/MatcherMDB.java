@@ -141,17 +141,23 @@ public class MatcherMDB extends AbstractMatcher {
 	protected void writeMatches(OabaJobMessage data, List<MatchRecord2> matches)
 			throws BlockingException {
 
-		// first figure out the correct file for this processor
-		final long jobId = data.jobID;
-		BatchJob batchJob = getJobController().findBatchJob(jobId);
-		IMatchRecord2Sink mSink =
-			OabaFileUtils.getMatchChunkFactory(batchJob).getSink(data.treeIndex);
-		IComparableSink sink = new ComparableMRSink(mSink);
+		assert data != null;
+		assert matches != null;
 
-		// write matches to this file.
-		sink.append();
-		sink.writeComparables(matches.iterator());
-		sink.close();
+		if (!matches.isEmpty()) {
+			// first figure out the correct file for this processor
+			final long jobId = data.jobID;
+			BatchJob batchJob = getJobController().findBatchJob(jobId);
+			IMatchRecord2Sink mSink =
+				OabaFileUtils.getMatchChunkFactory(batchJob).getSink(
+						data.treeIndex);
+			IComparableSink sink = new ComparableMRSink(mSink);
+
+			// write matches to this file.
+			sink.append();
+			sink.writeComparables(matches.iterator());
+			sink.close();
+		}
 	}
 
 	@Override

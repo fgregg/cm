@@ -10,7 +10,9 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
+import java.io.PrintWriter;
 import java.io.Serializable;
+import java.io.StringWriter;
 import java.util.Date;
 import java.util.logging.Logger;
 
@@ -86,8 +88,8 @@ public abstract class AbstractOabaMDB implements MessageListener, Serializable {
 	private OperationalPropertyController propController;
 
 	@EJB
-	private AbaStatisticsController statsController;	
-	
+	private AbaStatisticsController statsController;
+
 	@Inject
 	private JMSContext jmsContext;
 
@@ -155,7 +157,8 @@ public abstract class AbstractOabaMDB implements MessageListener, Serializable {
 				final long jobId = oabaMsg.jobID;
 				batchJob = getJobController().findBatchJob(jobId);
 				OabaParameters oabaParams =
-					getParametersController().findOabaParametersByBatchJobId(jobId);
+					getParametersController().findOabaParametersByBatchJobId(
+							jobId);
 				OabaSettings oabaSettings =
 					getSettingsController().findOabaSettingsByJobId(jobId);
 				ProcessingEventLog processingLog =
@@ -166,9 +169,11 @@ public abstract class AbstractOabaMDB implements MessageListener, Serializable {
 				if (batchJob == null || oabaParams == null
 						|| oabaSettings == null || serverConfig == null) {
 					String s0 =
-							"Unable to find a job, parameters, settings or server configuration for "
-									+ jobId;
-					String s = LoggingUtils.buildDiagnostic(s0, batchJob, oabaParams, oabaSettings, serverConfig);
+						"Unable to find a job, parameters, settings or server configuration for "
+								+ jobId;
+					String s =
+						LoggingUtils.buildDiagnostic(s0, batchJob, oabaParams,
+								oabaSettings, serverConfig);
 					getLogger().severe(s);
 					throw new IllegalStateException(s);
 				}
@@ -200,7 +205,8 @@ public abstract class AbstractOabaMDB implements MessageListener, Serializable {
 			}
 
 		} catch (Exception e) {
-			getLogger().severe(e.toString());
+			String msg0 = throwableToString(e);
+			getLogger().severe(msg0);
 			if (batchJob != null) {
 				batchJob.markAsFailed();
 			}
@@ -209,13 +215,23 @@ public abstract class AbstractOabaMDB implements MessageListener, Serializable {
 				.info("Exiting onMessage for " + this.getClass().getName());
 	}
 
-	protected void abortProcessing(BatchJob batchJob, ProcessingEventLog processingLog) {
+	protected String throwableToString(Throwable throwable) {
+		StringWriter sw = new StringWriter();
+		PrintWriter pw = new PrintWriter(sw);
+		pw.println(throwable.toString());
+		throwable.printStackTrace(pw);
+		pw.close();
+		return sw.toString();
+	}
+
+	protected void abortProcessing(BatchJob batchJob,
+			ProcessingEventLog processingLog) {
 		MessageBeanUtils.stopJob(batchJob, getPropertyController(),
 				processingLog);
 	}
 
-	protected void updateOabaProcessingStatus(BatchJob job, BatchProcessingEvent event,
-			Date timestamp, String info) {
+	protected void updateOabaProcessingStatus(BatchJob job,
+			BatchProcessingEvent event, Date timestamp, String info) {
 		getProcessingController().updateStatusWithNotification(job, event,
 				timestamp, info);
 	}
@@ -227,9 +243,10 @@ public abstract class AbstractOabaMDB implements MessageListener, Serializable {
 	protected abstract Logger getJmsTrace();
 
 	protected abstract void processOabaMessage(OabaJobMessage data,
-			BatchJob batchJob, OabaParameters params, OabaSettings oabaSettings,
-			ProcessingEventLog processingLog, ServerConfiguration serverConfig,
-			ImmutableProbabilityModel model) throws BlockingException;
+			BatchJob batchJob, OabaParameters params,
+			OabaSettings oabaSettings, ProcessingEventLog processingLog,
+			ServerConfiguration serverConfig, ImmutableProbabilityModel model)
+			throws BlockingException;
 
 	protected abstract BatchProcessingEvent getCompletionEvent();
 

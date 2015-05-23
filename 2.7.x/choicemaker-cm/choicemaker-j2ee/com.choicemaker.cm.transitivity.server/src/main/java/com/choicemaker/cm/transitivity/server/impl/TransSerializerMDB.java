@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -154,12 +154,22 @@ public class TransSerializerMDB implements MessageListener, Serializable {
 			}
 
 		} catch (Exception e) {
-			log.severe(e.toString());
+			String msg0 = throwableToString(e);
+			log.severe(msg0);
 			if (batchJob != null) {
 				batchJob.markAsFailed();
 			}
 		}
 		jmsTrace.info("Exiting onMessage for " + this.getClass().getName());
+	}
+
+	protected String throwableToString(Throwable throwable) {
+		StringWriter sw = new StringWriter();
+		PrintWriter pw = new PrintWriter(sw);
+		pw.println(throwable.toString());
+		throwable.printStackTrace(pw);
+		pw.close();
+		return sw.toString();
 	}
 
 	protected void processOabaMessage(BatchJob batchJob) {

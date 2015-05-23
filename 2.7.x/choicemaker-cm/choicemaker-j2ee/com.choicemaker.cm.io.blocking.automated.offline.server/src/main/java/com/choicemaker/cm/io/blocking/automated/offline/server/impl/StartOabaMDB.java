@@ -14,6 +14,8 @@ import static com.choicemaker.cm.args.OperationalPropertyNames.PN_BLOCKING_FIELD
 import static com.choicemaker.cm.args.OperationalPropertyNames.PN_RECORD_ID_TYPE;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.Date;
 import java.util.logging.Logger;
 
@@ -90,7 +92,8 @@ public class StartOabaMDB extends AbstractOabaMDB {
 				final long jobId = data.jobID;
 				batchJob = getJobController().findBatchJob(jobId);
 				OabaParameters params =
-					getParametersController().findOabaParametersByBatchJobId(jobId);
+					getParametersController().findOabaParametersByBatchJobId(
+							jobId);
 				OabaSettings oabaSettings =
 					getSettingsController().findOabaSettingsByJobId(jobId);
 				ProcessingEventLog processingEntry =
@@ -128,8 +131,9 @@ public class StartOabaMDB extends AbstractOabaMDB {
 				getLogger().info(
 						"Staging record source type: "
 								+ params.getQueryRsType());
-				getLogger().info(
-						"Master record source id: " + params.getReferenceRsId());
+				getLogger()
+						.info("Master record source id: "
+								+ params.getReferenceRsId());
 				getLogger().info(
 						"Master record source type: "
 								+ params.getReferenceRsType());
@@ -199,8 +203,8 @@ public class StartOabaMDB extends AbstractOabaMDB {
 					// object
 					data.validator = validator;
 
-					updateOabaProcessingStatus(batchJob, OabaProcessingEvent.DONE_REC_VAL,
-							new Date(), null);
+					updateOabaProcessingStatus(batchJob,
+							OabaProcessingEvent.DONE_REC_VAL, new Date(), null);
 					sendToBlocking(data);
 				}
 
@@ -210,12 +214,22 @@ public class StartOabaMDB extends AbstractOabaMDB {
 			}
 
 		} catch (Exception e) {
-			getLogger().severe(e.toString());
+			String msg0 = throwableToString(e);
+			log.severe(msg0);
 			if (batchJob != null) {
 				batchJob.markAsFailed();
 			}
 		}
 		jmsTrace.info("Exiting onMessage for " + this.getClass().getName());
+	}
+
+	protected String throwableToString(Throwable throwable) {
+		StringWriter sw = new StringWriter();
+		PrintWriter pw = new PrintWriter(sw);
+		pw.println(throwable.toString());
+		throwable.printStackTrace(pw);
+		pw.close();
+		return sw.toString();
 	}
 
 	/**
@@ -233,7 +247,8 @@ public class StartOabaMDB extends AbstractOabaMDB {
 	 * @throws OABABlockingException
 	 */
 	private boolean isMoreThanThreshold(RecordSource rs,
-			ImmutableProbabilityModel model, int threshold) throws BlockingException {
+			ImmutableProbabilityModel model, int threshold)
+			throws BlockingException {
 
 		// Preconditions need to be checked on this method, even though it is
 		// private, because the arguments haven't been validated before it

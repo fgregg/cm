@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -14,7 +14,9 @@ import static com.choicemaker.cm.args.OperationalPropertyNames.PN_CHUNK_FILE_COU
 import static com.choicemaker.cm.args.OperationalPropertyNames.PN_CURRENT_CHUNK_INDEX;
 import static com.choicemaker.cm.args.OperationalPropertyNames.PN_REGULAR_CHUNK_FILE_COUNT;
 
+import java.io.PrintWriter;
 import java.io.Serializable;
+import java.io.StringWriter;
 import java.rmi.RemoteException;
 import java.util.Date;
 import java.util.StringTokenizer;
@@ -128,8 +130,8 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 
 	protected abstract void sendToMatcher(OabaJobMessage sd);
 
-	protected abstract void sendToUpdateStatus(BatchJob job, ProcessingEvent event,
-			Date timestamp, String info);
+	protected abstract void sendToUpdateStatus(BatchJob job,
+			ProcessingEvent event, Date timestamp, String info);
 
 	protected abstract void sendToMatchDebup(BatchJob job, OabaJobMessage sd);
 
@@ -153,20 +155,22 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 					final long jobId = sd.jobID;
 					batchJob = getJobController().findBatchJob(jobId);
 					OabaParameters params =
-						getOabaParametersController().findOabaParametersByBatchJobId(
-								jobId);
+						getOabaParametersController()
+								.findOabaParametersByBatchJobId(jobId);
 					OabaSettings oabaSettings =
 						getSettingsController().findOabaSettingsByJobId(jobId);
 					ServerConfiguration serverConfig =
 						getServerController().findServerConfigurationByJobId(
 								jobId);
-	
+
 					if (batchJob == null || params == null
 							|| oabaSettings == null || serverConfig == null) {
 						String s0 =
-								"Unable to find a job, parameters, settings or server configuration for "
-										+ jobId;
-						String s = LoggingUtils.buildDiagnostic(s0, batchJob, params, oabaSettings, serverConfig);
+							"Unable to find a job, parameters, settings or server configuration for "
+									+ jobId;
+						String s =
+							LoggingUtils.buildDiagnostic(s0, batchJob, params,
+									oabaSettings, serverConfig);
 						getLogger().severe(s);
 						throw new IllegalStateException(s);
 					}
@@ -225,23 +229,32 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 			}
 
 		} catch (Exception e) {
-			getLogger().severe(e.toString());
+			String msg0 = throwableToString(e);
+			getLogger().severe(msg0);
 			if (batchJob != null) {
 				batchJob.markAsFailed();
 			}
-			// mdc.setRollbackOnly();
 		}
 		getJMSTrace()
 				.info("Exiting onMessage for " + this.getClass().getName());
 	}
 
+	protected String throwableToString(Throwable throwable) {
+		StringWriter sw = new StringWriter();
+		PrintWriter pw = new PrintWriter(sw);
+		pw.println(throwable.toString());
+		throwable.printStackTrace(pw);
+		pw.close();
+		return sw.toString();
+	}
+
 	/**
 	 * This method is called when a chunk is done and the system is ready for
 	 * the next chunk.
-	 * 
+	 *
 	 * It tabulates the statistics from the chunk that just finished and it
 	 * starts the next available chunk.
-	 * 
+	 *
 	 * @param mwd
 	 *            - the message data from the chunk that just finished.
 	 * @throws RemoteException
@@ -289,8 +302,7 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 						PN_CURRENT_CHUNK_INDEX);
 			final int latestChunkProcessed =
 				Integer.valueOf(_latestChunkProcessed);
-			getLogger().info(
-					"Current chunk: " + currentChunk);
+			getLogger().info("Current chunk: " + currentChunk);
 			getLogger().info(
 					"Chunk " + latestChunkProcessed + " tree " + mwd.treeIndex
 							+ " is done.");
@@ -312,7 +324,8 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 					Integer.toString(numChunks) + DELIM
 							+ Integer.toString(numRegularChunks) + DELIM
 							+ Integer.toString(currentChunk);
-				status.setCurrentProcessingEvent(OabaProcessingEvent.MATCHING_DATA, temp);
+				status.setCurrentProcessingEvent(
+						OabaProcessingEvent.MATCHING_DATA, temp);
 
 				getLogger().info("Chunk " + latestChunkProcessed + " is done.");
 
@@ -357,7 +370,8 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 	protected final void nextSteps(final BatchJob job, OabaJobMessage sd)
 			throws BlockingException {
 		cleanUp(job, sd);
-		sendToUpdateStatus(job, OabaProcessingEvent.DONE_MATCHING_DATA, new Date(), null);
+		sendToUpdateStatus(job, OabaProcessingEvent.DONE_MATCHING_DATA,
+				new Date(), null);
 		sendToMatchDebup(job, sd);
 	}
 
@@ -387,7 +401,8 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 
 			// set up the record source arrays.
 			OabaParameters oabaParams =
-				getOabaParametersController().findOabaParametersByBatchJobId(jobId);
+				getOabaParametersController().findOabaParametersByBatchJobId(
+						jobId);
 			String modelName = oabaParams.getModelConfigurationName();
 			ImmutableProbabilityModel ipm =
 				PMManager.getImmutableModelInstance(modelName);
@@ -442,7 +457,7 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 	/**
 	 * This is a special case when TE is not needed, because all the match
 	 * graphs are size 2 or 0.
-	 * 
+	 *
 	 */
 	protected final void noChunk(final OabaJobMessage sd)
 			throws XmlConfException, BlockingException, NamingException,
@@ -481,8 +496,8 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 			PMManager.getModelInstance(modelConfigId);
 
 		getLogger().info("Current chunk " + currentChunk);
-		getPropertyController().setJobProperty(batchJob, PN_CURRENT_CHUNK_INDEX,
-				String.valueOf(currentChunk));
+		getPropertyController().setJobProperty(batchJob,
+				PN_CURRENT_CHUNK_INDEX, String.valueOf(currentChunk));
 
 		// call to garbage collection
 		long t = System.currentTimeMillis();
