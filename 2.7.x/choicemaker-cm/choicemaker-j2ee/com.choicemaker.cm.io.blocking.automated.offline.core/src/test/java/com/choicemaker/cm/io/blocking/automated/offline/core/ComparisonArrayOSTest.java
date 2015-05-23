@@ -185,9 +185,9 @@ public class ComparisonArrayOSTest {
 			ComparisonArrayOS<String> caos = new ComparisonArrayOS<>(
 					queryIds, referenceIds, SyntheticRecordIds.ID_TYPE, SyntheticRecordIds.ID_TYPE, maxBlockSize
 					);
-			int count = 0;
+//			int count = 0;
 			while (caos.hasNextPair()) {
-				++count;
+//				++count;
 				ComparisonPair<String> cp = caos.getNextPair();
 				String id1 = cp.getId1();
 				assertTrue(id1 != null);
