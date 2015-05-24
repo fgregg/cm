@@ -27,6 +27,7 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 import com.choicemaker.cm.args.AbaSettings;
+import com.choicemaker.cm.args.RecordAccess;
 import com.choicemaker.cm.core.Accessor;
 import com.choicemaker.cm.core.Constants;
 import com.choicemaker.cm.core.DatabaseException;
@@ -264,21 +265,21 @@ public class OnlineMatchBaseBean implements SessionBean {
 			if (!modelDbrName.equals(masterCollection.getName()))
 				throw new RecordCollectionException("dbConfig should match accessProvider dbConfig attribute");
 
+			// FIXME temporary compilation hack until this class is removed
+			RecordAccess dbParams = null;
+			
 			q = getInternalRecord(model, queryRecord);
 			RecordDecisionMaker dm = new RecordDecisionMaker();
 			DatabaseAccessor databaseAccessor;
 			try {
-				// FIXME REMOVEME
-//				CMExtension dbaExt =
-//					CMPlatformUtils.getPluginRegistry().getExtension(
-//						Single.DATABASE_ACCESSOR,
-//						(String) model.properties().get(
-//							Single.DATABASE_ACCESSOR));
-				// END FIXME
+				// FIXME temporary compilation hack until this class is removed
+				String dbaName = dbParams.getDatabaseAccessorName();
 				CMExtension dbaExt =
 					CMPlatformUtils.getPluginRegistry().getExtension(
 							Single.DATABASE_ACCESSOR,
-							model.getDatabaseAccessorName());
+							// model.getDatabaseAccessorName());
+							dbaName);
+				// END compilation hack
 				databaseAccessor =
 					(DatabaseAccessor) dbaExt
 						.getConfigurationElements()[0]
@@ -309,7 +310,7 @@ public class OnlineMatchBaseBean implements SessionBean {
 			}
 
 			String dbConfigName = masterCollection.getName();
-			String blockingConfigName = model.getBlockingConfigurationName();
+			String blockingConfigName = dbParams.getBlockingConfigurationName();
 			// FIXME temporary HACK
 			AbaSettings FIXME = null;
 			// END FIXME

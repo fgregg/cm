@@ -26,6 +26,7 @@ import javax.jms.Message;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 
+import com.choicemaker.cm.args.RecordAccess;
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
@@ -91,24 +92,28 @@ public class StartOabaMDB extends AbstractOabaMDB {
 
 				final long jobId = data.jobID;
 				batchJob = getJobController().findBatchJob(jobId);
-				OabaParameters params =
+
+				// FIXME DOOMED TO FAIL
+				RecordAccess dbParams = null;
+
+				OabaParameters oabaParams =
 					getParametersController().findOabaParametersByBatchJobId(
 							jobId);
 				OabaSettings oabaSettings =
 					getSettingsController().findOabaSettingsByJobId(jobId);
 				ProcessingEventLog processingEntry =
 					getProcessingController().getProcessingLog(batchJob);
-				if (batchJob == null || params == null || oabaSettings == null) {
+				if (batchJob == null || oabaParams == null || oabaSettings == null) {
 					String s =
 						"Unable to find a job, parameters or settings for "
 								+ jobId;
 					getLogger().severe(s);
 					throw new IllegalArgumentException(s);
 				}
-				final String modelConfigId = params.getModelConfigurationName();
-				ImmutableProbabilityModel stageModel =
+				final String modelConfigId = oabaParams.getModelConfigurationName();
+				ImmutableProbabilityModel model =
 					PMManager.getModelInstance(modelConfigId);
-				if (stageModel == null) {
+				if (model == null) {
 					String s =
 						"No modelId corresponding to '" + modelConfigId + "'";
 					getLogger().severe(s);
@@ -121,24 +126,24 @@ public class StartOabaMDB extends AbstractOabaMDB {
 				getLogger().info("Job id: " + jobId);
 				getLogger().info(
 						"Model configuration: "
-								+ params.getModelConfigurationName());
+								+ oabaParams.getModelConfigurationName());
 				getLogger().info(
-						"Differ threshold: " + params.getLowThreshold());
+						"Differ threshold: " + oabaParams.getLowThreshold());
 				getLogger().info(
-						"Match threshold: " + params.getHighThreshold());
+						"Match threshold: " + oabaParams.getHighThreshold());
 				getLogger().info(
-						"Staging record source id: " + params.getQueryRsId());
+						"Staging record source id: " + oabaParams.getQueryRsId());
 				getLogger().info(
 						"Staging record source type: "
-								+ params.getQueryRsType());
+								+ oabaParams.getQueryRsType());
 				getLogger()
 						.info("Master record source id: "
-								+ params.getReferenceRsId());
+								+ oabaParams.getReferenceRsId());
 				getLogger().info(
 						"Master record source type: "
-								+ params.getReferenceRsType());
+								+ oabaParams.getReferenceRsType());
 				getLogger()
-						.info("Linkage type: " + params.getOabaLinkageType());
+						.info("Linkage type: " + oabaParams.getOabaLinkageType());
 
 				// check to see if there are a lot of records in stage.
 				// if not use single record matching instead of batch.
@@ -151,14 +156,14 @@ public class StartOabaMDB extends AbstractOabaMDB {
 				ISerializableRecordSource staging = null;
 				ISerializableRecordSource master = null;
 				try {
-					staging = getRecordSourceController().getStageRs(params);
-					master = getRecordSourceController().getMasterRs(params);
+					staging = getRecordSourceController().getStageRs(oabaParams);
+					master = getRecordSourceController().getMasterRs(oabaParams);
 				} catch (Exception e) {
 					throw new BlockingException(e.toString());
 				}
 				assert staging != null;
 
-				if (!isMoreThanThreshold(staging, stageModel,
+				if (!isMoreThanThreshold(staging, model,
 						oabaSettings.getMaxSingle())) {
 					getLogger().info("Using single record matching");
 					sendToSingleRecordMatching(data);
@@ -174,7 +179,7 @@ public class StartOabaMDB extends AbstractOabaMDB {
 					RecValSinkSourceFactory recvalFactory =
 						OabaFileUtils.getRecValFactory(batchJob);
 					RecValService3 rvService =
-						new RecValService3(staging, master, stageModel,
+						new RecValService3(staging, master, model, dbParams,
 								recvalFactory, getRecordIdController(),
 								translator, processingEntry, batchJob);
 					rvService.runService();
@@ -321,9 +326,10 @@ public class StartOabaMDB extends AbstractOabaMDB {
 
 	@Override
 	protected void processOabaMessage(OabaJobMessage data, BatchJob batchJob,
-			OabaParameters params, OabaSettings oabaSettings,
-			ProcessingEventLog processingLog, ServerConfiguration serverConfig,
-			ImmutableProbabilityModel model) throws BlockingException {
+			RecordAccess dbParams, OabaParameters oabaParams,
+			OabaSettings oabaSettings, ProcessingEventLog processingLog,
+			ServerConfiguration serverConfig, ImmutableProbabilityModel model)
+			throws BlockingException {
 		// Does nothing in this class. Instead, onMessage is overridden
 		// and this callback is bypassed.
 	}

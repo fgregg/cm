@@ -24,6 +24,7 @@ import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 
 import com.choicemaker.cm.args.BatchProcessingEvent;
+import com.choicemaker.cm.args.RecordAccess;
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
@@ -166,14 +167,16 @@ public abstract class AbstractOabaMDB implements MessageListener, Serializable {
 				ServerConfiguration serverConfig =
 					getServerController().findServerConfigurationByJobId(jobId);
 
-				if (batchJob == null || oabaParams == null
-						|| oabaSettings == null || serverConfig == null) {
-					String s0 =
-						"Unable to find a job, parameters, settings or server configuration for "
-								+ jobId;
+				// FIXME DOOMED TO FAIL
+				RecordAccess dbParams = null;
+
+				if (batchJob == null /* FIXME || dbParams == null */
+						|| oabaParams == null || oabaSettings == null
+						|| serverConfig == null) {
+					String s0 = "Null configuration info for job " + jobId;
 					String s =
-						LoggingUtils.buildDiagnostic(s0, batchJob, oabaParams,
-								oabaSettings, serverConfig);
+						LoggingUtils.buildDiagnostic(s0, batchJob, dbParams,
+								oabaParams, oabaSettings, serverConfig);
 					getLogger().severe(s);
 					throw new IllegalStateException(s);
 				}
@@ -192,7 +195,7 @@ public abstract class AbstractOabaMDB implements MessageListener, Serializable {
 				if (BatchJobStatus.ABORT_REQUESTED.equals(batchJob.getStatus())) {
 					abortProcessing(batchJob, processingLog);
 				} else {
-					processOabaMessage(oabaMsg, batchJob, oabaParams,
+					processOabaMessage(oabaMsg, batchJob, dbParams, oabaParams,
 							oabaSettings, processingLog, serverConfig, model);
 					updateOabaProcessingStatus(batchJob, getCompletionEvent(),
 							new Date(), null);
@@ -243,10 +246,10 @@ public abstract class AbstractOabaMDB implements MessageListener, Serializable {
 	protected abstract Logger getJmsTrace();
 
 	protected abstract void processOabaMessage(OabaJobMessage data,
-			BatchJob batchJob, OabaParameters params,
-			OabaSettings oabaSettings, ProcessingEventLog processingLog,
-			ServerConfiguration serverConfig, ImmutableProbabilityModel model)
-			throws BlockingException;
+			BatchJob batchJob, RecordAccess dbParams,
+			OabaParameters oabaParams, OabaSettings oabaSettings,
+			ProcessingEventLog processingLog, ServerConfiguration serverConfig,
+			ImmutableProbabilityModel model) throws BlockingException;
 
 	protected abstract BatchProcessingEvent getCompletionEvent();
 

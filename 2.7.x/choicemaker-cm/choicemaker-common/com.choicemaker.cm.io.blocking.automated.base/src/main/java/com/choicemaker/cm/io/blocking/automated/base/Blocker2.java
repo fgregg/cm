@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.logging.Logger;
 
-import com.choicemaker.cm.args.AbaSettings;
 import com.choicemaker.cm.core.Accessor;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
@@ -78,86 +77,6 @@ public class Blocker2 implements AutomatedBlocker {
 	private List<IBlockingSet> blockingSets;
 	private int numberOfRecordsRetrieved;
 	private String name;
-
-//	/**
-//	 * @param databaseAccessor
-//	 * @param model
-//	 * @param q
-//	 * @see #createBlockingSets(BlockingConfiguration,Record,int,int,int,AbaStatistics)
-//	 * for explanations of the limit parameters, return value, and possible
-//	 * exceptions.
-//	 */
-//	public Blocker2(
-//		DatabaseAccessor databaseAccessor,
-//		ImmutableProbabilityModel model,
-//		Record q,
-//		int limitPerBlockingSet,
-//		int singleTableBlockingSetGraceLimit,
-//		int limitSingleBlockingSet) {
-//		this(
-//			databaseAccessor,
-//			model,
-//			q,
-//			limitPerBlockingSet,
-//			singleTableBlockingSetGraceLimit,
-//			limitSingleBlockingSet,
-//			(AbaStatistics) model.getCountSource(),
-//			model.getDatabaseConfigurationName(),
-//			model.getBlockingConfigurationName());
-//	}
-
-	/**
-	 * Uses default limit values obtained from the model.
-	 * @param databaseAccessor
-	 * @param model
-	 * @param q
-	 */
-	public Blocker2(
-		DatabaseAccessor databaseAccessor,
-		ImmutableProbabilityModel model,
-		Record q,
-		AbaSettings abaSettings,
-		AbaStatistics abaStatistics
-		) {
-		this(
-			databaseAccessor,
-			model,
-			q,
-			abaSettings.getLimitPerBlockingSet(),
-			abaSettings.getSingleTableBlockingSetGraceLimit(),
-			abaSettings.getLimitSingleBlockingSet(),
-			abaStatistics,
-			model.getDatabaseConfigurationName(),
-			model.getBlockingConfigurationName()
-			);
-	}
-
-//	/**
-//	 * Uses default limit values obtained from the model.
-//	 * @param databaseAccessor
-//	 * @param model
-//	 * @param q
-//	 * @param dbConfigurationName
-//	 * @param blockingConfigurationName
-//	 */
-//	public Blocker2(
-//		DatabaseAccessor databaseAccessor,
-//		ImmutableProbabilityModel model,
-//		Record q,
-//		AbaSettings abaSettings,
-//		String dbConfigurationName,
-//		String blockingConfigurationName) {
-//		this(
-//			databaseAccessor,
-//			model,
-//			q,
-//			abaSettings.getLimitPerBlockingSet(),
-//			abaSettings.getSingleTableBlockingSetGraceLimit(),
-//			abaSettings.getLimitSingleBlockingSet(),
-//			(AbaStatistics) model.getCountSource(),
-//			dbConfigurationName,
-//			blockingConfigurationName);
-//	}
 
 	/**
 	 * @param databaseAccessor

@@ -1,6 +1,8 @@
 package com.choicemaker.cm.args;
 
-public interface UrmBatchParameters {
+import java.io.Serializable;
+
+public interface UrmBatchParameters extends Serializable {
 
 	OabaParameters getOabaParameters();
 	

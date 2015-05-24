@@ -224,15 +224,16 @@ public class OabaSettingsControllerBean implements OabaSettingsController {
 		return retVal;
 	}
 
-	@Override
-	public AbaSettings findDefaultAbaSettings(ImmutableProbabilityModel model) {
-		if (model == null) {
-			throw new IllegalArgumentException("null modelId");
-		}
-		return findDefaultAbaSettings(model.getModelName(),
-				model.getDatabaseConfigurationName(),
-				model.getBlockingConfigurationName());
-	}
+//	@Override
+//	public AbaSettings findDefaultAbaSettings(ImmutableProbabilityModel model,
+//			String databaseConfigurationName, String blockingConfigurationName) {
+//		if (model == null) {
+//			throw new IllegalArgumentException("null modelId");
+//		}
+//		return findDefaultAbaSettings(model.getModelName(),
+//				databaseConfigurationName,
+//				blockingConfigurationName);
+//	}
 
 	@Override
 	public AbaSettings findDefaultAbaSettings(String modelConfigurationId,
@@ -256,12 +257,13 @@ public class OabaSettingsControllerBean implements OabaSettingsController {
 		return retVal;
 	}
 
-	@Override
-	public OabaSettings findDefaultOabaSettings(ImmutableProbabilityModel model) {
-		return findDefaultOabaSettings(model.getModelName(),
-				model.getDatabaseConfigurationName(),
-				model.getBlockingConfigurationName());
-	}
+//	@Override
+//	public OabaSettings findDefaultOabaSettings(ImmutableProbabilityModel model,
+//			String databaseConfigurationName, String blockingConfigurationName) {
+//		return findDefaultOabaSettings(model.getModelName(),
+//				databaseConfigurationName,
+//				blockingConfigurationName);
+//	}
 
 	@Override
 	public OabaSettings findDefaultOabaSettings(String modelConfigurationId,

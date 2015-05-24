@@ -10,6 +10,8 @@
  */
 package com.choicemaker.cm.args;
 
+import java.io.Serializable;
+
 /**
  * This interface defines event ids and completion estimates used in batch
  * processing.
@@ -17,7 +19,7 @@ package com.choicemaker.cm.args;
  * @author pcheung (implemented as IStatus)
  * @author rphall (refactored from IStatus to BatchProcessing)
  */
-public interface BatchProcessing {
+public interface BatchProcessing extends Serializable {
 	
 	// -- Event names
 	

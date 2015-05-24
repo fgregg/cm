@@ -235,12 +235,13 @@ public class SettingsControllerBeanIT {
 		// Verify that no default is returned for a non-existent modelId
 		// with non-existent database and blocking configurations
 		MutableProbabilityModelStub mpm = new MutableProbabilityModelStub();
+		final String m0 = mpm.getModelName();
 		final String d0 = randomString();
 		mpm.databaseConfigurationName = d0;
 		final String b0 = randomString();
 		mpm.blockingConfigurationName = b0;
 		final AbaSettings aba0 =
-			oabaSettingsController.findDefaultAbaSettings(mpm);
+			oabaSettingsController.findDefaultAbaSettings(m0, d0, b0);
 		assertTrue(aba0 == null);
 
 		// Create random ABA settings, save them and set them as a default
@@ -255,7 +256,7 @@ public class SettingsControllerBeanIT {
 
 		// Retrieve the default and check the settings
 		final AbaSettings aba3 =
-			oabaSettingsController.findDefaultAbaSettings(mpm);
+			oabaSettingsController.findDefaultAbaSettings(m0, d0, b0);
 		te.add(aba3);
 		assertTrue(aba3 != null);
 		assertTrue(aba3.getLimitPerBlockingSet() == aba1
@@ -278,12 +279,13 @@ public class SettingsControllerBeanIT {
 		// Verify that no default is returned for a non-existent modelId
 		// with non-existent datoabase and blocking configurations
 		MutableProbabilityModelStub mpm = new MutableProbabilityModelStub();
+		final String m0 = mpm.getModelName();
 		final String d0 = randomString();
 		mpm.databaseConfigurationName = d0;
 		final String b0 = randomString();
 		mpm.blockingConfigurationName = b0;
 		final OabaSettings oaba0 =
-			oabaSettingsController.findDefaultOabaSettings(mpm);
+			oabaSettingsController.findDefaultOabaSettings(m0, d0, b0);
 		assertTrue(oaba0 == null);
 
 		// Create random OABA settings, save them and set them as a default
@@ -298,7 +300,7 @@ public class SettingsControllerBeanIT {
 
 		// Retrieve the default and check the settings
 		final OabaSettings oaba3 =
-			oabaSettingsController.findDefaultOabaSettings(mpm);
+			oabaSettingsController.findDefaultOabaSettings(m0, d0, b0);
 		te.add(oaba3);
 		assertTrue(oaba3 != null);
 		assertTrue(oaba3.getLimitPerBlockingSet() == oaba1

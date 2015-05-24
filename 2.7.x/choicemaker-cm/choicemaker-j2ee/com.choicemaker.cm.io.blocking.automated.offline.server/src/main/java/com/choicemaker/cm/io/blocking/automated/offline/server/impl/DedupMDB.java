@@ -17,6 +17,7 @@ import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
 import javax.jms.Queue;
 
+import com.choicemaker.cm.args.RecordAccess;
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
@@ -60,9 +61,10 @@ public class DedupMDB extends AbstractOabaMDB {
 
 	@Override
 	protected void processOabaMessage(OabaJobMessage data, BatchJob batchJob,
-			OabaParameters params, OabaSettings oabaSettings,
-			ProcessingEventLog processingLog, ServerConfiguration serverConfig,
-			ImmutableProbabilityModel model) throws BlockingException {
+			RecordAccess dbParams, OabaParameters oabaParams,
+			OabaSettings oabaSettings, ProcessingEventLog processingLog,
+			ServerConfiguration serverConfig, ImmutableProbabilityModel model)
+			throws BlockingException {
 
 		// Handle regular blocking sets
 		final int maxBlock = oabaSettings.getMaxBlockSize();

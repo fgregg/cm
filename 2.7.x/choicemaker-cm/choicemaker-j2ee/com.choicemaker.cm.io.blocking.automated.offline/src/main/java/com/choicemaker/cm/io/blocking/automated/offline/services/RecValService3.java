@@ -16,6 +16,7 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.logging.Logger;
 
+import com.choicemaker.cm.args.RecordAccess;
 import com.choicemaker.cm.batch.ProcessingEventLog;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.IControl;
@@ -64,19 +65,15 @@ public class RecValService3 {
 	private static final Logger log = Logger.getLogger(RecValService3.class
 			.getName());
 
-	private static final int DEBUG_INTERVAL = 1000;
-
-	private RecordSource master;
-	private RecordSource stage;
-	private ImmutableProbabilityModel model;
-
 	private static final int OUTPUT_INTERVAL = 100000;
 
-	// these two variables are used to stop the program in the middle
-	private IControl control;
-	private boolean stop;
+	private static final int DEBUG_INTERVAL = 1000;
 
-	private IRecValSink[] sinks;
+	private final RecordSource master;
+	private final RecordSource stage;
+	private final ImmutableProbabilityModel model;
+	private final RecordAccess dbParams;
+
 	private final int numBlockFields;
 
 	private final IRecValSinkSourceFactory rvFactory;
@@ -87,6 +84,10 @@ public class RecValService3 {
 
 	private final ProcessingEventLog status;
 
+	private final IControl control;
+
+	private IRecValSink[] sinks;
+
 	/** A flag indicating whether any staging record has been read */
 	private boolean firstStage = true;
 
@@ -95,45 +96,63 @@ public class RecValService3 {
 	/** A flag indicating whether any master record has been read */
 	private boolean firstMaster = true;
 
-	private long time; // this keeps track of time
+	/**
+	 * Tracks the time spent per invocation of {@link #runService()}.
+	 * (Assumes that {@link #runService()} is invoked only once per service
+	 * instance.)
+	 */
+	private long time;
 
 	/**
-	 * This constructor take these parameters:
+	 * Constructs a service that computes and stores field-record-value triplets
+	 * to files, one file per field. Records are represented by translated,
+	 * int-valued identifiers. Values are represented by their hashed values.
+	 * Fields may be stacked (i.e. multi-valued).
+	 * <pre>
+	 * File 1: Blocking field 1
+	 *   Translated id 356: value hash, value hash
+	 *   Translated id 123: value hash
+	 *   Translated id 947: value hash, value hash, value hash, ...
+	 *   ...
+	 * </pre>
 	 * 
-	 * @param stage
-	 *            - stage record source of the data
-	 * @param master
-	 *            - master record source of the data. This can be null.
-	 * @param modelConfigurationName
-	 *            - the name of a model configuration
+	 * @param queryRS
+	 *            query record source
+	 * @param refRS
+	 *            reference record source
+	 * @param model
+	 *            matching model
+	 * @param dbParams
+	 *            database and blocking configuration
 	 * @param rvFactory
-	 *            - factory to get RecValSinks
-	 * @param mutableTranslator
-	 *            - record ID to internal id mutableTranslator
+	 *            a factory for record-value sinks
+	 * @param recidFactory
+	 *            a factory for record identifiers
+	 * @param translator
+	 *            a translator of record identifiers to internal identifiers
 	 * @param status
-	 *            - current status of the system
+	 *            a log for recording status
 	 * @param control
-	 *            - a mechanism to get out of a long running loop
+	 *            a controller for this service
 	 */
-	public RecValService3(RecordSource stage, RecordSource master,
-			ImmutableProbabilityModel model,
+	public RecValService3(RecordSource queryRS, RecordSource refRS,
+			ImmutableProbabilityModel model, RecordAccess dbParams,
 			IRecValSinkSourceFactory rvFactory, IRecordIdFactory recidFactory,
 			MutableRecordIdTranslator translator, ProcessingEventLog status,
 			IControl control) {
 
-		this.stage = stage;
-		this.master = master;
+		this.stage = queryRS;
+		this.master = refRS;
 		this.model = model;
+		this.dbParams = dbParams;
 		this.mutableTranslator = translator;
 		this.rvFactory = rvFactory;
 		this.recidFactory = recidFactory;
 		this.status = status;
 		this.control = control;
 
-		this.stop = false;
-
 		BlockingAccessor ba = (BlockingAccessor) model.getAccessor();
-		String blockName = this.model.getBlockingConfigurationName();
+		String blockName = this.dbParams.getBlockingConfigurationName();
 		String dbConf = this.model.getDatabaseConfigurationName();
 
 		IBlockingConfiguration bc =
@@ -190,6 +209,8 @@ public class RecValService3 {
 			log.info("Creating new rec,val files");
 			status.setCurrentProcessingEvent(OabaProcessingEvent.CREATE_REC_VAL);
 			createFiles();
+			
+			boolean stop = this.control.shouldStop();
 			if (!stop) {
 				status.setCurrentProcessingEvent(OabaProcessingEvent.DONE_REC_VAL);
 			}
@@ -239,13 +260,15 @@ public class RecValService3 {
 		try {
 			Record r;
 
+			boolean stop = this.control.shouldStop();
+
 			// write the stage record source
 			if (stage != null) {
 				stage.setModel(model);
 				stage.open(); // FIXME! try { stage.open(); ... } finally{
 								// stage.close(); }
 
-				String blockName = model.getBlockingConfigurationName();
+				String blockName = dbParams.getBlockingConfigurationName();
 				String dbConf = model.getDatabaseConfigurationName();
 				BlockingAccessor ba = (BlockingAccessor) model.getAccessor();
 				IBlockingConfiguration bc =
@@ -283,7 +306,7 @@ public class RecValService3 {
 				master.open(); // FIXME! try { master.open(); ... } finally{
 								// master.close(); }
 
-				String blockName = model.getBlockingConfigurationName();
+				String blockName = dbParams.getBlockingConfigurationName();
 				String dbConf = model.getDatabaseConfigurationName();
 				BlockingAccessor ba = (BlockingAccessor) model.getAccessor();
 				IBlockingConfiguration bc =
@@ -372,7 +395,7 @@ public class RecValService3 {
 			sinks[C.intValue()].writeRecordValue((long) internal,
 					(IntArrayList) values.get(C));
 
-			if (internal%DEBUG_INTERVAL == 0) {
+			if (internal % DEBUG_INTERVAL == 0) {
 				log.fine("id " + internal + " C " + C + " " + values.get(C));
 			}
 		}

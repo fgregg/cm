@@ -69,11 +69,10 @@ public class SimplePersonSqlServerTestConfiguration implements
 	private final String dataSourceJndiName;
 	private final boolean queryRsIsDeduplicated = false;
 	private final String queryDatabaseConfiguration;
-	private final String queryToQueryBlockingConfiguration;
+	private final String blockingConfiguration;
 	private final String querySQL;
 	private final String referenceSQL;
 	private final String referenceDatabaseConfiguration;
-	private final String queryToReferenceBlockingConfiguration;
 	private final String modelConfigurationId;
 	private final ImmutableThresholds thresholds;
 	private final int maxSingle;
@@ -160,10 +159,9 @@ public class SimplePersonSqlServerTestConfiguration implements
 		}
 		this.dataSourceJndiName = dsJndiName;
 		this.queryDatabaseConfiguration = dbConfig;
-		this.queryToQueryBlockingConfiguration = blkConf;
+		this.blockingConfiguration = blkConf;
 		this.querySQL = stagingSQL;
 		this.referenceDatabaseConfiguration = dbConfig;
-		this.queryToReferenceBlockingConfiguration = blkConf;
 		this.referenceSQL = masterSQL;
 		this.modelConfigurationId = mci;
 		this.thresholds = t;
@@ -516,18 +514,13 @@ public class SimplePersonSqlServerTestConfiguration implements
 	}
 
 	@Override
-	public String getQueryBlockingConfiguration() {
-		return queryToQueryBlockingConfiguration;
+	public String getBlockingConfiguration() {
+		return blockingConfiguration;
 	}
 
 	@Override
 	public String getReferenceDatabaseConfiguration() {
 		return referenceDatabaseConfiguration;
-	}
-
-	@Override
-	public String getReferenceBlockingConfiguration() {
-		return queryToReferenceBlockingConfiguration;
 	}
 
 }

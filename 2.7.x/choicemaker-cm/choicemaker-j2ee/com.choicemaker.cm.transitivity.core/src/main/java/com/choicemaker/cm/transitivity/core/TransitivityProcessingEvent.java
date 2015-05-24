@@ -6,6 +6,8 @@ import com.choicemaker.cm.args.ProcessingEvent;
 public class TransitivityProcessingEvent extends BatchProcessingEvent implements
 		ProcessingEvent, TransitivityProcessing {
 
+	private static final long serialVersionUID = 271L;
+
 	public TransitivityProcessingEvent(String name, int id, float estimate) {
 		super(name, id, estimate);
 	}

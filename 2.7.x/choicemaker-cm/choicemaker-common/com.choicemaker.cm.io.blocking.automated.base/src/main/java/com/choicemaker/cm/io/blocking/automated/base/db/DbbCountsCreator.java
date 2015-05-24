@@ -19,9 +19,11 @@ import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -521,31 +523,34 @@ public class DbbCountsCreator {
 								bc.getDbTables()[0]), bcCountFields);
 				}
 				for (ImmutableProbabilityModel model : models) {
-					final String bcName = model.getBlockingConfigurationName();
-					final String dn = model.getDatabaseConfigurationName();
-					logger.info("DEBUG " + "Using blocking configuration: "
-							+ bcName);
-					IBlockingConfiguration bc =
-						((BlockingAccessor) model.getAccessor())
-								.getBlockingConfiguration(bcName, dn);
-					final String bcClassName = bc.getClass().getName();
+					final BlockingAccessor bAccessor = (BlockingAccessor) model.getAccessor();
+					final String[] bcNames = bAccessor.getBlockingConfigurations();
+					for (String bcName : bcNames) {
+						logger.info("DEBUG " + "Using blocking configuration: "
+								+ bcName);
+						final String dn = model.getDatabaseConfigurationName();
+						IBlockingConfiguration bc =
+								bAccessor
+									.getBlockingConfiguration(bcName, dn);
+						final String bcClassName = bc.getClass().getName();
 
-					// This would be simpler if the collection of
-					// AbaStatisticsImpl instances were not an array, but rather
-					// a Map. The key could remain as className, but it would be
-					// more resilient and less dependent on implementation if
-					// the key were a concatenation of the names of a model and
-					// a blocking configuration.
-					int j = 0;
-					while (!blockingConfigurations[j].getClass().getName()
-							.equals(bcClassName)) {
-						++j;
+						// This would be simpler if the collection of
+						// AbaStatisticsImpl instances were not an array, but rather
+						// a Map. The key could remain as className, but it would be
+						// more resilient and less dependent on implementation if
+						// the key were a concatenation of the names of a model and
+						// a blocking configuration.
+						int j = 0;
+						while (!blockingConfigurations[j].getClass().getName()
+								.equals(bcClassName)) {
+							++j;
+						}
+
+						// DEPRECATED 2014-11-18 rphall
+						// model.properties().put("countSource", ccs[j]);
+						// END DEPRECATED
+						cache.putStatistics(model, ccs[j]);
 					}
-
-					// DEPRECATED 2014-11-18 rphall
-					// model.properties().put("countSource", ccs[j]);
-					// END DEPRECATED
-					cache.putStatistics(model, ccs[j]);
 				}
 			} finally {
 				if (stmt != null) {
@@ -619,34 +624,54 @@ public class DbbCountsCreator {
 
 	private static IBlockingConfiguration[] getBlockingConfigurations(
 			ImmutableProbabilityModel[] models) {
-		int len = models.length;
-		IBlockingConfiguration[] bcs = new IBlockingConfiguration[len];
-		int numConfigurations = 0;
-		for (int i = 0; i < len; ++i) {
-			ImmutableProbabilityModel model = models[i];
-			String bcName = model.getBlockingConfigurationName();
-			String dn = model.getDatabaseConfigurationName();
-			IBlockingConfiguration bc =
-				((BlockingAccessor) model.getAccessor())
-						.getBlockingConfiguration(bcName, dn);
-			int j = 0;
-			// AWKWARD, BRITTLE CODE 2009-08-21 rphall
-			// Just use a Map of models to blockingConfigurations!
-			while (j < numConfigurations
-					&& !bc.getClass().getName()
-							.equals(bcs[j].getClass().getName())) {
-				++j;
+//		int len = models.length;
+//		IBlockingConfiguration[] bcs = new IBlockingConfiguration[len];
+//		int numConfigurations = 0;
+//		for (int i = 0; i < len; ++i) {
+//			ImmutableProbabilityModel model = models[i];
+//			String bcName = model.getBlockingConfigurationName();
+//			String dn = model.getDatabaseConfigurationName();
+//			IBlockingConfiguration bc =
+//				((BlockingAccessor) model.getAccessor())
+//						.getBlockingConfiguration(bcName, dn);
+//			int j = 0;
+//			// AWKWARD, BRITTLE CODE 2009-08-21 rphall
+//			// Just use a Map of models to blockingConfigurations!
+//			while (j < numConfigurations
+//					&& !bc.getClass().getName()
+//							.equals(bcs[j].getClass().getName())) {
+//				++j;
+//			}
+//			if (j == numConfigurations) {
+//				bcs[numConfigurations++] = bc;
+//			}
+//			// END AWKWARD, BRITTLE CODE
+//		}
+//		IBlockingConfiguration[] res =
+//			new IBlockingConfiguration[numConfigurations];
+//		System.arraycopy(bcs, 0, res, 0, numConfigurations);
+//		return res;
+
+		final Set<String> bcClassNames = new HashSet<>();
+		final List<IBlockingConfiguration> ibcs0 = new ArrayList<>();
+		for (ImmutableProbabilityModel model : models) {
+			final BlockingAccessor bAccessor =
+				(BlockingAccessor) model.getAccessor();
+			final String[] bcNames = bAccessor.getBlockingConfigurations();
+			final String dn = model.getDatabaseConfigurationName();
+			for (String bcName : bcNames) {
+				IBlockingConfiguration ibc =
+					bAccessor.getBlockingConfiguration(bcName, dn);
+				String bcClassName = ibc.getClass().getName();
+				if (!bcClassNames.contains(bcClassName)) {
+					ibcs0.add(ibc);
+				}
 			}
-			if (j == numConfigurations) {
-				bcs[numConfigurations++] = bc;
-			}
-			// END AWKWARD, BRITTLE CODE
 		}
-		IBlockingConfiguration[] res =
-			new IBlockingConfiguration[numConfigurations];
-		System.arraycopy(bcs, 0, res, 0, numConfigurations);
+		final int bcCount = ibcs0.size();
+		IBlockingConfiguration[] res = ibcs0.toArray(new IBlockingConfiguration[bcCount]);
 		return res;
-	}
+}
 
 	// private static DatabaseAbstraction[] getDatabaseAbstractions(
 	// ImmutableProbabilityModel[] models) throws E2Exception {

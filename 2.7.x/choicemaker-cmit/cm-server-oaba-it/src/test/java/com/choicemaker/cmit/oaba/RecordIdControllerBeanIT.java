@@ -225,11 +225,11 @@ public class RecordIdControllerBeanIT {
 		final String dbConfig0 =
 			c.getQueryDatabaseConfiguration();
 		final String blkConf0 =
-			c.getQueryBlockingConfiguration();
+			c.getBlockingConfiguration();
 		final String dbConfig1 =
 			c.getReferenceDatabaseConfiguration();
 		final String blkConf1 =
-			c.getReferenceBlockingConfiguration();
+			c.getBlockingConfiguration();
 
 		final OabaParameters bp =
 			new OabaParametersEntity(c.getModelConfigurationName(), c

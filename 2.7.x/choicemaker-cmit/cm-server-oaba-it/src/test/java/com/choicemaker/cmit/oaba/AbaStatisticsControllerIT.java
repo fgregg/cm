@@ -137,9 +137,9 @@ public class AbaStatisticsControllerIT {
 		te.add(master);
 
 		final String dbConfig0 = c.getQueryDatabaseConfiguration();
-		final String blkConf0 = c.getQueryBlockingConfiguration();
+		final String blkConf0 = c.getBlockingConfiguration();
 		final String dbConfig1 = c.getReferenceDatabaseConfiguration();
-		final String blkConf1 = c.getReferenceBlockingConfiguration();
+		final String blkConf1 = blkConf0;
 
 		final OabaParameters bp =
 			new OabaParametersEntity(c.getModelConfigurationName(), c

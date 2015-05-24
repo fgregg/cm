@@ -6,6 +6,8 @@ import com.choicemaker.cm.args.ProcessingEvent;
 public class OabaProcessingEvent extends BatchProcessingEvent implements
 		ProcessingEvent, OabaProcessing {
 
+	private static final long serialVersionUID = 271L;
+
 	public OabaProcessingEvent(String name, int id, float estimate) {
 		super(name, id, estimate);
 	}

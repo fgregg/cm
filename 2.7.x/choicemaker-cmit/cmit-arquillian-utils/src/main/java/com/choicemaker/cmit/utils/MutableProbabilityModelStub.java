@@ -49,8 +49,8 @@ public class MutableProbabilityModelStub implements IProbabilityModel {
 	public String antCommand;
 	public String blockingConfigurationName;
 	public String clueFilePath;
-	public String databaseAbstractionName;
-	public String databaseAccessorName;
+//	public String databaseAbstractionName;
+//	public String databaseAccessorName;
 	public String databaseConfigurationName;
 	public String modelFilePath;
 	public String trainingSource;
@@ -110,13 +110,6 @@ public class MutableProbabilityModelStub implements IProbabilityModel {
 	}
 
 	@Override
-	public String getBlockingConfigurationName() {
-		log.exiting(CLASSNAME, "getBlockingConfigurationName",
-				blockingConfigurationName);
-		return blockingConfigurationName;
-	}
-
-	@Override
 	public String getClueFilePath() {
 		log.exiting(CLASSNAME, "getClueFilePath", clueFilePath);
 		return clueFilePath;
@@ -153,19 +146,19 @@ public class MutableProbabilityModelStub implements IProbabilityModel {
 		return null;
 	}
 
-	@Override
-	public String getDatabaseAbstractionName() {
-		log.exiting(CLASSNAME, "getDatabaseAbstractionName",
-				databaseAbstractionName);
-		return databaseAbstractionName;
-	}
+//	@Override
+//	public String getDatabaseAbstractionName() {
+//		log.exiting(CLASSNAME, "getDatabaseAbstractionName",
+//				databaseAbstractionName);
+//		return databaseAbstractionName;
+//	}
 
-	@Override
-	public String getDatabaseAccessorName() {
-		log.exiting(CLASSNAME, "getDatabaseAccessorName",
-				databaseAccessorName);
-		return databaseAccessorName;
-	}
+//	@Override
+//	public String getDatabaseAccessorName() {
+//		log.exiting(CLASSNAME, "getDatabaseAccessorName",
+//				databaseAccessorName);
+//		return databaseAccessorName;
+//	}
 
 	@Override
 	public String getDatabaseConfigurationName() {

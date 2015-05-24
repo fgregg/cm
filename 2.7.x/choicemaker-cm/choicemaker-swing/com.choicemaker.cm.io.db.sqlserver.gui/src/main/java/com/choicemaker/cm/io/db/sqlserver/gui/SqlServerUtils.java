@@ -15,6 +15,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
 
+import com.choicemaker.cm.args.RecordAccess;
 import com.choicemaker.cm.core.DatabaseException;
 // import com.choicemaker.cm.compiler.impl.CompilerFactory;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
@@ -40,81 +41,89 @@ import com.choicemaker.cm.io.db.sqlserver.blocking.SqlServerDatabaseAbstractionM
 public class SqlServerUtils {
 
 	private static boolean connectionPoolsInited = false;
-// 	private static boolean productionModelsInited = false;
+
+	// private static boolean productionModelsInited = false;
 
 	static void maybeInitConnectionPools() {
 		if (!connectionPoolsInited) {
-			// init the connections.  Note: this is only for ConnectionPool elements, 
+			// init the connections. Note: this is only for ConnectionPool
+			// elements,
 			// and not OraConnectionCache elements...
-			// NOTE: if we want to do Oracle here, we should use 
+			// NOTE: if we want to do Oracle here, we should use
 			// the OraConnectionCache.
 			ConnectionPoolDataSourceXmlConf.init();
 			connectionPoolsInited = true;
 		}
 	}
-	
-// 	static void maybeInitProductionModels() {
-// 		if (!productionModelsInited) {
-// 			try {
-// 				CompilerFactory factory = CompilerFactory.getInstance ();
-// 				ICompiler compiler = factory.getDefaultCompiler();
-// 				ProbabilityModelsXmlConf.loadProductionProbabilityModels(compiler);
-// 			} catch (XmlConfException ex) {
-// 				ex.printStackTrace();
-// 			}
-// 			
-// 			//try {
-// 			//	// populates the "multi" query in each accessProvider's properties object.
-// 			//	SqlDbObjectMaker.getAllModels();
-// 			//} catch (IOException ex) {
-// 			//	ex.printStackTrace();
-// 			//}
-// 			
-// 			productionModelsInited = true;
-// 		}
-// 	}
+
+	// static void maybeInitProductionModels() {
+	// if (!productionModelsInited) {
+	// try {
+	// CompilerFactory factory = CompilerFactory.getInstance ();
+	// ICompiler compiler = factory.getDefaultCompiler();
+	// ProbabilityModelsXmlConf.loadProductionProbabilityModels(compiler);
+	// } catch (XmlConfException ex) {
+	// ex.printStackTrace();
+	// }
+	//
+	// //try {
+	// // // populates the "multi" query in each accessProvider's properties
+	// object.
+	// // SqlDbObjectMaker.getAllModels();
+	// //} catch (IOException ex) {
+	// // ex.printStackTrace();
+	// //}
+	//
+	// productionModelsInited = true;
+	// }
+	// }
 
 	private static ImmutableProbabilityModel lastModel;
 	private static DataSource lastDs;
 	private static String lastBlockingConfiguration;
 	private static String lastDbConfiguration;
 
-	static void maybeUpdateCounts(DataSource ds, ImmutableProbabilityModel model,
-			AbaStatisticsCache statsCache)
-			throws SQLException, DatabaseException {
-		
-		if (model == lastModel &&
-			ds == lastDs &&
-			lastBlockingConfiguration != null &&
-			lastBlockingConfiguration.equals(model.getBlockingConfigurationName()) &&
-			lastDbConfiguration != null && 
-			lastDbConfiguration.equals(model.getDatabaseConfigurationName()) &&
-			statsCache.getStatistics(model) != null) {
-			
+	static void maybeUpdateCounts(DataSource ds,
+			ImmutableProbabilityModel model, RecordAccess dbParams,
+			AbaStatisticsCache statsCache) throws SQLException,
+			DatabaseException {
+
+		if (model == lastModel
+				&& ds == lastDs
+				&& lastBlockingConfiguration != null
+				&& lastBlockingConfiguration.equals(dbParams
+						.getBlockingConfigurationName())
+				&& lastDbConfiguration != null
+				&& lastDbConfiguration.equals(model
+						.getDatabaseConfigurationName())
+				&& statsCache.getStatistics(model) != null) {
+
 			return;
 		}
 
-		DatabaseAbstractionManager mgr = new SqlServerDatabaseAbstractionManager();
+		DatabaseAbstractionManager mgr =
+			new SqlServerDatabaseAbstractionManager();
 		DatabaseAbstraction dba = mgr.lookupDatabaseAbstraction(ds);
 		DbbCountsCreator cr = new DbbCountsCreator();
 		cr.install(ds);
 		// "true" means to do them only if we haven't done them before...
 		cr.create(ds, dba, true);
 		cr.setCacheCountSources(ds, dba, statsCache);
-		
+
 		lastModel = model;
 		lastDs = ds;
-		lastBlockingConfiguration = model.getBlockingConfigurationName();
+		lastBlockingConfiguration = dbParams.getBlockingConfigurationName();
 		lastDbConfiguration = model.getDatabaseConfigurationName();
 	}
 
 	/**
 	 * NOTE: RecordReader is a SQLServer-specific piece of code.
 	 */
-	static Record readRecord(ImmutableProbabilityModel model, DataSource ds, String id) throws IOException {
+	static Record readRecord(ImmutableProbabilityModel model, DataSource ds,
+			String id) throws IOException {
 		String condition = createCondition(model, id);
 		RecordReader reader = new RecordReader(model, ds, condition);
-		
+
 		Record ret = null;
 		try {
 			reader.open();
@@ -130,18 +139,22 @@ public class SqlServerUtils {
 	}
 
 	/**
-	 * NOTE: this only works when the id type is integer (as the value is not quoted).
+	 * NOTE: this only works when the id type is integer (as the value is not
+	 * quoted).
 	 */
-	private static String createCondition(ImmutableProbabilityModel model, String id) {
+	private static String createCondition(ImmutableProbabilityModel model,
+			String id) {
 		String dbConf = model.getDatabaseConfigurationName();
-		DbReaderSequential dbr = ((DbAccessor)model.getAccessor()).getDbReaderSequential(dbConf);
+		DbReaderSequential dbr =
+			((DbAccessor) model.getAccessor()).getDbReaderSequential(dbConf);
 		String masterType = dbr.getMasterIdType().toUpperCase();
 		if (masterType.indexOf("INT") >= 0) {
 			return "VALUES(" + id + ")";
 		} else if (masterType.startsWith("VARCHAR")) {
 			return "VALUES('" + id + "')";
 		} else {
-			throw new IllegalStateException("Unknown master ID type: " + masterType);
+			throw new IllegalStateException("Unknown master ID type: "
+					+ masterType);
 		}
 	}
 
@@ -150,7 +163,7 @@ public class SqlServerUtils {
 		dba.setDataSource(ds);
 		return dba;
 	}
-	
+
 	//
 	// GUI stuff
 	//
@@ -158,7 +171,8 @@ public class SqlServerUtils {
 	static JComboBox createDataSource() {
 		JComboBox ds = new JComboBox();
 		ds.setEditable(false);
-		ds.setModel(new DefaultComboBoxModel(new Vector(DataSources.getDataSourceNames())));
+		ds.setModel(new DefaultComboBoxModel(new Vector(DataSources
+				.getDataSourceNames())));
 		return ds;
 	}
 
@@ -169,24 +183,24 @@ public class SqlServerUtils {
 	// Also, even if the convention is maintained in the user interface,
 	// it should be removed from the programming interface.
 	static JComboBox createProductionConfigurationsComboBox() {
-//		ImmutableProbabilityModel[] models = PMManager.getModels();
-//		Vector v = new Vector(models.length);
-//		for (int i=0; i<models.length; i++) {
-//			String name = models[i].getModelName();
-//			if ("".equals(name)) {
-//				v.add(DEFAULT);
-//			} else {
-//				v.add(name);
-//			}
-//		}
-//		return new JComboBox(v);
-		
+		// ImmutableProbabilityModel[] models = PMManager.getModels();
+		// Vector v = new Vector(models.length);
+		// for (int i=0; i<models.length; i++) {
+		// String name = models[i].getModelName();
+		// if ("".equals(name)) {
+		// v.add(DEFAULT);
+		// } else {
+		// v.add(name);
+		// }
+		// }
+		// return new JComboBox(v);
+
 		return new JComboBox();
 	}
 
 	// PROBLEM:
 	// This method is very problematic. It **changes** the name
-	// of model -- it requires this entire  module to work with mutable
+	// of model -- it requires this entire module to work with mutable
 	// models, unlike every other DB GUI plugin -- just to pretty up
 	// a user interface.
 	//
@@ -194,15 +208,16 @@ public class SqlServerUtils {
 	// The blank string convention causes a bunch of annoying issues.
 	// Also, even if the convention is maintained in the user interface,
 	// it should be removed from the programming interface.
-//	static ImmutableProbabilityModel getProductionConfiguration(String name) {
-//		if (DEFAULT.equals(name)) {
-//			name = "";
-//		}		
-//		return PMManager.getModelInstance(name);
-//	}
+	// static ImmutableProbabilityModel getProductionConfiguration(String name)
+	// {
+	// if (DEFAULT.equals(name)) {
+	// name = "";
+	// }
+	// return PMManager.getModelInstance(name);
+	// }
 
 	static String[] getDbConfigurations(ImmutableProbabilityModel model) {
-		return ((DbAccessor)model.getAccessor()).getDbConfigurations();
+		return ((DbAccessor) model.getAccessor()).getDbConfigurations();
 	}
 
 	static JComboBox createDbConfigurationsBox(ImmutableProbabilityModel model) {
@@ -210,10 +225,12 @@ public class SqlServerUtils {
 	}
 
 	static String[] getBlockingConfigurations(ImmutableProbabilityModel model) {
-		return ((BlockingAccessor)model.getAccessor()).getBlockingConfigurations();
+		return ((BlockingAccessor) model.getAccessor())
+				.getBlockingConfigurations();
 	}
 
-	static JComboBox createBlockingConfigurationsBox(ImmutableProbabilityModel model) {
+	static JComboBox createBlockingConfigurationsBox(
+			ImmutableProbabilityModel model) {
 		return new JComboBox(getBlockingConfigurations(model));
 	}
 
@@ -223,7 +240,7 @@ public class SqlServerUtils {
 			return null;
 		} else {
 			return s;
-		}			
+		}
 	}
 
 	static final void setWaitCursor(Component c1, Component c2) {
@@ -237,11 +254,11 @@ public class SqlServerUtils {
 
 	static final void setDefaultCursor(Component c1, Component c2) {
 		setDefaultCursor(c1);
-		setDefaultCursor(c2);		
+		setDefaultCursor(c2);
 	}
 
 	static final void setDefaultCursor(Component c) {
-		c.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));	
+		c.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 	}
-	
+
 }

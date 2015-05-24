@@ -12,8 +12,6 @@ import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.batch.BatchJob;
-import com.choicemaker.cm.core.ImmutableProbabilityModel;
-import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.DefaultServerConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
@@ -70,13 +68,12 @@ public class OabaTestUtils {
 			te.add(master);
 		}
 
-		final String modelId = c.getModelConfigurationName();
-		final ImmutableProbabilityModel model =
-			PMManager.getImmutableModelInstance(modelId);
-		
-		// Create default or generic settings 
+		// Create default or generic settings
+		final String m0 = c.getModelConfigurationName();
+		final String d0 = c.getQueryDatabaseConfiguration();
+		final String b0 = c.getBlockingConfiguration();
 		OabaSettings _os0 =
-			test.getSettingsController().findDefaultOabaSettings(model);
+			test.getSettingsController().findDefaultOabaSettings(m0, d0, b0);
 		if (_os0 == null) {
 			// Creates generic settings and saves them
 			_os0 = new OabaSettingsEntity();
@@ -128,9 +125,9 @@ public class OabaTestUtils {
 					.getThresholds().getDifferThreshold(), c.getThresholds()
 					.getMatchThreshold(), staging,
 					c.getQueryDatabaseConfiguration(),
-					c.getQueryBlockingConfiguration(), master,
+					c.getBlockingConfiguration(), master,
 					c.getReferenceDatabaseConfiguration(),
-					c.getReferenceBlockingConfiguration(), c.getOabaTask());
+					c.getBlockingConfiguration(), c.getOabaTask());
 		te.add(bp);
 
 		final OabaService batchQuery = test.getOabaService();

@@ -2,6 +2,8 @@ package com.choicemaker.cm.args;
 
 public class BatchProcessingEvent implements ProcessingEvent, BatchProcessing {
 
+	protected static final long serialVersionUID = 271L;
+
 	// -- Well-known instances
 
 	public static final BatchProcessingEvent INIT = new BatchProcessingEvent(

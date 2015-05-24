@@ -16,6 +16,7 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.logging.Logger;
 
+import com.choicemaker.cm.args.RecordAccess;
 import com.choicemaker.cm.batch.ProcessingEventLog;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
@@ -57,34 +58,22 @@ public class RecValService2 {
 	private static final Logger log = Logger.getLogger(RecValService2.class
 			.getName());
 
-	private RecordSource master;
-	private RecordSource stage;
-	private ImmutableProbabilityModel model;
-
-	private IRecValSink[] sinks;
-	private int numBlockFields;
-
-	private IRecValSinkSourceFactory rvFactory;
-
 	private static int INTERVAL = 100000;
 
+	private final RecordSource master;
+	private final RecordSource stage;
+	private final ImmutableProbabilityModel model;
+	private final RecordAccess dbParams;
+	private final int numBlockFields;
+	private final IRecValSinkSourceFactory rvFactory;
+	private final MutableRecordIdTranslator mutableTranslator;
+	private final ProcessingEventLog status;
+
 	private IBlockingConfiguration bc;
-
-	// this is the input record id to internal id mutableTranslator
-	private MutableRecordIdTranslator mutableTranslator;
-
-	private ProcessingEventLog status;
-
-	// This stores if stage record id is Integer, Long, or string
-	private boolean firstStage = true;
+	private IRecValSink[] sinks;
 	private int stageType = -1;
-
-	// This stores if master record id is Integer, Long, or string
+	private boolean firstStage = true;
 	private boolean firstMaster = true;
-	// private int masterType = -1;
-
-	// private String blockName;
-	// private String dbConf;
 
 	private long time; // this keeps track of time
 
@@ -109,14 +98,14 @@ public class RecValService2 {
 	 *            - current status of the system
 	 */
 	public RecValService2(RecordSource stage, RecordSource master,
-			ImmutableProbabilityModel model,
-			ImmutableProbabilityModel unusedMasterModel,
+			ImmutableProbabilityModel model, RecordAccess dbParams,
 			IRecValSinkSourceFactory rvFactory,
 			MutableRecordIdTranslator translator, ProcessingEventLog status) {
 
 		this.stage = stage;
 		this.master = master;
 		this.model = model;
+		this.dbParams = dbParams;
 		this.mutableTranslator = translator;
 		this.rvFactory = rvFactory;
 		this.status = status;
@@ -125,7 +114,7 @@ public class RecValService2 {
 		// this.dbConf = dbConf;
 
 		BlockingAccessor ba = (BlockingAccessor) model.getAccessor();
-		String blockName = model.getBlockingConfigurationName();
+		String blockName = this.dbParams.getBlockingConfigurationName();
 		String dbConf = model.getDatabaseConfigurationName();
 
 		IBlockingConfiguration bc =
@@ -266,7 +255,7 @@ public class RecValService2 {
 				stage.setModel(model);
 				stage.open();
 
-				String blockName = model.getBlockingConfigurationName();
+				String blockName = this.dbParams.getBlockingConfigurationName();
 				String dbConf = model.getDatabaseConfigurationName();
 				BlockingAccessor ba = (BlockingAccessor) model.getAccessor();
 				bc = ba.getBlockingConfiguration(blockName, dbConf);
@@ -304,7 +293,7 @@ public class RecValService2 {
 				master.setModel(model);
 				master.open();
 
-				String blockName = model.getBlockingConfigurationName();
+				String blockName = this.dbParams.getBlockingConfigurationName();
 				String dbConf = model.getDatabaseConfigurationName();
 				BlockingAccessor ba = (BlockingAccessor) model.getAccessor();
 				bc = ba.getBlockingConfiguration(blockName, dbConf);

@@ -30,6 +30,7 @@ import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 import javax.naming.NamingException;
 
+import com.choicemaker.cm.args.RecordAccess;
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
@@ -140,12 +141,17 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 						getServerController().findServerConfigurationByJobId(
 								jobId);
 
-					if (batchJob == null || params == null
-							|| oabaSettings == null || serverConfig == null) {
-						String s0 =
-								"Unable to find a job, parameters, settings or server configuration for "
-										+ jobId;
-						String s = LoggingUtils.buildDiagnostic(s0, batchJob, params, oabaSettings, serverConfig);
+					// FIXME DOOMED TO FAIL
+					RecordAccess dbParams = null;
+
+					if (batchJob == null /* FIXME || dbParams == null */
+							|| params == null || oabaSettings == null
+							|| serverConfig == null) {
+						String s0 = "Null configuration info for job " + jobId;
+						String s =
+							LoggingUtils.buildDiagnostic(s0, batchJob,
+									dbParams, params, oabaSettings,
+									serverConfig);
 						getLogger().severe(s);
 						throw new IllegalStateException(s);
 					}

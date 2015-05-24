@@ -36,15 +36,17 @@ public interface OabaSettingsController {
 			ImmutableProbabilityModel model, String databaseConfiguration,
 			String blockingConfiguration, OabaSettings oaba);
 
-	AbaSettings findDefaultAbaSettings(ImmutableProbabilityModel model);
-
 	AbaSettings findDefaultAbaSettings(String modelConfigurationId,
 			String databaseConfiguration, String blockingConfiguration);
 
-	OabaSettings findDefaultOabaSettings(ImmutableProbabilityModel model);
+//	AbaSettings findDefaultAbaSettings(ImmutableProbabilityModel model,
+//			String databaseConfigurationName, String blockingConfigurationName);
 
 	OabaSettings findDefaultOabaSettings(String modelConfigurationId,
 			String databaseConfiguration, String blockingConfiguration);
+
+//	OabaSettings findDefaultOabaSettings(ImmutableProbabilityModel model,
+//	String databaseConfigurationName, String blockingConfigurationName);
 
 	List<AbaSettings> findAllAbaSettings();
 

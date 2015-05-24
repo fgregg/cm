@@ -154,8 +154,8 @@ public class DefaultProbabilityModelManager implements IProbabilityModelManager 
 				final CMConfigurationElement el = els[j];
 				final String KEY_FILE = "model";
 				String file = el.getAttribute(KEY_FILE);
-				String databaseAbstraction =
-					el.getAttribute(ProbabilityModelConfiguration.AN_DATABASE_ABSTRACTION);
+//				String databaseAbstraction =
+//					el.getAttribute(ProbabilityModelConfiguration.AN_DATABASE_ABSTRACTION);
 				String databaseAccessor =
 					el.getAttribute(ProbabilityModelConfiguration.AN_DATABASE_ACCESSOR);
 				String databaseConfig =
@@ -180,7 +180,7 @@ public class DefaultProbabilityModelManager implements IProbabilityModelManager 
 					MutableProbabilityModel mpm =
 						(MutableProbabilityModel) model;
 					mpm.setBlockingConfigurationName(blockingConfig);
-					mpm.setDatabaseAbstractionName(databaseAbstraction);
+//					mpm.setDatabaseAbstractionName(databaseAbstraction);
 					mpm.setDatabaseAccessorName(databaseAccessor);
 					mpm.setDatabaseConfigurationName(databaseConfig);
 					mpm.setModelName(ext.getUniqueIdentifier());

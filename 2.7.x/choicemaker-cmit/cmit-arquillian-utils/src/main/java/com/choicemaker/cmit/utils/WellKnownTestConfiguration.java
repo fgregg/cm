@@ -28,13 +28,11 @@ public interface WellKnownTestConfiguration {
 
 	String getQueryDatabaseConfiguration();
 
-	String getQueryBlockingConfiguration();
+	String getBlockingConfiguration();
 
 	PersistableRecordSource getReferenceRecordSource();
 
 	String getReferenceDatabaseConfiguration();
-
-	String getReferenceBlockingConfiguration();
 
 	ImmutableThresholds getThresholds();
 

@@ -72,7 +72,7 @@ public class MutableProbabilityModel implements IProbabilityModel {
 	private String clueFilePath;
 	private File clueFile;
 	private boolean[] cluesToEvaluate;
-	private String databaseAbstractionName;
+//	private String databaseAbstractionName;
 	private String databaseAccessorName;
 	private String databaseConfigurationName;
 	private int decisionDomainSize;
@@ -714,9 +714,9 @@ public class MutableProbabilityModel implements IProbabilityModel {
 		return retVal;
 	}
 
-	public String getDatabaseAbstractionName() {
-		return databaseAbstractionName;
-	}
+//	public String getDatabaseAbstractionName() {
+//		return databaseAbstractionName;
+//	}
 
 	public String getDatabaseAccessorName() {
 		return databaseAccessorName;
@@ -739,9 +739,9 @@ public class MutableProbabilityModel implements IProbabilityModel {
 		this.blockingConfigurationName = bc;
 	}
 
-	public void setDatabaseAbstractionName(String databaseAbstractionName) {
-		this.databaseAbstractionName = databaseAbstractionName;
-	}
+//	public void setDatabaseAbstractionName(String databaseAbstractionName) {
+//		this.databaseAbstractionName = databaseAbstractionName;
+//	}
 
 	public void setDatabaseAccessorName(String databaseAccessorName) {
 		this.databaseAccessorName = databaseAccessorName;

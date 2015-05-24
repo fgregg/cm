@@ -27,6 +27,7 @@ import com.choicemaker.cm.core.util.CommandLineArguments;
 import com.choicemaker.cm.core.util.ObjectMaker;
 import com.choicemaker.cm.core.xmlconf.ProbabilityModelsXmlConf;
 import com.choicemaker.cm.core.xmlconf.XmlConfigurator;
+import com.choicemaker.cm.io.blocking.automated.BlockingAccessor;
 import com.choicemaker.cm.io.db.base.DbAccessor;
 import com.choicemaker.cm.io.db.base.DbField;
 import com.choicemaker.cm.io.db.base.DbReaderParallel;
@@ -72,7 +73,7 @@ public class DbDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 		Set alreadyHandledRetrieval = new HashSet();
 		Set alreadyHandledBlocking = new HashSet();
 		ImmutableProbabilityModel[] iModels = PMManager.getModels();
-		for (int i=0; i<iModels.length ; i++) {
+		for (int i = 0; i < iModels.length; i++) {
 			ImmutableProbabilityModel model = iModels[i];
 			String key =
 				model.getAccessor().getSchemaName() + "|"
@@ -80,19 +81,24 @@ public class DbDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 			if (alreadyHandledRetrieval.add(key)) {
 				createRetrievalObjects(model, w);
 			}
-			key = model.getAccessor().getSchemaName() + "|" 
-				+ model.getBlockingConfigurationName() + "|"
-				+ model.getDatabaseConfigurationName();
-			if (alreadyHandledBlocking.add(key)) {
-				createBlockingObjects(model, w);
+			final String dcName = model.getDatabaseConfigurationName();
+			BlockingAccessor bAccessor = (BlockingAccessor) model.getAccessor();
+			String[] bcNames = bAccessor.getBlockingConfigurations();
+			for (int j = 0; j < bcNames.length; j++) {
+				final String bcName = bcNames[j];
+				key =
+					model.getAccessor().getSchemaName() + "|" + bcName + "|"
+							+ dcName;
+				if (alreadyHandledBlocking.add(key)) {
+					createBlockingObjects(model, dcName, bcName, w);
+				}
 			}
 		}
 		w.close();
 	}
 
-	private static void createBlockingObjects(ImmutableProbabilityModel model, Writer w) throws IOException {
-		String dbConfiguration = model.getDatabaseConfigurationName();
-		String blockingConfiguration = model.getBlockingConfigurationName();
+	private static void createBlockingObjects(ImmutableProbabilityModel model,
+			String dbConfiguration, String blockingConfiguration ,Writer w) throws IOException {
 		Accessor accessor = model.getAccessor();
 		if (dbConfiguration != null && blockingConfiguration != null && accessor instanceof DbAccessor) {
 			String config = accessor.getSchemaName() + ":b:" + blockingConfiguration + ":" + dbConfiguration;

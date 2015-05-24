@@ -26,6 +26,7 @@ import javax.ejb.MessageDriven;
 import javax.sql.DataSource;
 
 import com.choicemaker.cm.args.BatchProcessingEvent;
+import com.choicemaker.cm.args.RecordAccess;
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ProcessingEvent;
@@ -113,25 +114,27 @@ public class SingleRecordMatchMDB extends AbstractOabaMDB {
 
 	@Override
 	protected void processOabaMessage(OabaJobMessage data, BatchJob batchJob,
-			OabaParameters params, OabaSettings settings,
-			ProcessingEventLog processingLog, ServerConfiguration serverConfig,
-			ImmutableProbabilityModel model) throws BlockingException {
+			RecordAccess dbParams, OabaParameters oabaParams,
+			OabaSettings oabaSettings, ProcessingEventLog processingLog,
+			ServerConfiguration serverConfig, ImmutableProbabilityModel model)
+			throws BlockingException {
 
 		log.info("Starting Single Record Match with maxSingle = "
-				+ settings.getMaxSingle());
+				+ oabaSettings.getMaxSingle());
 
 		// final file
 		IMatchRecord2Sink mSink = OabaFileUtils.getCompositeMatchSink(batchJob);
 
 		// run OABA on the staging data set.
 		long t = System.currentTimeMillis();
-		handleStageBatch(mSink, batchJob, params, settings, processingLog,
-				serverConfig, model);
+		handleStageBatch(mSink, batchJob, dbParams, oabaParams, oabaSettings,
+				processingLog, serverConfig, model);
 		log.info("Msecs in dedup stage " + (System.currentTimeMillis() - t));
 
 		// run single record match between stage and master.
 		t = System.currentTimeMillis();
-		handleSingleMatching(data, mSink, batchJob, params, settings);
+		handleSingleMatching(data, mSink, batchJob, dbParams, oabaParams,
+				oabaSettings);
 		log.info("Msecs in single matching " + (System.currentTimeMillis() - t));
 
 		String cachedFileName = mSink.getInfo();
@@ -147,7 +150,8 @@ public class SingleRecordMatchMDB extends AbstractOabaMDB {
 	 * @param data
 	 */
 	private void handleStageBatch(IMatchRecord2Sink mSinkFinal,
-			BatchJob batchJob, OabaParameters params, OabaSettings settings,
+			BatchJob batchJob, RecordAccess dbParams,
+			OabaParameters params, OabaSettings settings,
 			ProcessingEventLog processingLog, ServerConfiguration serverConfig,
 			ImmutableProbabilityModel model) throws BlockingException {
 
@@ -178,7 +182,7 @@ public class SingleRecordMatchMDB extends AbstractOabaMDB {
 			throw new BlockingException(msg);
 		}
 		RecValService2 rvService =
-			new RecValService2(staging, null, stageModel, null,
+			new RecValService2(staging, null, stageModel, dbParams,
 					OabaFileUtils.getRecValFactory(batchJob),
 					mutableTranslator, processingEntry);
 		rvService.runService();
@@ -334,10 +338,10 @@ public class SingleRecordMatchMDB extends AbstractOabaMDB {
 	 */
 	private void handleSingleMatching(OabaJobMessage data,
 			IMatchRecord2Sink mSinkFinal, BatchJob batchJob,
-			OabaParameters params, OabaSettings settings)
-			throws BlockingException {
+			RecordAccess dbParams, OabaParameters oabaParams,
+			OabaSettings oabaSettings) throws BlockingException {
 
-		final String modelConfigId = params.getModelConfigurationName();
+		final String modelConfigId = oabaParams.getModelConfigurationName();
 		ImmutableProbabilityModel model =
 			PMManager.getModelInstance(modelConfigId);
 
@@ -350,7 +354,7 @@ public class SingleRecordMatchMDB extends AbstractOabaMDB {
 		// Get the data sources for ABA queries
 		DataSource stageDS = null;
 		try {
-			stageDS = getSqlRecordSourceController().getStageDataSource(params);
+			stageDS = getSqlRecordSourceController().getStageDataSource(oabaParams);
 		} catch (BlockingException e) {
 			String msg = "Unable to acquire data source: " + e;
 			log.severe(msg);
@@ -361,7 +365,7 @@ public class SingleRecordMatchMDB extends AbstractOabaMDB {
 		DataSource masterDS = null;
 		try {
 			masterDS =
-				getSqlRecordSourceController().getMasterDataSource(params);
+				getSqlRecordSourceController().getMasterDataSource(oabaParams);
 		} catch (BlockingException e) {
 			String msg = "Unable to acquire data source: " + e;
 			log.severe(msg);
@@ -408,7 +412,7 @@ public class SingleRecordMatchMDB extends AbstractOabaMDB {
 			log.info("... finished caching ABA statistics for staging records.");
 		}
 
-		String dbaName = model.getDatabaseAccessorName();
+		String dbaName = dbParams.getDatabaseAccessorName();
 		CMExtension dbaExt =
 			CMPlatformUtils.getExtension(DATABASE_ACCESSOR, dbaName);
 		DatabaseAccessor databaseAccessor = null;
@@ -431,7 +435,7 @@ public class SingleRecordMatchMDB extends AbstractOabaMDB {
 
 		RecordSource stage = null;
 		try {
-			stage = getRecordSourceController().getStageRs(params);
+			stage = getRecordSourceController().getStageRs(oabaParams);
 		} catch (Exception e) {
 			String msg = "Unable to get staging record source: " + e;
 			log.severe(msg);
@@ -472,15 +476,24 @@ public class SingleRecordMatchMDB extends AbstractOabaMDB {
 
 			while (stage.hasNext()) {
 				Record q = stage.getNext();
+				int limitPBS = oabaSettings.getLimitPerBlockingSet();
+				int stbsgl = oabaSettings.getSingleTableBlockingSetGraceLimit();
+				int limitSBS = oabaSettings.getLimitSingleBlockingSet();
 				AbaStatistics stats =
 					getAbaStatisticsController().getStatistics(model);
+				String databaseConfiguration =
+					dbParams.getDatabaseConfigurationName();
+				String blockingConfiguration =
+					dbParams.getBlockingConfigurationName();
 				AutomatedBlocker rs =
-					new Blocker2(databaseAccessor, model, q, settings, stats);
+					new Blocker2(databaseAccessor, model, q, limitPBS, stbsgl,
+							limitSBS, stats, databaseConfiguration,
+							blockingConfiguration);
 				log.fine(q.getId() + " " + rs + " " + model);
 
 				SortedSet<Match> s =
-					dm.getMatches(q, rs, model, params.getLowThreshold(),
-							params.getHighThreshold());
+					dm.getMatches(q, rs, model, oabaParams.getLowThreshold(),
+							oabaParams.getHighThreshold());
 				Iterator<Match> iS = s.iterator();
 				while (iS.hasNext()) {
 					Match m = iS.next();

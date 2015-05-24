@@ -21,6 +21,7 @@ import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
 import javax.jms.Queue;
 
+import com.choicemaker.cm.args.RecordAccess;
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
@@ -70,9 +71,10 @@ public class Chunk2MDB extends AbstractOabaMDB {
 
 	@Override
 	protected void processOabaMessage(OabaJobMessage data, BatchJob batchJob,
-			OabaParameters params, OabaSettings oabaSettings,
-			ProcessingEventLog processingLog, ServerConfiguration serverConfig,
-			ImmutableProbabilityModel model) throws BlockingException {
+			RecordAccess dbParams, OabaParameters oabaParams,
+			OabaSettings oabaSettings, ProcessingEventLog processingLog,
+			ServerConfiguration serverConfig, ImmutableProbabilityModel model)
+			throws BlockingException {
 
 		final int maxChunk = oabaSettings.getMaxChunkSize();
 		final int numProcessors = serverConfig.getMaxChoiceMakerThreads();
@@ -113,8 +115,8 @@ public class Chunk2MDB extends AbstractOabaMDB {
 		ISerializableRecordSource staging = null;
 		ISerializableRecordSource master = null;
 		try {
-			staging = getRecordSourceController().getStageRs(params);
-			master = getRecordSourceController().getMasterRs(params);
+			staging = getRecordSourceController().getStageRs(oabaParams);
+			master = getRecordSourceController().getMasterRs(oabaParams);
 		} catch (Exception e) {
 			throw new BlockingException(e.toString());
 		}

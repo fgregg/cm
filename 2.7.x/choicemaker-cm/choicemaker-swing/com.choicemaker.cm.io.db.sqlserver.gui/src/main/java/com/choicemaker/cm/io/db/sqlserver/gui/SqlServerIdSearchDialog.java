@@ -36,6 +36,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import com.choicemaker.cm.args.AbaSettings;
+import com.choicemaker.cm.args.RecordAccess;
 import com.choicemaker.cm.core.DatabaseException;
 import com.choicemaker.cm.core.Decision;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
@@ -78,6 +79,7 @@ public class SqlServerIdSearchDialog extends JDialog {
 	
 	private ModelMaker modelMaker;
 	private ImmutableProbabilityModel model;
+	private RecordAccess dbParams;
 
 	private JComboBox dataSource;
 	private JRadioButton predefined, manual;
@@ -89,10 +91,12 @@ public class SqlServerIdSearchDialog extends JDialog {
 	private JTextField qId;
 	private JButton ok, cancel;
 
-	public SqlServerIdSearchDialog(ModelMaker modelMaker) {
+	public SqlServerIdSearchDialog(ModelMaker modelMaker,
+			RecordAccess dbParams) {
 		super(modelMaker, "SQL Server Record Search", false);
 		this.modelMaker = modelMaker;
 		this.model = modelMaker.getProbabilityModel();
+		this.dbParams = dbParams;
 
 		SqlServerUtils.maybeInitConnectionPools();
 //		SqlServerUtils.maybeInitProductionModels();
@@ -314,7 +318,7 @@ public class SqlServerIdSearchDialog extends JDialog {
 		logger.severe(msg);
 		// END FIXME
 		try {
-			SqlServerUtils.maybeUpdateCounts(ds, model, statsCache);
+			SqlServerUtils.maybeUpdateCounts(ds, model, dbParams, statsCache);
 		} catch (SQLException ex) {
 			SqlServerUtils.setDefaultCursor(modelMaker, this);
 			ErrorDialog.showErrorDialog(this, "Error updating counts: " + ex, ex);
@@ -342,8 +346,23 @@ public class SqlServerIdSearchDialog extends JDialog {
 		// FIXME temporary HACK
 		AbaSettings FIXME = null;
 		// END FIXME
-		AbaStatistics stats = statsCache.getStatistics(model);
-		AutomatedBlocker blocker = new Blocker2(dbAccessor, model, q, FIXME, stats);
+		final int limitPBS = FIXME.getLimitPerBlockingSet();
+		final int stbgl = FIXME.getSingleTableBlockingSetGraceLimit();
+		final int limitSBS = FIXME.getLimitSingleBlockingSet();
+		final AbaStatistics stats = statsCache.getStatistics(model);
+		final String databaseConfig = dbParams.getDatabaseConfigurationName();
+		final String _blockingConfig = dbParams.getBlockingConfigurationName();
+		if (blockingConfiguration == null
+				|| !blockingConfiguration.equals(_blockingConfig)) {
+			msg =
+				"Blocking configuration from GUI ('" + blockingConfiguration
+						+ "' does not equal value from application ('"
+						+ _blockingConfig + "').";
+			logger.warning(msg);
+		}
+		AutomatedBlocker blocker =
+			new Blocker2(dbAccessor, model, q, limitPBS, stbgl, limitSBS,
+					stats, databaseConfig, blockingConfiguration);
 		Thresholds t = modelMaker.getThresholds();
 		SortedSet matches = null;
 		try {
