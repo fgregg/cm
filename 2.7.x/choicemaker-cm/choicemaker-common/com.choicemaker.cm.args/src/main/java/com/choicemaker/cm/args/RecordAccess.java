@@ -20,11 +20,20 @@ import java.io.Serializable;
  * particular database type, or they may apply to broad categories of database
  * types that conform to some standard. This interface defines several
  * well-known database types, but others may be defined elsewhere.
+ * <p>
+ * The <code>modelName</code> and <code>databaseType</code> properties should be
+ * treated as documentation, rather than as references or foreign keys to other
+ * ChoiceMaker types. Implementations of this interface are not required to
+ * enforce consistency between the model name and the blocking, query or
+ * reference configurations. Similarly, implementations are not required to
+ * enforce consistency between the database type and the database accessor
+ * class.
+ * </p>
  * 
  * @author rphall
  *
  */
-public interface RecordAccess extends Serializable {
+public interface RecordAccess extends PersistentObject, Serializable {
 
 	String DB_TYPE_FLATFILE = "FLATFILE";
 	String DB_TYPE_XML = "XML";
@@ -33,14 +42,43 @@ public interface RecordAccess extends Serializable {
 	String DB_TYPE_POSTGRES = "POSTGRES";
 	String DB_TYPE_JDBC = "JDBC";
 
+	/** The name of a ChoiceMaker matching model */
 	String getModelName();
 
+	/**
+	 * A descriptive tag indicating the type of database accessor used by this
+	 * record accessor
+	 */
 	String getDatabaseType();
 
-	String getDatabaseAccessorName();
+	/**
+	 * Returns the class name of the database accessor used by this record
+	 * accessor.
+	 */
+	String getDatabaseAccessor();
 
-	String getDatabaseConfigurationName();
+	/**
+	 * Returns the name of a blocking configuration used by this record
+	 * accessor. The blocking configuration must be defined by the model used by
+	 * this instance, but this constraint may not be enforced by implementations
+	 * of this class.
+	 */
+	String getBlockingConfiguration();
 
-	String getBlockingConfigurationName();
+	/**
+	 * Returns the name of a database configuration used by this record accessor
+	 * to retrieve query records. The database configuration must be defined by
+	 * the model used by this instance, but this constraint may not be enforced
+	 * by implementations of this class.
+	 */
+	String getDatabaseQueryConfiguration();
+
+	/**
+	 * Returns the name of a database configuration used by this record accessor
+	 * to retrieve reference records. The database configuration must be defined
+	 * by the model used by this instance, but this constraint may not be
+	 * enforced by implementations of this class.
+	 */
+	String getDatabaseReferenceConfiguration();
 
 }

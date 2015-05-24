@@ -273,7 +273,7 @@ public class OnlineMatchBaseBean implements SessionBean {
 			DatabaseAccessor databaseAccessor;
 			try {
 				// FIXME temporary compilation hack until this class is removed
-				String dbaName = dbParams.getDatabaseAccessorName();
+				String dbaName = dbParams.getDatabaseAccessor();
 				CMExtension dbaExt =
 					CMPlatformUtils.getPluginRegistry().getExtension(
 							Single.DATABASE_ACCESSOR,
@@ -310,7 +310,7 @@ public class OnlineMatchBaseBean implements SessionBean {
 			}
 
 			String dbConfigName = masterCollection.getName();
-			String blockingConfigName = dbParams.getBlockingConfigurationName();
+			String blockingConfigName = dbParams.getBlockingConfiguration();
 			// FIXME temporary HACK
 			AbaSettings FIXME = null;
 			// END FIXME

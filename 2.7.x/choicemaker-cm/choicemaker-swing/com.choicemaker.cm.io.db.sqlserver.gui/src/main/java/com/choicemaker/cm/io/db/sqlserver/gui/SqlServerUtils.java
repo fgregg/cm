@@ -92,7 +92,7 @@ public class SqlServerUtils {
 				&& ds == lastDs
 				&& lastBlockingConfiguration != null
 				&& lastBlockingConfiguration.equals(dbParams
-						.getBlockingConfigurationName())
+						.getBlockingConfiguration())
 				&& lastDbConfiguration != null
 				&& lastDbConfiguration.equals(model
 						.getDatabaseConfigurationName())
@@ -112,7 +112,7 @@ public class SqlServerUtils {
 
 		lastModel = model;
 		lastDs = ds;
-		lastBlockingConfiguration = dbParams.getBlockingConfigurationName();
+		lastBlockingConfiguration = dbParams.getBlockingConfiguration();
 		lastDbConfiguration = model.getDatabaseConfigurationName();
 	}
 

@@ -152,7 +152,7 @@ public class RecValService3 {
 		this.control = control;
 
 		BlockingAccessor ba = (BlockingAccessor) model.getAccessor();
-		String blockName = this.dbParams.getBlockingConfigurationName();
+		String blockName = this.dbParams.getBlockingConfiguration();
 		String dbConf = this.model.getDatabaseConfigurationName();
 
 		IBlockingConfiguration bc =
@@ -268,7 +268,7 @@ public class RecValService3 {
 				stage.open(); // FIXME! try { stage.open(); ... } finally{
 								// stage.close(); }
 
-				String blockName = dbParams.getBlockingConfigurationName();
+				String blockName = dbParams.getBlockingConfiguration();
 				String dbConf = model.getDatabaseConfigurationName();
 				BlockingAccessor ba = (BlockingAccessor) model.getAccessor();
 				IBlockingConfiguration bc =
@@ -306,7 +306,7 @@ public class RecValService3 {
 				master.open(); // FIXME! try { master.open(); ... } finally{
 								// master.close(); }
 
-				String blockName = dbParams.getBlockingConfigurationName();
+				String blockName = dbParams.getBlockingConfiguration();
 				String dbConf = model.getDatabaseConfigurationName();
 				BlockingAccessor ba = (BlockingAccessor) model.getAccessor();
 				IBlockingConfiguration bc =

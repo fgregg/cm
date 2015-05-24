@@ -350,8 +350,8 @@ public class SqlServerIdSearchDialog extends JDialog {
 		final int stbgl = FIXME.getSingleTableBlockingSetGraceLimit();
 		final int limitSBS = FIXME.getLimitSingleBlockingSet();
 		final AbaStatistics stats = statsCache.getStatistics(model);
-		final String databaseConfig = dbParams.getDatabaseConfigurationName();
-		final String _blockingConfig = dbParams.getBlockingConfigurationName();
+		final String databaseConfig = dbParams.getDatabaseQueryConfiguration();
+		final String _blockingConfig = dbParams.getBlockingConfiguration();
 		if (blockingConfiguration == null
 				|| !blockingConfiguration.equals(_blockingConfig)) {
 			msg =

@@ -412,7 +412,7 @@ public class SingleRecordMatchMDB extends AbstractOabaMDB {
 			log.info("... finished caching ABA statistics for staging records.");
 		}
 
-		String dbaName = dbParams.getDatabaseAccessorName();
+		String dbaName = dbParams.getDatabaseAccessor();
 		CMExtension dbaExt =
 			CMPlatformUtils.getExtension(DATABASE_ACCESSOR, dbaName);
 		DatabaseAccessor databaseAccessor = null;
@@ -482,9 +482,9 @@ public class SingleRecordMatchMDB extends AbstractOabaMDB {
 				AbaStatistics stats =
 					getAbaStatisticsController().getStatistics(model);
 				String databaseConfiguration =
-					dbParams.getDatabaseConfigurationName();
+					dbParams.getDatabaseQueryConfiguration();
 				String blockingConfiguration =
-					dbParams.getBlockingConfigurationName();
+					dbParams.getBlockingConfiguration();
 				AutomatedBlocker rs =
 					new Blocker2(databaseAccessor, model, q, limitPBS, stbsgl,
 							limitSBS, stats, databaseConfiguration,

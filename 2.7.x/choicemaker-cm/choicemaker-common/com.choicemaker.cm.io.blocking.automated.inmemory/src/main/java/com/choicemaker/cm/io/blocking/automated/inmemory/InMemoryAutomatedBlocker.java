@@ -51,7 +51,7 @@ public class InMemoryAutomatedBlocker implements InMemoryBlocker {
 				.getSingleTableBlockingSetGraceLimit(), abaSettings
 				.getLimitSingleBlockingSet(), model
 				.getDatabaseConfigurationName(), dbParams
-				.getBlockingConfigurationName());
+				.getBlockingConfiguration());
 
 	}
 

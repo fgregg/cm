@@ -114,7 +114,7 @@ public class RecValService2 {
 		// this.dbConf = dbConf;
 
 		BlockingAccessor ba = (BlockingAccessor) model.getAccessor();
-		String blockName = this.dbParams.getBlockingConfigurationName();
+		String blockName = this.dbParams.getBlockingConfiguration();
 		String dbConf = model.getDatabaseConfigurationName();
 
 		IBlockingConfiguration bc =
@@ -255,7 +255,7 @@ public class RecValService2 {
 				stage.setModel(model);
 				stage.open();
 
-				String blockName = this.dbParams.getBlockingConfigurationName();
+				String blockName = this.dbParams.getBlockingConfiguration();
 				String dbConf = model.getDatabaseConfigurationName();
 				BlockingAccessor ba = (BlockingAccessor) model.getAccessor();
 				bc = ba.getBlockingConfiguration(blockName, dbConf);
@@ -293,7 +293,7 @@ public class RecValService2 {
 				master.setModel(model);
 				master.open();
 
-				String blockName = this.dbParams.getBlockingConfigurationName();
+				String blockName = this.dbParams.getBlockingConfiguration();
 				String dbConf = model.getDatabaseConfigurationName();
 				BlockingAccessor ba = (BlockingAccessor) model.getAccessor();
 				bc = ba.getBlockingConfiguration(blockName, dbConf);
