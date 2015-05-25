@@ -180,7 +180,7 @@ public class SimplePersonSqlServerTestConfiguration implements
 	 * <li>the staging record source</li>
 	 * <li>the master record source</li>
 	 * </ul>
-	 * 
+	 *
 	 * @throws IllegalArgumentException
 	 *             if either constructor argument is null
 	 * @throws IllegalStateException
@@ -258,7 +258,7 @@ public class SimplePersonSqlServerTestConfiguration implements
 
 	/**
 	 * Checks whether initialization has left the instance in a valid state.
-	 * 
+	 *
 	 * @throws IllegalStateException
 	 *             if the instance is not initialized or is not in a valid state
 	 */
@@ -319,7 +319,7 @@ public class SimplePersonSqlServerTestConfiguration implements
 			}
 
 			@Override
-			public String getClassName() {
+			public String getDatabaseReader() {
 				return RECORD_SOURCE_CLASS_NAME;
 			}
 
@@ -389,7 +389,7 @@ public class SimplePersonSqlServerTestConfiguration implements
 			}
 
 			@Override
-			public String getClassName() {
+			public String getDatabaseReader() {
 				return RECORD_SOURCE_CLASS_NAME;
 			}
 

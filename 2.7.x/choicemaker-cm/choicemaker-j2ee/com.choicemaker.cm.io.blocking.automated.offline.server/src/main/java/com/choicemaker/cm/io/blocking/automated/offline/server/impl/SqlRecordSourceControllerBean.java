@@ -102,7 +102,7 @@ public class SqlRecordSourceControllerBean implements SqlRecordSourceController 
 		if (rsId != null && PersistableSqlRecordSource.TYPE.equals(type)) {
 			PersistableSqlRecordSource psrs = findInternal(rsId.longValue());
 			if (psrs != null) {
-				Class<?> c = Class.forName(psrs.getClassName());
+				Class<?> c = Class.forName(psrs.getDatabaseReader());
 				Constructor<?> ctor =
 					c.getConstructor(String.class, String.class, String.class,
 							String.class);

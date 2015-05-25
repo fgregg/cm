@@ -10,7 +10,7 @@ import com.choicemaker.cm.args.PersistableSqlRecordSource;
  * <li>QN -- Query Name</li>
  * <li>CN -- Column Name</li>
  * </ul>
- * 
+ *
  * @author rphall
  */
 public interface SqlRecordSourceJPA extends BaseRecordSourceJPA {
@@ -33,6 +33,8 @@ public interface SqlRecordSourceJPA extends BaseRecordSourceJPA {
 	String CN_MODEL = "MODEL";
 
 	String CN_DBCONFIG = "DBCONFIG";
+
+	String CN_ABA_PLUGIN = "ABA_PLUGIN";
 
 	/** Name of the query that finds all persistent batch job instances */
 	String QN_SQLRS_FIND_ALL = "sqlRecordSourceFindAll";

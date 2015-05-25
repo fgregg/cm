@@ -1,5 +1,6 @@
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.SqlRecordSourceJPA.CN_ABA_PLUGIN;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.SqlRecordSourceJPA.CN_CM_IO_CLASS;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.SqlRecordSourceJPA.CN_DATASOURCE;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.SqlRecordSourceJPA.CN_DBCONFIG;
@@ -9,6 +10,8 @@ import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.SqlRe
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.SqlRecordSourceJPA.JPQL_SQLRS_FIND_ALL;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.SqlRecordSourceJPA.QN_SQLRS_FIND_ALL;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.SqlRecordSourceJPA.TABLE_NAME;
+
+import java.util.logging.Logger;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
@@ -24,6 +27,8 @@ import com.choicemaker.cm.args.PersistableSqlRecordSource;
 @DiscriminatorValue(DISCRIMINATOR_VALUE)
 public class SqlRecordSourceEntity extends BaseRecordSourceEntity implements
 		PersistableSqlRecordSource {
+
+	private static final Logger logger = Logger.getLogger(SqlRecordSourceEntity.class.getName());
 
 	private static final long serialVersionUID = 271L;
 
@@ -44,6 +49,9 @@ public class SqlRecordSourceEntity extends BaseRecordSourceEntity implements
 	@Column(name = CN_DBCONFIG)
 	protected final String dbConfig;
 
+	@Column(name = CN_ABA_PLUGIN)
+	protected final String abaAccessor;
+
 	// -- Constructors
 
 	/** Required by JPA */
@@ -54,15 +62,17 @@ public class SqlRecordSourceEntity extends BaseRecordSourceEntity implements
 		this.modelId = null;
 		this.sql = null;
 		this.dbConfig = null;
+		this.abaAccessor = null;
 	}
 
 	public SqlRecordSourceEntity(PersistableSqlRecordSource psrs) {
-		this(psrs.getClassName(), psrs.getDataSource(), psrs.getModelId(), psrs
-				.getSqlSelectStatement(), psrs.getDatabaseConfiguration());
+		this(psrs.getDatabaseReader(), psrs.getDataSource(), psrs.getModelId(), psrs
+				.getSqlSelectStatement(), psrs.getDatabaseConfiguration(),
+				psrs.getDatabaseAccessor());
 	}
 
 	public SqlRecordSourceEntity(String className, String dataSource,
-			String model, String sql, String dbConfig) {
+			String model, String sql, String dbConfig, String abaAccessor) {
 		super(TYPE);
 
 		if (className == null || !className.equals(className.trim())
@@ -88,18 +98,28 @@ public class SqlRecordSourceEntity extends BaseRecordSourceEntity implements
 			String msg = "invalid data configuration name '" + dbConfig + "'";
 			throw new IllegalArgumentException(msg);
 		}
+		if (abaAccessor == null || !abaAccessor.equals(abaAccessor.trim())
+				|| abaAccessor.isEmpty()) {
+			String msg = "null or blank ABA database accessor'" + abaAccessor + "'";
+			logger.fine(msg);
+			abaAccessor = null;
+		} else {
+			String msg = "non-null ABA database accessor'" + abaAccessor + "'";
+			logger.fine(msg);
+		}
 
 		this.className = className;
 		this.dataSource = dataSource;
 		this.modelId = model;
 		this.sql = sql;
 		this.dbConfig = dbConfig;
+		this.abaAccessor = abaAccessor;
 	}
 
 	// -- Accessors
 
 	@Override
-	public String getClassName() {
+	public String getDatabaseReader() {
 		return className;
 	}
 
@@ -121,6 +141,11 @@ public class SqlRecordSourceEntity extends BaseRecordSourceEntity implements
 	@Override
 	public String getDatabaseConfiguration() {
 		return dbConfig;
+	}
+
+	@Override
+	public String getDatabaseAccessor() {
+		return abaAccessor;
 	}
 
 	// -- Identity

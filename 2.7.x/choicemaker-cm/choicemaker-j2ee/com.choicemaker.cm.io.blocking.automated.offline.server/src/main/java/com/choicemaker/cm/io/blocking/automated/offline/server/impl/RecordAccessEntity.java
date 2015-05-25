@@ -46,22 +46,22 @@ public class RecordAccessEntity extends AbstractPersistentObject implements
 	@GeneratedValue(strategy = GenerationType.TABLE,
 			generator = ID_GENERATOR_NAME)
 	protected long id;
-	
+
 	@Column(name = CN_MODELNAME)
 	protected final String modelName;
-	
+
 	@Column(name = CN_DB_TYPE)
 	protected final String databaseType;
-	
+
 	@Column(name = CN_DB_ACCESSOR)
 	protected final String databaseAccessor;
-	
+
 	@Column(name = CN_QUERY_CONFIGURATION)
 	protected final String queryConfiguration;
-	
+
 	@Column(name = CN_REFERENCE_CONFIGURATION)
 	protected final String referenceConfiguration;
-	
+
 	@Column(name = CN_BLOCKING_CONFIGURATION)
 	protected final String blockingConfiguration;
 
@@ -141,7 +141,7 @@ public class RecordAccessEntity extends AbstractPersistentObject implements
 	@Override
 	public String toString() {
 		return "RecordAccessEntity [id=" + id + ", modelName=" + modelName
-				+ ", databaseType=" + databaseType + ", databaseAccessor="
+				+ ", databaseType=" + databaseType + ", abaAccessor="
 				+ databaseAccessor + ", queryConfiguration="
 				+ queryConfiguration + ", referenceConfiguration="
 				+ referenceConfiguration + ", blockingConfiguration="
