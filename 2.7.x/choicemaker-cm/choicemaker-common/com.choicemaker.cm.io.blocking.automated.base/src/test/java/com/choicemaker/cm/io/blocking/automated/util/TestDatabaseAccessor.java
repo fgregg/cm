@@ -99,7 +99,8 @@ public class TestDatabaseAccessor implements DatabaseAccessor {
 		return -1;
 	}
 
-	public void open(AutomatedBlocker blocker) throws IOException {
+	public void open(AutomatedBlocker blocker, String databaseConfiguration)
+			throws IOException {
 		System.out.println("=============== open");
 		Iterator<IBlockingSet> iBlockingSets = blocker.getBlockingSets().iterator();
 		int i = 0;

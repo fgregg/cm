@@ -27,7 +27,8 @@ public interface DatabaseAccessor {
 	String EXTENSION_POINT =
 		ChoiceMakerExtensionPoint.CM_IO_BLOCKING_AUTOMATED_BASE_DATABASEACCESSOR;
 
-	void open(AutomatedBlocker blocker) throws IOException;
+	void open(AutomatedBlocker blocker, String databaseConfiguration)
+			throws IOException;
 
 	void close() throws IOException;
 

@@ -75,22 +75,25 @@ public class DbDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 		ImmutableProbabilityModel[] iModels = PMManager.getModels();
 		for (int i = 0; i < iModels.length; i++) {
 			ImmutableProbabilityModel model = iModels[i];
-			String key =
-				model.getAccessor().getSchemaName() + "|"
-						+ model.getDatabaseConfigurationName();
-			if (alreadyHandledRetrieval.add(key)) {
-				createRetrievalObjects(model, w);
-			}
-			final String dcName = model.getDatabaseConfigurationName();
-			BlockingAccessor bAccessor = (BlockingAccessor) model.getAccessor();
-			String[] bcNames = bAccessor.getBlockingConfigurations();
-			for (int j = 0; j < bcNames.length; j++) {
-				final String bcName = bcNames[j];
-				key =
-					model.getAccessor().getSchemaName() + "|" + bcName + "|"
-							+ dcName;
-				if (alreadyHandledBlocking.add(key)) {
-					createBlockingObjects(model, dcName, bcName, w);
+			final DbAccessor dbAccessor = (DbAccessor) model.getAccessor();
+			String[] dbcNames = dbAccessor.getDbConfigurations();
+			for (int k = 0; k < dbcNames.length; k++) {
+				final String dcName = dbcNames[k];
+				String key = model.getAccessor().getSchemaName() + "|" + dcName;
+				if (alreadyHandledRetrieval.add(key)) {
+					createRetrievalObjects(model, dcName, w);
+				}
+				BlockingAccessor bAccessor =
+					(BlockingAccessor) model.getAccessor();
+				String[] bcNames = bAccessor.getBlockingConfigurations();
+				for (int j = 0; j < bcNames.length; j++) {
+					final String bcName = bcNames[j];
+					key =
+						model.getAccessor().getSchemaName() + "|" + bcName
+								+ "|" + dcName;
+					if (alreadyHandledBlocking.add(key)) {
+						createBlockingObjects(model, dcName, bcName, w);
+					}
 				}
 			}
 		}
@@ -114,8 +117,8 @@ public class DbDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 		}
 	}
 
-	private static void createRetrievalObjects(ImmutableProbabilityModel model, Writer w) throws IOException {
-		String dbConfiguration = model.getDatabaseConfigurationName();
+	private static void createRetrievalObjects(ImmutableProbabilityModel model,
+			String dbConfiguration, Writer w) throws IOException {
 		if (dbConfiguration != null) {
 			Accessor accessor = model.getAccessor();
 			if (accessor instanceof DbAccessor) {

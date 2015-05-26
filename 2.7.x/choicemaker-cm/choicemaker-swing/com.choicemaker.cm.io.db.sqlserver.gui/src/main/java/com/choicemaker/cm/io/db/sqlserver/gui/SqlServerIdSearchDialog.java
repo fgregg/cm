@@ -328,7 +328,7 @@ public class SqlServerIdSearchDialog extends JDialog {
 		String qId = getQId();
 		Record q = null;
 		try {
-			q = SqlServerUtils.readRecord(model, ds, qId);
+			q = SqlServerUtils.readRecord(model, dbConfiguration, ds, qId);
 		} catch (IOException ex) {
 			SqlServerUtils.setDefaultCursor(modelMaker, this);
 			ErrorDialog.showErrorDialog(this, "Error reading record with ID " + qId, ex);

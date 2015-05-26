@@ -86,15 +86,22 @@ public class SqlDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 		return res;
 	}
 
-	public static void processAllModels(Writer w, boolean insertGo) throws IOException {
+	public static void processAllModels(Writer w, boolean insertGo)
+			throws IOException {
 		ImmutableProbabilityModel[] models = PMManager.getModels();
 		for (int i=0; i<models.length; i++) {
-			createObjects(w, models[i], insertGo);
+			ImmutableProbabilityModel model = models[i];
+			DbAccessor dbAccessor = (DbAccessor) model.getAccessor();
+			String[] dbcNames = dbAccessor.getDbConfigurations();
+			for (int j=0; j<dbcNames.length; j++) {
+				String dbcName = dbcNames[i];
+				createObjects(w, model, dbcName, insertGo);
+			}
 		}
 	}
-	
-	public static void createObjects(Writer w, ImmutableProbabilityModel model, boolean insertGo) throws IOException {
-		String dbConfiguration = model.getDatabaseConfigurationName();
+
+	public static void createObjects(Writer w, ImmutableProbabilityModel model,
+			String dbConfiguration, boolean insertGo) throws IOException {
 		if (dbConfiguration != null) {
 			Accessor accessor = model.getAccessor();
 			if (accessor instanceof DbAccessor) {
@@ -167,11 +174,8 @@ public class SqlDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 		return dbReader.getName() + ":SQLServer";
 	}
 
-	public static String getMultiQuery(ImmutableProbabilityModel model) {
-		return getMultiQuery(model, model.getDatabaseConfigurationName());
-	}
-	
-	public static String getMultiQuery(ImmutableProbabilityModel model, String dbConfiguration) {
+	public static String getMultiQuery(ImmutableProbabilityModel model,
+			String dbConfiguration) {
 		Accessor accessor = model.getAccessor();
 		DbReaderSequential dbr = ((DbAccessor)accessor).getDbReaderSequential(dbConfiguration);
 		String viewBase = "vw_cmt_" + accessor.getSchemaName() + "_r_" + dbConfiguration;

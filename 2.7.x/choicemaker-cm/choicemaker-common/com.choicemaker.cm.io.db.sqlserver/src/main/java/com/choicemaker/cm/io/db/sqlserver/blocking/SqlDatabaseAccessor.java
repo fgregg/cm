@@ -69,10 +69,10 @@ public class SqlDatabaseAccessor implements DatabaseAccessor {
 		throw new CloneNotSupportedException("not yet implemented");
 	}
 
-	public void open(AutomatedBlocker blocker) throws IOException {
+	public void open(AutomatedBlocker blocker, String databaseConfiguration)
+			throws IOException {
 		Accessor acc = blocker.getModel().getAccessor();
-		String dbrName = blocker.getModel().getDatabaseConfigurationName();
-		dbr = ((DbAccessor) acc).getDbReaderSequential(dbrName);
+		dbr = ((DbAccessor) acc).getDbReaderSequential(databaseConfiguration);
 		String query = null;
 		try {
 			query = getQuery(blocker, dbr);

@@ -68,6 +68,7 @@ public class Blocker2 implements AutomatedBlocker {
 
 	private final ImmutableProbabilityModel model;
 	private final IBlockingConfiguration blockingConfiguration;
+	private final String databaseConfiguration;
 	private final DatabaseAccessor databaseAccessor;
 	private final AbaStatistics abaStatistics;
 	private final Record q;
@@ -120,6 +121,7 @@ public class Blocker2 implements AutomatedBlocker {
 		this.abaStatistics = abaStatistics;
 		this.databaseAccessor = databaseAccessor;
 		this.model = model;
+		this.databaseConfiguration = dbConfigurationName;
 		this.blockingConfiguration =
 			((BlockingAccessor) model.getAccessor()).getBlockingConfiguration(
 				blockingConfigurationName,
@@ -142,7 +144,7 @@ public class Blocker2 implements AutomatedBlocker {
 				this.singleTableBlockingSetGraceLimit,
 				this.limitSingleBlockingSet,
 				this.abaStatistics);
-		databaseAccessor.open(this);
+		databaseAccessor.open(this,databaseConfiguration);
 
 		// If processing has gotten this far, (i.e. an IncompleteBlockingSetsException
 		// was not thrown), then the results from this class should be the same as
@@ -187,6 +189,7 @@ public class Blocker2 implements AutomatedBlocker {
 						getLimitPerBlockingSet(),
 						getSingleTableBlockingSetGraceLimit(),
 						getLimitSingleBlockingSet(), getCountSource(),
+						databaseConfiguration,
 						getBlockingConfiguration())) {
 				sanityCheck.open();
 				List<IBlockingSet> newBlockingSets = this.getBlockingSets();

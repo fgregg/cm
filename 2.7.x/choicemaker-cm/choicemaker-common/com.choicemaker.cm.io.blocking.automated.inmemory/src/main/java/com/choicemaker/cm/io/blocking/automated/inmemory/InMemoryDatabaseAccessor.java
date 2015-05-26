@@ -48,7 +48,7 @@ public class InMemoryDatabaseAccessor implements DatabaseAccessor {
 		throw new UnsupportedOperationException();
 	}
 
-	public void open(AutomatedBlocker blocker) throws IOException {
+	public void open(AutomatedBlocker blocker, String unused) throws IOException {
 		itBlocked = imds.select(blocker.getBlockingSets(), start);
 	}
 

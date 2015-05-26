@@ -160,12 +160,12 @@ public class MutableProbabilityModelStub implements IProbabilityModel {
 //		return databaseAccessorName;
 //	}
 
-	@Override
-	public String getDatabaseConfigurationName() {
-		log.exiting(CLASSNAME, "getDatabaseConfigurationName",
-				databaseConfigurationName);
-		return databaseConfigurationName;
-	}
+//	@Override
+//	public String getDatabaseConfigurationName() {
+//		log.exiting(CLASSNAME, "getDatabaseConfigurationName",
+//				databaseConfigurationName);
+//		return databaseConfigurationName;
+//	}
 
 	@Override
 	public int getDecisionDomainSize() {

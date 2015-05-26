@@ -107,10 +107,10 @@ public class SqlServerUtils {
 	/**
 	 * NOTE: RecordReader is a SQLServer-specific piece of code.
 	 */
-	static Record readRecord(ImmutableProbabilityModel model, DataSource ds,
-			String id) throws IOException {
-		String condition = createCondition(model, id);
-		RecordReader reader = new RecordReader(model, ds, condition);
+	static Record readRecord(ImmutableProbabilityModel model, String dbConf,
+			DataSource ds, String id) throws IOException {
+		String condition = createCondition(model, dbConf, id);
+		RecordReader reader = new RecordReader(model, dbConf, ds, condition);
 
 		Record ret = null;
 		try {
@@ -131,8 +131,7 @@ public class SqlServerUtils {
 	 * quoted).
 	 */
 	private static String createCondition(ImmutableProbabilityModel model,
-			String id) {
-		String dbConf = model.getDatabaseConfigurationName();
+			String dbConf, String id) {
 		DbReaderSequential dbr =
 			((DbAccessor) model.getAccessor()).getDbReaderSequential(dbConf);
 		String masterType = dbr.getMasterIdType().toUpperCase();

@@ -260,7 +260,9 @@ public class OnlineMatchBaseBean implements SessionBean {
 			}
 
 			model = getProbabilityModel(modelName);
-			String modelDbrName = model.getDatabaseConfigurationName();
+			// FIXME temporary compilation hack until this class is removed
+			String modelDbrName = null;
+			// END compilation hack
 			if (!modelDbrName.equals(masterCollection.getName()))
 				throw new RecordCollectionException("dbConfig should match accessProvider dbConfig attribute");
 

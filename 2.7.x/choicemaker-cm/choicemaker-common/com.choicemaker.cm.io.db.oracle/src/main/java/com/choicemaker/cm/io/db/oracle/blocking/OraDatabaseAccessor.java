@@ -110,7 +110,8 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 		return retVal;
 	}
 
-	public void open(AutomatedBlocker blocker) throws IOException {
+	public void open(AutomatedBlocker blocker, String databaseConfiguration)
+			throws IOException {
 		logger.fine("open");
 		ImmutableProbabilityModel model = blocker.getModel();
 		if (startSession == SET_FROM_MODEL) {
@@ -118,8 +119,7 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 			endSession = (String) model.properties().get("endSession");
 		}
 		Accessor acc = model.getAccessor();
-		String dbrName = model.getDatabaseConfigurationName();
-		dbr = ((DbAccessor) acc).getDbReaderParallel(dbrName);
+		dbr = ((DbAccessor) acc).getDbReaderParallel(databaseConfiguration);
 		String query = getQuery(blocker,dbr);
 		
 		logger.fine("query length: " + query.length());
@@ -173,7 +173,7 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 						+ "', '"
 						+ condition2
 						+ "' ,'"
-						+ acc.getSchemaName() + ":r:" + dbrName
+						+ acc.getSchemaName() + ":r:" + databaseConfiguration
 						+ "', '?')");
 			}
 
@@ -183,7 +183,7 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 			stmt.setString(2, query);
 			stmt.setString(3, condition1);
 			stmt.setString(4, condition2);
-			stmt.setString(5, acc.getSchemaName() + ":r:" + dbrName);
+			stmt.setString(5, acc.getSchemaName() + ":r:" + databaseConfiguration);
 			stmt.registerOutParameter(6, OracleTypes.CURSOR);
 			logger.fine("execute");
 			stmt.execute();
@@ -209,7 +209,7 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 			logger.severe("call CMTBlocking.Blocking('"
 					+ blocker.getBlockingConfiguration().getName() + "', '"
 					+ query + "', '" + condition1 + "', '" + condition2
-					+ "' ,'" + acc.getSchemaName() + ":r:" + dbrName
+					+ "' ,'" + acc.getSchemaName() + ":r:" + databaseConfiguration
 					+ "', '?'): " + ex.toString());
 			throw new IOException(ex.toString());
 		}

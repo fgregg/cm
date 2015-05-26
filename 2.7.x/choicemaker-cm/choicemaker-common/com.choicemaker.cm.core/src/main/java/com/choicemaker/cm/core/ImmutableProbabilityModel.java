@@ -140,24 +140,24 @@ public interface ImmutableProbabilityModel {
 
 	String getClueText(int clueNum) throws IOException;
 
-	/**
-	 * When a model configuration is loaded as a plugin extension, this method
-	 * returns the name of the database configuration that is specified for the
-	 * configuration. When a model is loaded outside of a plugin, there will be
-	 * no (single) database specified, although its schema will may define
-	 * several, so this method will throw an IllegalStateException.<br/>
-	 * <br/>
-	 * In practice, only CM Server expects to deal with model configurations in
-	 * which a database configuration has been set, and CM Server uses only
-	 * models configurations that are loaded as plugin extensions.<br/>
-	 * <br/>
-	 * FIXME: this method should move to {@link ProbabilityModelConfiguration}
-	 * 
-	 * @see ProbabilityModelConfiguration
-	 * @see #getBlockingConfigurationName()
-	 * @see #getDatabaseAccessorName()
-	 */
-	String getDatabaseConfigurationName();
+//	/**
+//	 * When a model configuration is loaded as a plugin extension, this method
+//	 * returns the name of the database configuration that is specified for the
+//	 * configuration. When a model is loaded outside of a plugin, there will be
+//	 * no (single) database specified, although its schema will may define
+//	 * several, so this method will throw an IllegalStateException.<br/>
+//	 * <br/>
+//	 * In practice, only CM Server expects to deal with model configurations in
+//	 * which a database configuration has been set, and CM Server uses only
+//	 * models configurations that are loaded as plugin extensions.<br/>
+//	 * <br/>
+//	 * FIXME: this method should move to {@link ProbabilityModelConfiguration}
+//	 * 
+//	 * @see ProbabilityModelConfiguration
+//	 * @see #getBlockingConfigurationName()
+//	 * @see #getDatabaseAccessorName()
+//	 */
+//	String getDatabaseConfigurationName();
 
 //	/**
 //	 * When a model configuration is loaded as a plugin extension, this method

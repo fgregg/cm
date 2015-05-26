@@ -38,6 +38,7 @@ public class RecordReader implements RecordSource {
 	private static Logger logger = Logger.getLogger(RecordReader.class.getName());
 
 	private ImmutableProbabilityModel model;
+	private final String databaseConfiguration;
 	private DataSource ds;
 	private Connection connection;
 	private DbReaderSequential dbr;
@@ -45,22 +46,24 @@ public class RecordReader implements RecordSource {
 	private String condition;
 	private String name;
 
-	public RecordReader(ImmutableProbabilityModel model, DataSource ds, String condition) {
+	public RecordReader(ImmutableProbabilityModel model, String dbConf,
+			DataSource ds, String condition) {
 		this.model = model;
+		this.databaseConfiguration = dbConf;
 		this.ds = ds;
 		this.condition = condition;
 	}
 
-	public RecordReader(ImmutableProbabilityModel model, Connection connection, String condition) {
-		this.model = model;
-		this.connection = connection;
-		this.condition = condition;
-	}
+//	public RecordReader(ImmutableProbabilityModel model, Connection connection,
+//			String condition) {
+//		this.model = model;
+//		this.connection = connection;
+//		this.condition = condition;
+//	}
 
 	public void open() throws IOException {
 		Accessor acc = model.getAccessor();
-		String dbrName = model.getDatabaseConfigurationName();
-		dbr = ((DbAccessor) acc).getDbReaderSequential(dbrName);
+		dbr = ((DbAccessor) acc).getDbReaderSequential(databaseConfiguration);
 		try {
 			String query = getQuery();
 			logger.fine(query);

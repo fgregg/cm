@@ -41,6 +41,7 @@ import com.choicemaker.cm.io.blocking.automated.base.CountField;
 import com.choicemaker.cm.io.blocking.automated.base.DbTable;
 import com.choicemaker.cm.io.blocking.automated.cachecount.AbaStatisticsImpl;
 import com.choicemaker.cm.io.db.base.DatabaseAbstraction;
+import com.choicemaker.cm.io.db.base.DbAccessor;
 
 /**
  * Database Blocking Counts Creator
@@ -523,33 +524,36 @@ public class DbbCountsCreator {
 								bc.getDbTables()[0]), bcCountFields);
 				}
 				for (ImmutableProbabilityModel model : models) {
-					final BlockingAccessor bAccessor = (BlockingAccessor) model.getAccessor();
-					final String[] bcNames = bAccessor.getBlockingConfigurations();
-					for (String bcName : bcNames) {
-						logger.info("DEBUG " + "Using blocking configuration: "
-								+ bcName);
-						final String dn = model.getDatabaseConfigurationName();
-						IBlockingConfiguration bc =
-								bAccessor
-									.getBlockingConfiguration(bcName, dn);
-						final String bcClassName = bc.getClass().getName();
+					final DbAccessor dbAccessor = (DbAccessor) model.getAccessor();
+					String[] dbcNames = dbAccessor.getDbConfigurations();
+					for (String dn : dbcNames) {
+						final BlockingAccessor bAccessor = (BlockingAccessor) model.getAccessor();
+						final String[] bcNames = bAccessor.getBlockingConfigurations();
+						for (String bcName : bcNames) {
+							logger.info("DEBUG " + "Using blocking configuration: "
+									+ bcName);
+							IBlockingConfiguration bc =
+									bAccessor
+										.getBlockingConfiguration(bcName, dn);
+							final String bcClassName = bc.getClass().getName();
 
-						// This would be simpler if the collection of
-						// AbaStatisticsImpl instances were not an array, but rather
-						// a Map. The key could remain as className, but it would be
-						// more resilient and less dependent on implementation if
-						// the key were a concatenation of the names of a model and
-						// a blocking configuration.
-						int j = 0;
-						while (!blockingConfigurations[j].getClass().getName()
-								.equals(bcClassName)) {
-							++j;
+							// This would be simpler if the collection of
+							// AbaStatisticsImpl instances were not an array, but rather
+							// a Map. The key could remain as className, but it would be
+							// more resilient and less dependent on implementation if
+							// the key were a concatenation of the names of a model and
+							// a blocking configuration.
+							int j = 0;
+							while (!blockingConfigurations[j].getClass().getName()
+									.equals(bcClassName)) {
+								++j;
+							}
+
+							// DEPRECATED 2014-11-18 rphall
+							// model.properties().put("countSource", ccs[j]);
+							// END DEPRECATED
+							cache.putStatistics(model, ccs[j]);
 						}
-
-						// DEPRECATED 2014-11-18 rphall
-						// model.properties().put("countSource", ccs[j]);
-						// END DEPRECATED
-						cache.putStatistics(model, ccs[j]);
 					}
 				}
 			} finally {
@@ -624,101 +628,29 @@ public class DbbCountsCreator {
 
 	private static IBlockingConfiguration[] getBlockingConfigurations(
 			ImmutableProbabilityModel[] models) {
-//		int len = models.length;
-//		IBlockingConfiguration[] bcs = new IBlockingConfiguration[len];
-//		int numConfigurations = 0;
-//		for (int i = 0; i < len; ++i) {
-//			ImmutableProbabilityModel model = models[i];
-//			String bcName = model.getBlockingConfigurationName();
-//			String dn = model.getDatabaseConfigurationName();
-//			IBlockingConfiguration bc =
-//				((BlockingAccessor) model.getAccessor())
-//						.getBlockingConfiguration(bcName, dn);
-//			int j = 0;
-//			// AWKWARD, BRITTLE CODE 2009-08-21 rphall
-//			// Just use a Map of models to blockingConfigurations!
-//			while (j < numConfigurations
-//					&& !bc.getClass().getName()
-//							.equals(bcs[j].getClass().getName())) {
-//				++j;
-//			}
-//			if (j == numConfigurations) {
-//				bcs[numConfigurations++] = bc;
-//			}
-//			// END AWKWARD, BRITTLE CODE
-//		}
-//		IBlockingConfiguration[] res =
-//			new IBlockingConfiguration[numConfigurations];
-//		System.arraycopy(bcs, 0, res, 0, numConfigurations);
-//		return res;
-
 		final Set<String> bcClassNames = new HashSet<>();
 		final List<IBlockingConfiguration> ibcs0 = new ArrayList<>();
 		for (ImmutableProbabilityModel model : models) {
-			final BlockingAccessor bAccessor =
-				(BlockingAccessor) model.getAccessor();
-			final String[] bcNames = bAccessor.getBlockingConfigurations();
-			final String dn = model.getDatabaseConfigurationName();
-			for (String bcName : bcNames) {
-				IBlockingConfiguration ibc =
-					bAccessor.getBlockingConfiguration(bcName, dn);
-				String bcClassName = ibc.getClass().getName();
-				if (!bcClassNames.contains(bcClassName)) {
-					ibcs0.add(ibc);
+			final DbAccessor dbAccessor = (DbAccessor) model.getAccessor();
+			String[] dbcNames = dbAccessor.getDbConfigurations();
+			for (String dn : dbcNames) {
+				final BlockingAccessor bAccessor =
+					(BlockingAccessor) model.getAccessor();
+				final String[] bcNames = bAccessor.getBlockingConfigurations();
+				for (String bcName : bcNames) {
+					IBlockingConfiguration ibc =
+						bAccessor.getBlockingConfiguration(bcName, dn);
+					String bcClassName = ibc.getClass().getName();
+					if (!bcClassNames.contains(bcClassName)) {
+						ibcs0.add(ibc);
+					}
 				}
 			}
 		}
 		final int bcCount = ibcs0.size();
-		IBlockingConfiguration[] res = ibcs0.toArray(new IBlockingConfiguration[bcCount]);
+		IBlockingConfiguration[] res =
+			ibcs0.toArray(new IBlockingConfiguration[bcCount]);
 		return res;
-}
-
-	// private static DatabaseAbstraction[] getDatabaseAbstractions(
-	// ImmutableProbabilityModel[] models) throws E2Exception {
-	// Set<String> dbaNames = new HashSet<>();
-	// for (ImmutableProbabilityModel model : models) {
-	// final String dbaName = model.getDatabaseAbstractionName();
-	// if (dbaName == null) {
-	// String msg =
-	// "Missing name of database abstraction for model '"
-	// + model.getModelName() + "'";
-	// logger.warning(msg);
-	// }
-	// dbaNames.add(dbaName);
-	// }
-	// if (dbaNames.isEmpty()) {
-	// String msg = "No database abstractions configured for any model.";
-	// logger.severe(msg);
-	// throw new IllegalStateException(msg);
-	// }
-	// List<DatabaseAbstraction> dbas = new ArrayList<>();
-	// for (String dbaName : dbaNames) {
-	// DatabaseAbstraction dba = getDatabaseAbtraction(dbaName);
-	// if (dba == null) {
-	// String msg = "Missing database abstraction '" + dbaName + "'";
-	// logger.severe(msg);
-	// throw new IllegalStateException(msg);
-	// }
-	// dbas.add(dba);
-	// }
-	// DatabaseAbstraction[] retVal =
-	// dbas.toArray(new DatabaseAbstraction[dbas.size()]);
-	// return retVal;
-	// }
-	//
-	// private static DatabaseAbstraction getDatabaseAbtraction(String das)
-	// throws E2Exception {
-	// assert das != null && !das.isEmpty();
-	// CMExtension dbExtension =
-	// CMPlatformUtils.getExtension(DatabaseAbstraction.EXTENSION_POINT,
-	// das);
-	// CMConfigurationElement[] configurationElements =
-	// dbExtension.getConfigurationElements();
-	// CMConfigurationElement classConfiguration = configurationElements[0];
-	// DatabaseAbstraction databaseAbstraction =
-	// (DatabaseAbstraction) classConfiguration
-	// .createExecutableExtension("class");
-	// return databaseAbstraction;
-	// }
+	}
 
 }

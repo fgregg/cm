@@ -50,6 +50,7 @@ public class Blocker implements AutomatedBlocker {
 	private AbaStatistics abaStatistics;
 	private DatabaseAccessor databaseAccessor;
 	private ImmutableProbabilityModel model;
+	private final String databaseConfiguration;
 	private IBlockingConfiguration blockingConfiguration;
 	private Record q;
 	private int limitPerBlockingSet;
@@ -140,12 +141,11 @@ public class Blocker implements AutomatedBlocker {
 		int singleTableBlockingSetGraceLimit,
 		int limitSingleBlockingSet,
 		AbaStatistics abaStatistics,
+		String dbConfigurationName,
 		IBlockingConfiguration blockingConfiguration) {
 		this.databaseAccessor = databaseAccessor;
 		this.model = model;
-		// 2014-04-24 rphall: Commented out unused local variable
-		// Any side effects?
-//		BlockingAccessor ba = (BlockingAccessor) model.getAccessor();
+		this.databaseConfiguration = dbConfigurationName;
 		this.q = q;
 		this.limitPerBlockingSet = limitPerBlockingSet;
 		this.singleTableBlockingSetGraceLimit =
@@ -268,7 +268,7 @@ public class Blocker implements AutomatedBlocker {
 		}
 		logger.fine("...Finished listing final blocking sets");
 
-		getDatabaseAccessor().open(this);
+		getDatabaseAccessor().open(this,databaseConfiguration);
 	}
 
 	private boolean valid(IBlockingValue bv, BlockingSet bs) {

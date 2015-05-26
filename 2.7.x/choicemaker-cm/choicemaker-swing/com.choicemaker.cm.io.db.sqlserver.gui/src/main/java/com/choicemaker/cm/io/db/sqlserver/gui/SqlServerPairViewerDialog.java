@@ -203,8 +203,8 @@ public class SqlServerPairViewerDialog extends JDialog {
 		String errorMsg = null;
 		Exception ex = null;
 		try {
-			q = SqlServerUtils.readRecord(model, ds, qId);
-			m = SqlServerUtils.readRecord(model, ds, mId);
+			q = SqlServerUtils.readRecord(model, dbConfiguration, ds, qId);
+			m = SqlServerUtils.readRecord(model, dbConfiguration, ds, mId);
 		} catch (IOException ex2) {
 			errorMsg = "Error reading record " + (q == null ? qId : mId);
 			ex = ex2;
