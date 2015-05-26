@@ -125,9 +125,12 @@ public class CmServerAdminBean implements SessionBean {
 			log.severe("Invalid probability accessProvider: " + modelName);
 			throw new ModelException(modelName);
 		}
+		// HACK compilation hack until this class is eliminated
 		String delegateExtension =
-			(String) model.properties().get(
-				IUpdateDerivedFields.PN_MODEL_CONFIGURATION_UPDATOR_DELEGATE);
+		// (String) model.properties().get(
+		// IUpdateDerivedFields.PN_MODEL_CONFIGURATION_UPDATOR_DELEGATE);
+			null;
+		// END compilation hack
 		XmlConfigurablesRegistry registry =
 			DefaultUpdateDerivedFieldsRegistry.getInstance();
 		IUpdateDerivedFields retVal;

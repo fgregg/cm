@@ -50,7 +50,6 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 	private static final char BS_SEP = '^';
 	private static final char TB_VAL_SEP = '`';
 	private static final int MAX_LEN = 3950;
-	private static final String SET_FROM_MODEL = new String();
 	private static Logger logger = Logger.getLogger(OraDatabaseAccessor.class.getName());
 	private DataSource ds;
 	private Connection connection;
@@ -70,9 +69,9 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 		this.ds = ds;
 		this.condition1 = condition1;
 		this.condition2 = condition2;
-		startSession = SET_FROM_MODEL;
 	}
 
+	/** @deprecated */
 	public OraDatabaseAccessor(
 		DataSource ds,
 		String condition1,
@@ -80,8 +79,8 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 		String startSession,
 		String endSession) {
 		this(ds, condition1, condition2);
-		this.startSession = startSession;
-		this.endSession = endSession;
+		this.setStartSession(startSession);
+		this.setEndSession(endSession);
 	}
 
 	
@@ -105,8 +104,8 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 				this.ds,
 				this.condition1,
 				this.condition2,
-				this.startSession,
-				this.endSession);
+				this.getStartSession(),
+				this.getEndSession());
 		return retVal;
 	}
 
@@ -114,10 +113,6 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 			throws IOException {
 		logger.fine("open");
 		ImmutableProbabilityModel model = blocker.getModel();
-		if (startSession == SET_FROM_MODEL) {
-			startSession = (String) model.properties().get("startSession");
-			endSession = (String) model.properties().get("endSession");
-		}
 		Accessor acc = model.getAccessor();
 		dbr = ((DbAccessor) acc).getDbReaderParallel(databaseConfiguration);
 		String query = getQuery(blocker,dbr);
@@ -129,9 +124,9 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 			connection = ds.getConnection();
 //			connection.setAutoCommit(false); // 2015-04-01a EJB3 CHANGE rphall
 
-			if (startSession != null) {
+			if (getStartSession() != null) {
 				Statement stmt = connection.createStatement();
-				stmt.execute(startSession);
+				stmt.execute(getStartSession());
 				stmt.close();
 			}
 
@@ -262,10 +257,10 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 //				logger.severe("Commiting." + e.toString());
 //			}
 			// END EJB3 CHANGE
-			if (endSession != null) {
+			if (getEndSession() != null) {
 				try {
 					Statement stmt = connection.createStatement();
-					stmt.execute(startSession);
+					stmt.execute(getEndSession());
 					stmt.close();
 				} catch (SQLException e) {
 					ex = e;
@@ -444,30 +439,22 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 		}
 	}
 
-	/**
-	 * @return
-	 */
+	/** @deprecated */
 	public String getEndSession() {
 		return endSession;
 	}
 
-	/**
-	 * @return
-	 */
+	/** @deprecated */
 	public String getStartSession() {
 		return startSession;
 	}
 
-	/**
-	 * @param string
-	 */
+	/** @deprecated */
 	public void setEndSession(String string) {
 		endSession = string;
 	}
 
-	/**
-	 * @param string
-	 */
+	/** @deprecated */
 	public void setStartSession(String string) {
 		startSession = string;
 	}
