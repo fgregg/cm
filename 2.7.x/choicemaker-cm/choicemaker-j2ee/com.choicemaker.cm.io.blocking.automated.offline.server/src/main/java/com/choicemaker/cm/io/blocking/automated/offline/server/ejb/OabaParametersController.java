@@ -30,4 +30,8 @@ public interface OabaParametersController {
 
 	OabaParameters save(OabaParameters p);
 
+	String getQueryDatabaseConfiguration(OabaParameters oabaParams);
+
+	String getReferenceDatabaseAccessor(OabaParameters oabaParams);
+
 }

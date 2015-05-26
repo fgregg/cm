@@ -26,7 +26,6 @@ import javax.jms.Message;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 
-import com.choicemaker.cm.args.RecordAccess;
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
@@ -92,9 +91,6 @@ public class StartOabaMDB extends AbstractOabaMDB {
 
 				final long jobId = data.jobID;
 				batchJob = getJobController().findBatchJob(jobId);
-
-				// FIXME DOOMED TO FAIL
-				RecordAccess dbParams = null;
 
 				OabaParameters oabaParams =
 					getParametersController().findOabaParametersByBatchJobId(
@@ -176,11 +172,16 @@ public class StartOabaMDB extends AbstractOabaMDB {
 								.createMutableRecordIdTranslator(batchJob);
 
 					// create rec_id, val_id files
+					String blockingConfiguration =
+						oabaParams.getBlockingConfiguration();
+					String databaseConfiguration =
+						this.getParametersController()
+								.getQueryDatabaseConfiguration(oabaParams);
 					RecValSinkSourceFactory recvalFactory =
 						OabaFileUtils.getRecValFactory(batchJob);
 					RecValService3 rvService =
-						new RecValService3(staging, master, model, dbParams,
-								recvalFactory, getRecordIdController(),
+						new RecValService3(staging, master, model,
+								blockingConfiguration, databaseConfiguration,								recvalFactory, getRecordIdController(),
 								translator, processingEntry, batchJob);
 					rvService.runService();
 					getLogger().info(
@@ -326,10 +327,9 @@ public class StartOabaMDB extends AbstractOabaMDB {
 
 	@Override
 	protected void processOabaMessage(OabaJobMessage data, BatchJob batchJob,
-			RecordAccess dbParams, OabaParameters oabaParams,
-			OabaSettings oabaSettings, ProcessingEventLog processingLog,
-			ServerConfiguration serverConfig, ImmutableProbabilityModel model)
-			throws BlockingException {
+			OabaParameters oabaParams, OabaSettings oabaSettings,
+			ProcessingEventLog processingLog, ServerConfiguration serverConfig,
+			ImmutableProbabilityModel model) throws BlockingException {
 		// Does nothing in this class. Instead, onMessage is overridden
 		// and this callback is bypassed.
 	}

@@ -110,58 +110,53 @@ public class OabaParametersEntity extends AbstractParametersEntity implements
 	}
 
 	public OabaParametersEntity(String modelConfigurationName,
-			float lowThreshold, float highThreshold,
-			PersistableRecordSource stageRs, String queryRsDbConfig,
-			String queryToQueryBlocking) {
-		this(modelConfigurationName, lowThreshold, highThreshold, stageRs,
-				OabaParametersEntity.DEFAULT_QUERY_RS_IS_DEDUPLICATED,
-				queryRsDbConfig, queryToQueryBlocking, null, null, null,
+			float lowThreshold, float highThreshold, String blocking,
+			PersistableRecordSource stageRs, String queryRsDbConfig) {
+		this(modelConfigurationName, lowThreshold, highThreshold, blocking,
+				stageRs, OabaParametersEntity.DEFAULT_QUERY_RS_IS_DEDUPLICATED,
+				queryRsDbConfig, null, null,
 				OabaLinkageType.STAGING_DEDUPLICATION);
 	}
 
 	public OabaParametersEntity(String modelConfigurationName,
-			float lowThreshold, float highThreshold,
+			float lowThreshold, float highThreshold, String blocking,
 			PersistableRecordSource stageRs, String queryRsDbConfig,
-			String queryToQueryBlocking, boolean isQueryDeduped) {
-		this(modelConfigurationName, lowThreshold, highThreshold, stageRs,
-				isQueryDeduped, queryRsDbConfig, queryToQueryBlocking, null,
-				null, null, OabaLinkageType.STAGING_DEDUPLICATION);
+			boolean isQueryDeduped) {
+		this(modelConfigurationName, lowThreshold, highThreshold, blocking,
+				stageRs, isQueryDeduped, queryRsDbConfig, null, null,
+				OabaLinkageType.STAGING_DEDUPLICATION);
 	}
 
 	public OabaParametersEntity(OabaParameters bp) {
 		this(bp.getModelConfigurationName(), bp.getLowThreshold(), bp
-				.getHighThreshold(), bp.getQueryRsId(), bp.getQueryRsType(), bp
+				.getHighThreshold(), bp.getBlockingConfiguration(), bp
+				.getQueryRsId(), bp.getQueryRsType(), bp
 				.isQueryRsDeduplicated(), bp.getQueryRsDatabaseConfiguration(),
-				bp.getQueryToQueryBlockingConfiguration(), bp
-						.getReferenceRsId(), bp.getReferenceRsType(), bp
+				bp.getReferenceRsId(), bp.getReferenceRsType(), bp
 						.getReferenceRsDatabaseConfiguration(), bp
-						.getQueryToReferenceBlockingConfiguration(), bp
 						.getOabaLinkageType());
 	}
 
 	public OabaParametersEntity(String modelConfigurationName,
-			float lowThreshold, float highThreshold,
+			float lowThreshold, float highThreshold, String blocking,
 			PersistableRecordSource stageRs, String queryRsDbConfig,
-			String queryToQueryBlocking, PersistableRecordSource masterRs,
-			String refRsDbConfig, String queryToRefBlocking,
+			PersistableRecordSource masterRs, String refRsDbConfig,
 			OabaLinkageType taskType) {
-		this(modelConfigurationName, lowThreshold, highThreshold, stageRs,
-				OabaParametersEntity.DEFAULT_QUERY_RS_IS_DEDUPLICATED,
-				queryRsDbConfig, queryToQueryBlocking, masterRs, refRsDbConfig,
-				queryToRefBlocking, taskType);
+		this(modelConfigurationName, lowThreshold, highThreshold, blocking,
+				stageRs, OabaParametersEntity.DEFAULT_QUERY_RS_IS_DEDUPLICATED,
+				queryRsDbConfig, masterRs, refRsDbConfig, taskType);
 	}
 
 	public OabaParametersEntity(String modelConfigurationName,
-			float lowThreshold, float highThreshold,
+			float lowThreshold, float highThreshold, String blocking,
 			PersistableRecordSource stageRs, boolean isQueryDeduped,
-			String queryRsDbConfig, String queryToQueryBlocking,
-			PersistableRecordSource masterRs, String refRsDbConfig,
-			String queryToRefBlocking, OabaLinkageType taskType) {
-		this(modelConfigurationName, lowThreshold, highThreshold, stageRs
-				.getId(), stageRs.getType(), isQueryDeduped, queryRsDbConfig,
-				queryToQueryBlocking, masterRs == null ? null : masterRs
-						.getId(), masterRs == null ? null : masterRs.getType(),
-				refRsDbConfig, queryToRefBlocking, taskType);
+			String queryRsDbConfig, PersistableRecordSource masterRs,
+			String refRsDbConfig, OabaLinkageType taskType) {
+		this(modelConfigurationName, lowThreshold, highThreshold, blocking,
+				stageRs.getId(), stageRs.getType(), isQueryDeduped,
+				queryRsDbConfig, masterRs == null ? null : masterRs.getId(),
+				masterRs == null ? null : masterRs.getType(), refRsDbConfig,
+				taskType);
 	}
 
 	/**
@@ -195,19 +190,22 @@ public class OabaParametersEntity extends AbstractParametersEntity implements
 	 *            two master sources.
 	 */
 	OabaParametersEntity(String modelConfigurationName, float lowThreshold,
-			float highThreshold, long sId, String sType, boolean qIsDeduped,
-			String queryRsDbConfig, String queryToQueryBlocking, Long mId,
-			String mType, String refRsDbConfig, String queryToRefBlocking,
-			OabaLinkageType taskType) {
+			float highThreshold, String blocking, long sId, String sType,
+			boolean qIsDeduped, String queryRsDbConfig, Long mId, String mType,
+			String refRsDbConfig, OabaLinkageType taskType) {
 		super(DV_OABA, modelConfigurationName, lowThreshold, highThreshold,
-				sId, sType, qIsDeduped, queryRsDbConfig, queryToQueryBlocking,
-				mId, mType, refRsDbConfig, queryToRefBlocking, taskType, null,
-				null);
+				blocking, sId, sType, qIsDeduped, queryRsDbConfig, mId, mType,
+				refRsDbConfig, taskType, null, null);
 	}
 
 	@Override
 	public String getModelConfigurationName() {
 		return modelConfigName;
+	}
+
+	@Override
+	public String getBlockingConfiguration() {
+		return blockingConfiguration;
 	}
 
 	@Override
@@ -230,9 +228,10 @@ public class OabaParametersEntity extends AbstractParametersEntity implements
 		return queryRsDatabaseConfiguration;
 	}
 
+	@Deprecated
 	@Override
 	public String getQueryToQueryBlockingConfiguration() {
-		return queryToQueryBlockingConfiguration;
+		return null;
 	}
 
 	@Override
@@ -250,9 +249,10 @@ public class OabaParametersEntity extends AbstractParametersEntity implements
 		return referenceRsDatabaseConfiguration;
 	}
 
+	@Deprecated
 	@Override
 	public String getQueryToReferenceBlockingConfiguration() {
-		return queryToReferenceBlockingConfiguration;
+		return null;
 	}
 
 	@Override

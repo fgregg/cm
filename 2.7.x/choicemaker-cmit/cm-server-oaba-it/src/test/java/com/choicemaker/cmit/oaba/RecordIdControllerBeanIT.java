@@ -228,14 +228,12 @@ public class RecordIdControllerBeanIT {
 			c.getBlockingConfiguration();
 		final String dbConfig1 =
 			c.getReferenceDatabaseConfiguration();
-		final String blkConf1 =
-			c.getBlockingConfiguration();
 
 		final OabaParameters bp =
 			new OabaParametersEntity(c.getModelConfigurationName(), c
 					.getThresholds().getDifferThreshold(), c.getThresholds()
-					.getMatchThreshold(), staging, dbConfig0, blkConf0, master,
-					dbConfig1, blkConf1, c.getOabaTask());
+					.getMatchThreshold(), blkConf0, staging, dbConfig0, master,
+					dbConfig1, c.getOabaTask());
 		te.add(bp);
 
 		OabaSettings oabaSettings = new OabaSettingsEntity();

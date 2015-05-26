@@ -93,4 +93,14 @@ public class CombinedParametersController implements
 		return o.findParameters(id);
 	}
 
+	@Override
+	public String getQueryDatabaseConfiguration(OabaParameters oabaParams) {
+		throw new Error("not yet implemented");
+	}
+
+	@Override
+	public String getReferenceDatabaseAccessor(OabaParameters oabaParams) {
+		throw new Error("not yet implemented");
+	}
+
 }

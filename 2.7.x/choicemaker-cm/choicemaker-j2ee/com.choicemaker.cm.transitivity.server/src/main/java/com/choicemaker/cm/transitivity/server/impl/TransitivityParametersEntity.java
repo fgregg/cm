@@ -94,7 +94,7 @@ public class TransitivityParametersEntity extends AbstractParametersEntity
 			OabaParametersEntity.dump(tag, p);
 		} else {
 			final OabaLinkageType task = p.getOabaLinkageType();
-			switch(task) {
+			switch (task) {
 
 			case STAGING_DEDUPLICATION:
 			case STAGING_TO_MASTER_LINKAGE:
@@ -135,31 +135,29 @@ public class TransitivityParametersEntity extends AbstractParametersEntity
 	}
 
 	public TransitivityParametersEntity(String modelConfigurationName,
-			float differThreshold, float matchThreshold,
+			float differThreshold, float matchThreshold, String blocking,
 			PersistableRecordSource stage, String queryRsDbConfig,
 			String queryToQueryBlocking, PersistableRecordSource master,
-			String refRsDbConfig, String queryToRefBlocking, OabaLinkageType linkageType) {
-		this(modelConfigurationName, differThreshold, matchThreshold, stage,
-				DEFAULT_QUERY_RS_IS_DEDUPLICATED, queryRsDbConfig,
-				queryToQueryBlocking, master, refRsDbConfig,
-				queryToRefBlocking, linkageType, DEFAULT_RESULT_FORMAT,
+			String refRsDbConfig, String queryToRefBlocking,
+			OabaLinkageType linkageType) {
+		this(modelConfigurationName, differThreshold, matchThreshold, blocking,
+				stage, DEFAULT_QUERY_RS_IS_DEDUPLICATED, queryRsDbConfig,
+				master, refRsDbConfig, linkageType, DEFAULT_RESULT_FORMAT,
 				DEFAULT_GRAPH_PROPERTY_NAME);
 	}
 
 	public TransitivityParametersEntity(String modelConfigurationName,
-			float differThreshold, float matchThreshold,
+			float differThreshold, float matchThreshold, String blocking,
 			PersistableRecordSource stage, boolean isQueryRsDeduped,
-			String queryRsDbConfig, String queryToQueryBlocking,
-			PersistableRecordSource master, String refRsDbConfig,
-			String queryToRefBlocking, OabaLinkageType linkageType,
+			String queryRsDbConfig, PersistableRecordSource master,
+			String refRsDbConfig, OabaLinkageType linkageType,
 			AnalysisResultFormat format, String graphPropertyName) {
 		super(DV_TRANS, modelConfigurationName, differThreshold,
-				matchThreshold, stage.getId(), stage.getType(),
-				isQueryRsDeduped, queryRsDbConfig, queryToQueryBlocking,
-				master == null ? null : master.getId(), master == null ? null
-						: master.getType(), refRsDbConfig, queryToRefBlocking,
-				linkageType, format == null ? null : format.name(),
-				graphPropertyName);
+				matchThreshold, blocking, stage.getId(), stage.getType(),
+				isQueryRsDeduped, queryRsDbConfig, master == null ? null
+						: master.getId(), master == null ? null : master
+						.getType(), refRsDbConfig, linkageType,
+				format == null ? null : format.name(), graphPropertyName);
 		if (format == null) {
 			throw new IllegalArgumentException("null analysis-result format");
 		}
@@ -170,16 +168,14 @@ public class TransitivityParametersEntity extends AbstractParametersEntity
 
 	public TransitivityParametersEntity(TransitivityParameters tp) {
 		super(DV_TRANS, tp.getModelConfigurationName(), tp.getLowThreshold(),
-				tp.getHighThreshold(), tp.getQueryRsId(), tp.getQueryRsType(),
-				tp.isQueryRsDeduplicated(), tp
+				tp.getHighThreshold(), tp.getBlockingConfiguration(), tp
+						.getQueryRsId(), tp.getQueryRsType(), tp
+						.isQueryRsDeduplicated(), tp
 						.getQueryRsDatabaseConfiguration(), tp
-						.getQueryToQueryBlockingConfiguration(), tp
-						.getReferenceRsId(), tp
-						.getReferenceRsType(), tp
+						.getReferenceRsId(), tp.getReferenceRsType(), tp
 						.getReferenceRsDatabaseConfiguration(), tp
-						.getQueryToReferenceBlockingConfiguration(), tp.getOabaLinkageType(), tp
-						.getAnalysisResultFormat().name(), tp
-						.getGraphProperty().getName());
+						.getOabaLinkageType(), tp.getAnalysisResultFormat()
+						.name(), tp.getGraphProperty().getName());
 		if (tp.getGraphProperty() == null) {
 			throw new IllegalArgumentException("null graph-property");
 		}
@@ -188,14 +184,13 @@ public class TransitivityParametersEntity extends AbstractParametersEntity
 	public TransitivityParametersEntity(OabaParameters p,
 			AnalysisResultFormat format, String graphPropertyName) {
 		super(DV_TRANS, p.getModelConfigurationName(), p.getLowThreshold(), p
-				.getHighThreshold(), p.getQueryRsId(), p.getQueryRsType(), p
-				.isQueryRsDeduplicated(), p.getQueryRsDatabaseConfiguration(),
-				p.getQueryToQueryBlockingConfiguration(), p.getReferenceRsId(),
-				p.getReferenceRsType(),
-				p.getReferenceRsDatabaseConfiguration(), p
-						.getQueryToReferenceBlockingConfiguration(),
-				OabaLinkageType.transitivityAnalysis(p.getOabaLinkageType()),
-				format.name(), graphPropertyName);
+				.getHighThreshold(), p.getBlockingConfiguration(), p
+				.getQueryRsId(), p.getQueryRsType(), p.isQueryRsDeduplicated(),
+				p.getQueryRsDatabaseConfiguration(), p.getReferenceRsId(), p
+						.getReferenceRsType(), p
+						.getReferenceRsDatabaseConfiguration(), OabaLinkageType
+						.transitivityAnalysis(p.getOabaLinkageType()), format
+						.name(), graphPropertyName);
 		if (graphPropertyName == null) {
 			throw new IllegalArgumentException("null graph-property");
 		}
@@ -204,6 +199,11 @@ public class TransitivityParametersEntity extends AbstractParametersEntity
 	@Override
 	public String getModelConfigurationName() {
 		return this.modelConfigName;
+	}
+
+	@Override
+	public String getBlockingConfiguration() {
+		return this.blockingConfiguration;
 	}
 
 	@Override
@@ -226,9 +226,10 @@ public class TransitivityParametersEntity extends AbstractParametersEntity
 		return queryRsDatabaseConfiguration;
 	}
 
+	@Deprecated
 	@Override
 	public String getQueryToQueryBlockingConfiguration() {
-		return queryToQueryBlockingConfiguration;
+		return null;
 	}
 
 	@Override
@@ -246,9 +247,10 @@ public class TransitivityParametersEntity extends AbstractParametersEntity
 		return referenceRsDatabaseConfiguration;
 	}
 
+	@Deprecated
 	@Override
 	public String getQueryToReferenceBlockingConfiguration() {
-		return queryToReferenceBlockingConfiguration;
+		return null;
 	}
 
 	@Override

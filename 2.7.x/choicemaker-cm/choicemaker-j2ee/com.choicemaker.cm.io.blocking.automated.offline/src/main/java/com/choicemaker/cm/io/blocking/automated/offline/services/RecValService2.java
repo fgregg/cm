@@ -16,7 +16,6 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.logging.Logger;
 
-import com.choicemaker.cm.args.RecordAccess;
 import com.choicemaker.cm.batch.ProcessingEventLog;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
@@ -63,7 +62,8 @@ public class RecValService2 {
 	private final RecordSource master;
 	private final RecordSource stage;
 	private final ImmutableProbabilityModel model;
-	private final RecordAccess dbParams;
+	private final String blockingConfiguration;
+	private final String databaseConfiguration;
 	private final int numBlockFields;
 	private final IRecValSinkSourceFactory rvFactory;
 	private final MutableRecordIdTranslator mutableTranslator;
@@ -98,14 +98,15 @@ public class RecValService2 {
 	 *            - current status of the system
 	 */
 	public RecValService2(RecordSource stage, RecordSource master,
-			ImmutableProbabilityModel model, RecordAccess dbParams,
+			ImmutableProbabilityModel model, String blockName, String dbConf,
 			IRecValSinkSourceFactory rvFactory,
 			MutableRecordIdTranslator translator, ProcessingEventLog status) {
 
 		this.stage = stage;
 		this.master = master;
 		this.model = model;
-		this.dbParams = dbParams;
+		this.blockingConfiguration = blockName;
+		this.databaseConfiguration = dbConf;
 		this.mutableTranslator = translator;
 		this.rvFactory = rvFactory;
 		this.status = status;
@@ -114,11 +115,9 @@ public class RecValService2 {
 		// this.dbConf = dbConf;
 
 		BlockingAccessor ba = (BlockingAccessor) model.getAccessor();
-		String blockName = this.dbParams.getBlockingConfiguration();
-		String dbConf = model.getDatabaseConfigurationName();
-
 		IBlockingConfiguration bc =
-			ba.getBlockingConfiguration(blockName, dbConf);
+			ba.getBlockingConfiguration(blockingConfiguration,
+					databaseConfiguration);
 		IBlockingField[] bfs = bc.getBlockingFields();
 
 		// print blocking info
@@ -255,10 +254,10 @@ public class RecValService2 {
 				stage.setModel(model);
 				stage.open();
 
-				String blockName = this.dbParams.getBlockingConfiguration();
-				String dbConf = model.getDatabaseConfigurationName();
 				BlockingAccessor ba = (BlockingAccessor) model.getAccessor();
-				bc = ba.getBlockingConfiguration(blockName, dbConf);
+				bc =
+					ba.getBlockingConfiguration(blockingConfiguration,
+							databaseConfiguration);
 
 				while (stage.hasNext()) {
 					count++;
@@ -293,10 +292,10 @@ public class RecValService2 {
 				master.setModel(model);
 				master.open();
 
-				String blockName = this.dbParams.getBlockingConfiguration();
-				String dbConf = model.getDatabaseConfigurationName();
 				BlockingAccessor ba = (BlockingAccessor) model.getAccessor();
-				bc = ba.getBlockingConfiguration(blockName, dbConf);
+				bc =
+					ba.getBlockingConfiguration(blockingConfiguration,
+							databaseConfiguration);
 
 				while (master.hasNext()) {
 					count++;
@@ -376,9 +375,9 @@ public class RecValService2 {
 			sinks[C.intValue()].writeRecordValue((long) internal,
 					(IntArrayList) values.get(C));
 
-//			if (internal%DEBUG_INTERVAL == 0) {
-//				log.fine("id " + internal + " C " + C + " " + values.get(C));
-//			}
+			// if (internal%DEBUG_INTERVAL == 0) {
+			// log.fine("id " + internal + " C " + C + " " + values.get(C));
+			// }
 		}
 	}
 

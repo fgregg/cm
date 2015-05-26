@@ -16,7 +16,6 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.logging.Logger;
 
-import com.choicemaker.cm.args.RecordAccess;
 import com.choicemaker.cm.batch.ProcessingEventLog;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.IControl;
@@ -42,7 +41,7 @@ import com.choicemaker.util.IntArrayList;
 
 /**
  * This object performs the creation of rec_id, val_id pairs.
- * 
+ *
  * It uses input record id to internal id translation. As a result, it can use a
  * array instead of hashmap to stored the val_id's. This also uses dbField
  * instead of blocking fields to prep for swap.
@@ -72,7 +71,8 @@ public class RecValService3 {
 	private final RecordSource master;
 	private final RecordSource stage;
 	private final ImmutableProbabilityModel model;
-	private final RecordAccess dbParams;
+	private final String blockingConfiguration;
+	private final String databaseConfiguration;
 
 	private final int numBlockFields;
 
@@ -115,7 +115,7 @@ public class RecValService3 {
 	 *   Translated id 947: value hash, value hash, value hash, ...
 	 *   ...
 	 * </pre>
-	 * 
+	 *
 	 * @param queryRS
 	 *            query record source
 	 * @param refRS
@@ -136,7 +136,8 @@ public class RecValService3 {
 	 *            a controller for this service
 	 */
 	public RecValService3(RecordSource queryRS, RecordSource refRS,
-			ImmutableProbabilityModel model, RecordAccess dbParams,
+			ImmutableProbabilityModel model, String blockName,
+			String dbConf,
 			IRecValSinkSourceFactory rvFactory, IRecordIdFactory recidFactory,
 			MutableRecordIdTranslator translator, ProcessingEventLog status,
 			IControl control) {
@@ -144,7 +145,8 @@ public class RecValService3 {
 		this.stage = queryRS;
 		this.master = refRS;
 		this.model = model;
-		this.dbParams = dbParams;
+		this.blockingConfiguration = blockName;
+		this.databaseConfiguration = dbConf;
 		this.mutableTranslator = translator;
 		this.rvFactory = rvFactory;
 		this.recidFactory = recidFactory;
@@ -152,8 +154,6 @@ public class RecValService3 {
 		this.control = control;
 
 		BlockingAccessor ba = (BlockingAccessor) model.getAccessor();
-		String blockName = this.dbParams.getBlockingConfiguration();
-		String dbConf = this.model.getDatabaseConfigurationName();
 
 		IBlockingConfiguration bc =
 			ba.getBlockingConfiguration(blockName, dbConf);
@@ -209,7 +209,7 @@ public class RecValService3 {
 			log.info("Creating new rec,val files");
 			status.setCurrentProcessingEvent(OabaProcessingEvent.CREATE_REC_VAL);
 			createFiles();
-			
+
 			boolean stop = this.control.shouldStop();
 			if (!stop) {
 				status.setCurrentProcessingEvent(OabaProcessingEvent.DONE_REC_VAL);
@@ -268,11 +268,9 @@ public class RecValService3 {
 				stage.open(); // FIXME! try { stage.open(); ... } finally{
 								// stage.close(); }
 
-				String blockName = dbParams.getBlockingConfiguration();
-				String dbConf = model.getDatabaseConfigurationName();
 				BlockingAccessor ba = (BlockingAccessor) model.getAccessor();
 				IBlockingConfiguration bc =
-					ba.getBlockingConfiguration(blockName, dbConf);
+					ba.getBlockingConfiguration(blockingConfiguration, databaseConfiguration);
 
 				while (stage.hasNext() && !stop) {
 					count++;
@@ -306,11 +304,9 @@ public class RecValService3 {
 				master.open(); // FIXME! try { master.open(); ... } finally{
 								// master.close(); }
 
-				String blockName = dbParams.getBlockingConfiguration();
-				String dbConf = model.getDatabaseConfigurationName();
 				BlockingAccessor ba = (BlockingAccessor) model.getAccessor();
 				IBlockingConfiguration bc =
-					ba.getBlockingConfiguration(blockName, dbConf);
+						ba.getBlockingConfiguration(blockingConfiguration, databaseConfiguration);
 
 				// 2014-04-24 rphall: Commented out unused local variable.
 				// long lastID = Long.MIN_VALUE;

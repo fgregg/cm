@@ -14,8 +14,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import com.choicemaker.cm.args.AbaSettings;
-import com.choicemaker.cm.args.RecordAccess;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.RecordSource;
@@ -44,16 +42,6 @@ public class InMemoryAutomatedBlocker implements InMemoryBlocker {
 	// created by init().
 	private InMemoryDataSource imds;
 	private AbaStatistics abaStatistics;
-
-	public InMemoryAutomatedBlocker(ImmutableProbabilityModel model,
-			RecordAccess dbParams, AbaSettings abaSettings) {
-		this(model, abaSettings.getLimitPerBlockingSet(), abaSettings
-				.getSingleTableBlockingSetGraceLimit(), abaSettings
-				.getLimitSingleBlockingSet(), model
-				.getDatabaseConfigurationName(), dbParams
-				.getBlockingConfiguration());
-
-	}
 
 	public InMemoryAutomatedBlocker(ImmutableProbabilityModel model,
 			int limitPerBlockingSet, int singleTableBlockingSetGraceLimit,

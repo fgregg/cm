@@ -8,7 +8,6 @@ import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import com.choicemaker.cm.args.RecordAccess;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 import com.choicemaker.cm.modelmaker.gui.menus.ToolsMenu.ToolAction;
 
@@ -40,23 +39,8 @@ public class SqlServerUtilsAction extends ToolAction implements PropertyChangeLi
 
 		private static final long serialVersionUID = 271L;
 
-		private RecordAccess dbParams;
-
-		public void setDatabaseParameters(RecordAccess dbp) {
-			this.dbParams = dbp;
-		}
-
-		public RecordAccess getDatabaseParameters() {
-			return this.dbParams;
-		}
-
 		public SqlServerIdSearchAction() {
-			this(null);
-		}
-	
-		public SqlServerIdSearchAction(RecordAccess dbp) {
 			super("SQL Server Record Search...");
-			this.dbParams = dbp;
 			setEnabled(false);
 		}
 	
@@ -66,8 +50,7 @@ public class SqlServerUtilsAction extends ToolAction implements PropertyChangeLi
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			RecordAccess dbp = getDatabaseParameters();
-			new SqlServerIdSearchDialog(modelMaker,dbp).show();
+			new SqlServerIdSearchDialog(modelMaker).show();
 		}
 
 		public void propertyChange(PropertyChangeEvent evt) {

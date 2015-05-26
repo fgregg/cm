@@ -40,6 +40,8 @@ public interface AbstractParametersJPA {
 
 	String CN_HIGH_THRESHOLD = "HIGH_THRESHOLD";
 
+	String CN_BLOCKING = "BLOCKING";
+
 	String CN_QUERY_RS = "QUERY_RS_ID";
 
 	String CN_QUERY_RS_TYPE = "QUERY_RS_TYPE";

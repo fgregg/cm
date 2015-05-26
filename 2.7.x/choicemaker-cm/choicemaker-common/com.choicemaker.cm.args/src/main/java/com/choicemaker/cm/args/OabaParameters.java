@@ -34,6 +34,8 @@ public interface OabaParameters extends PersistentObject, Serializable {
 
 	float getHighThreshold();
 
+	String getBlockingConfiguration();
+
 	/** The query record source (and its id) is never null */
 	long getQueryRsId();
 

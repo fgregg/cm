@@ -27,7 +27,6 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 import com.choicemaker.cm.args.AbaSettings;
-import com.choicemaker.cm.args.RecordAccess;
 import com.choicemaker.cm.core.Accessor;
 import com.choicemaker.cm.core.Constants;
 import com.choicemaker.cm.core.DatabaseException;
@@ -265,15 +264,12 @@ public class OnlineMatchBaseBean implements SessionBean {
 			if (!modelDbrName.equals(masterCollection.getName()))
 				throw new RecordCollectionException("dbConfig should match accessProvider dbConfig attribute");
 
-			// FIXME temporary compilation hack until this class is removed
-			RecordAccess dbParams = null;
-			
 			q = getInternalRecord(model, queryRecord);
 			RecordDecisionMaker dm = new RecordDecisionMaker();
 			DatabaseAccessor databaseAccessor;
 			try {
 				// FIXME temporary compilation hack until this class is removed
-				String dbaName = dbParams.getDatabaseAccessor();
+				String dbaName = null;
 				CMExtension dbaExt =
 					CMPlatformUtils.getPluginRegistry().getExtension(
 							Single.DATABASE_ACCESSOR,
@@ -310,8 +306,8 @@ public class OnlineMatchBaseBean implements SessionBean {
 			}
 
 			String dbConfigName = masterCollection.getName();
-			String blockingConfigName = dbParams.getBlockingConfiguration();
 			// FIXME temporary HACK
+			String blockingConfigName = null;
 			AbaSettings FIXME = null;
 			// END FIXME
 			AbaStatistics stats = statsController.getStatistics(model);

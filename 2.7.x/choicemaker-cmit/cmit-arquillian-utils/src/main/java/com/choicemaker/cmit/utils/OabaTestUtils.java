@@ -123,11 +123,11 @@ public class OabaTestUtils {
 		final OabaParameters bp =
 			new OabaParametersEntity(c.getModelConfigurationName(), c
 					.getThresholds().getDifferThreshold(), c.getThresholds()
-					.getMatchThreshold(), staging,
+					.getMatchThreshold(), c.getBlockingConfiguration(), staging,
 					c.getQueryDatabaseConfiguration(),
-					c.getBlockingConfiguration(), master,
+					master,
 					c.getReferenceDatabaseConfiguration(),
-					c.getBlockingConfiguration(), c.getOabaTask());
+					c.getOabaTask());
 		te.add(bp);
 
 		final OabaService batchQuery = test.getOabaService();

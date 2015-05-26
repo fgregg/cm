@@ -15,7 +15,6 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
 
-import com.choicemaker.cm.args.RecordAccess;
 import com.choicemaker.cm.core.DatabaseException;
 // import com.choicemaker.cm.compiler.impl.CompilerFactory;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
@@ -80,22 +79,13 @@ public class SqlServerUtils {
 
 	private static ImmutableProbabilityModel lastModel;
 	private static DataSource lastDs;
-	private static String lastBlockingConfiguration;
-	private static String lastDbConfiguration;
 
 	static void maybeUpdateCounts(DataSource ds,
-			ImmutableProbabilityModel model, RecordAccess dbParams,
-			AbaStatisticsCache statsCache) throws SQLException,
-			DatabaseException {
+			ImmutableProbabilityModel model, AbaStatisticsCache statsCache)
+			throws SQLException, DatabaseException {
 
 		if (model == lastModel
 				&& ds == lastDs
-				&& lastBlockingConfiguration != null
-				&& lastBlockingConfiguration.equals(dbParams
-						.getBlockingConfiguration())
-				&& lastDbConfiguration != null
-				&& lastDbConfiguration.equals(model
-						.getDatabaseConfigurationName())
 				&& statsCache.getStatistics(model) != null) {
 
 			return;
@@ -112,8 +102,6 @@ public class SqlServerUtils {
 
 		lastModel = model;
 		lastDs = ds;
-		lastBlockingConfiguration = dbParams.getBlockingConfiguration();
-		lastDbConfiguration = model.getDatabaseConfigurationName();
 	}
 
 	/**

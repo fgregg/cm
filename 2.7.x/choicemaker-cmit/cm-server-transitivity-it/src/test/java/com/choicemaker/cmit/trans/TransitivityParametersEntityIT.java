@@ -151,13 +151,11 @@ public class TransitivityParametersEntityIT {
 			EntityManagerUtils.createRandomBlockingConfigurationName(METHOD);
 		final String dbConfig1 =
 			EntityManagerUtils.createRandomDatabaseConfigurationName(METHOD);
-		final String blkConf1 =
-			EntityManagerUtils.createRandomBlockingConfigurationName(METHOD);
 		final String v1 = EntityManagerUtils.createExternalId(METHOD);
 		OabaParameters oaba_p =
 			new OabaParametersEntity(v1, thresholds.getDifferThreshold(),
-					thresholds.getMatchThreshold(), stage, dbConfig0, blkConf0,
-					master, dbConfig1, blkConf1, task);
+					thresholds.getMatchThreshold(), blkConf0, stage, dbConfig0,
+					master, dbConfig1, task);
 		te.add(oaba_p);
 
 		// Create a set of transitivity parameters
@@ -213,14 +211,12 @@ public class TransitivityParametersEntityIT {
 			EntityManagerUtils.createRandomBlockingConfigurationName(tag);
 		final String dbConfig1 =
 			EntityManagerUtils.createRandomDatabaseConfigurationName(tag);
-		final String blkConf1 =
-			EntityManagerUtils.createRandomBlockingConfigurationName(tag);
 
 		final String v1 = EntityManagerUtils.createExternalId(tag);
 		OabaParameters oaba_p =
 			new OabaParametersEntity(v1, thresholds.getDifferThreshold(),
-					thresholds.getMatchThreshold(), stage, dbConfig0, blkConf0,
-					master, dbConfig1, blkConf1, task);
+					thresholds.getMatchThreshold(), blkConf0, stage, dbConfig0,
+					master, dbConfig1, task);
 		te.add(oaba_p);
 
 		// Create a set of transitivity parameters

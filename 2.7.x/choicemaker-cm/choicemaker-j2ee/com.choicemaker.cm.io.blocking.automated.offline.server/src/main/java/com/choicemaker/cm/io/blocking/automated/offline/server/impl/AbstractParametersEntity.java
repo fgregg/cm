@@ -1,13 +1,12 @@
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.CN_BLOCKING;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.CN_FORMAT;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.CN_GRAPH;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.CN_HIGH_THRESHOLD;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.CN_ID;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.CN_LOW_THRESHOLD;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.CN_MODEL;
-import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.CN_Q2Q_BLOCKING;
-import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.CN_Q2R_BLOCKING;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.CN_QUERY_RS;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.CN_QUERY_RS_DBCONF;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.CN_QUERY_RS_DEDUPED;
@@ -50,8 +49,10 @@ import com.choicemaker.cm.batch.impl.AbstractPersistentObject;
 import com.choicemaker.cm.core.base.ImmutableThresholds;
 
 @NamedQueries({
-@NamedQuery(name = QN_PARAMETERS_FIND_ALL, query = JPQL_PARAMETERS_FIND_ALL),
-@NamedQuery(name = QN_PARAMETERS_FIND_BY_ID, query = JPQL_PARAMETERS_FIND_BY_ID) })
+		@NamedQuery(name = QN_PARAMETERS_FIND_ALL,
+				query = JPQL_PARAMETERS_FIND_ALL),
+		@NamedQuery(name = QN_PARAMETERS_FIND_BY_ID,
+				query = JPQL_PARAMETERS_FIND_BY_ID) })
 @Entity
 @Table(/* schema = "CHOICEMAKER", */name = TABLE_NAME)
 @DiscriminatorColumn(name = DISCRIMINATOR_COLUMN,
@@ -90,6 +91,9 @@ public class AbstractParametersEntity extends AbstractPersistentObject
 	@Column(name = CN_HIGH_THRESHOLD)
 	protected final float highThreshold;
 
+	@Column(name = CN_BLOCKING)
+	protected final String blockingConfiguration;
+
 	@Column(name = CN_QUERY_RS)
 	protected final long queryRsId;
 
@@ -102,9 +106,6 @@ public class AbstractParametersEntity extends AbstractPersistentObject
 	@Column(name = CN_QUERY_RS_DBCONF)
 	protected final String queryRsDatabaseConfiguration;
 
-	@Column(name = CN_Q2Q_BLOCKING)
-	protected final String queryToQueryBlockingConfiguration;
-
 	@Column(name = CN_REFERENCE_RS)
 	protected final Long referenceRsId;
 
@@ -113,9 +114,6 @@ public class AbstractParametersEntity extends AbstractPersistentObject
 
 	@Column(name = CN_REF_RS_DBCONF)
 	protected final String referenceRsDatabaseConfiguration;
-
-	@Column(name = CN_Q2R_BLOCKING)
-	protected final String queryToReferenceBlockingConfiguration;
 
 	@Column(name = CN_TASK)
 	protected final String task;
@@ -132,15 +130,14 @@ public class AbstractParametersEntity extends AbstractPersistentObject
 		this.modelConfigName = null;
 		this.lowThreshold = INVALID_THRESHOLD;
 		this.highThreshold = INVALID_THRESHOLD;
+		this.blockingConfiguration = null;
 		this.queryRsId = NONPERSISTENT_ID;
 		this.queryRsType = null;
 		this.queryRsIsDeduplicated = false;
 		this.queryRsDatabaseConfiguration = null;
-		this.queryToQueryBlockingConfiguration = null;
 		this.referenceRsId = null;
 		this.referenceRsType = null;
 		this.referenceRsDatabaseConfiguration = null;
-		this.queryToReferenceBlockingConfiguration = null;
 		this.task = null;
 		this.format = null;
 		this.graph = null;
@@ -179,11 +176,10 @@ public class AbstractParametersEntity extends AbstractPersistentObject
 	 */
 	protected AbstractParametersEntity(String type,
 			String modelConfigurationName, float lowThreshold,
-			float highThreshold, long sId, String sType,
-			boolean qIsDeduplicated, String queryRsDbConfig,
-			String queryToQueryBlocking, Long mId, String mType,
-			String refRsDbConfig, String queryToRefBlocking,
-			OabaLinkageType taskType, String format, String graph) {
+			float highThreshold, String blocking, long sId, String sType,
+			boolean qIsDeduplicated, String queryRsDbConfig, Long mId,
+			String mType, String refRsDbConfig, OabaLinkageType taskType,
+			String format, String graph) {
 
 		if (type == null || type.trim().isEmpty()) {
 			throw new IllegalArgumentException("null or blank type");
@@ -209,7 +205,7 @@ public class AbstractParametersEntity extends AbstractPersistentObject
 		// If the type is TRANSITIVITY_ANALYSIS, the referenceRsId and the
 		// referenceRsType must be consistent with one another, but they are
 		// otherwise unconstrained.
-		switch(taskType) {
+		switch (taskType) {
 		case STAGING_DEDUPLICATION:
 		case TA_STAGING_DEDUPLICATION:
 			if (mId != null) {
@@ -252,15 +248,14 @@ public class AbstractParametersEntity extends AbstractPersistentObject
 		this.modelConfigName = modelConfigurationName.trim();
 		this.lowThreshold = lowThreshold;
 		this.highThreshold = highThreshold;
+		this.blockingConfiguration = blocking;
 		this.queryRsId = sId;
 		this.queryRsType = sType;
 		this.queryRsIsDeduplicated = qIsDeduplicated;
 		this.queryRsDatabaseConfiguration = queryRsDbConfig;
-		this.queryToQueryBlockingConfiguration = queryToQueryBlocking;
 		this.referenceRsId = mId;
 		this.referenceRsType = mType;
 		this.referenceRsDatabaseConfiguration = refRsDbConfig;
-		this.queryToReferenceBlockingConfiguration = queryToRefBlocking;
 		this.task = taskType.name();
 		this.format = format;
 		this.graph = graph;
@@ -269,9 +264,10 @@ public class AbstractParametersEntity extends AbstractPersistentObject
 	// HACK FIXME REMOVEME
 	protected AbstractParametersEntity(long persistenceId, String type,
 			String modelConfigurationName, float lowThreshold,
-			float highThreshold, long sId, String sType, boolean qIsDeduplicated,
-			String queryRsDbConfig, String queryToQueryBlocking, Long mId,
-			String mType, String refRsDbConfig, String queryToRefBlocking, OabaLinkageType taskType, String format, String graph) {
+			float highThreshold, String blocking, long sId, String sType,
+			boolean qIsDeduplicated, String queryRsDbConfig, Long mId,
+			String mType, String refRsDbConfig, OabaLinkageType taskType,
+			String format, String graph) {
 
 		if (type == null || type.trim().isEmpty()) {
 			throw new IllegalArgumentException("null or blank type");
@@ -297,7 +293,7 @@ public class AbstractParametersEntity extends AbstractPersistentObject
 		// If the type is TRANSITIVITY_ANALYSIS, the referenceRsId and the
 		// referenceRsType must be consistent with one another, but they are
 		// otherwise unconstrained.
-		switch(taskType) {
+		switch (taskType) {
 		case STAGING_DEDUPLICATION:
 		case TA_STAGING_DEDUPLICATION:
 			if (mId != null) {
@@ -341,19 +337,19 @@ public class AbstractParametersEntity extends AbstractPersistentObject
 		this.modelConfigName = modelConfigurationName.trim();
 		this.lowThreshold = lowThreshold;
 		this.highThreshold = highThreshold;
+		this.blockingConfiguration = blocking;
 		this.queryRsId = sId;
 		this.queryRsType = sType;
 		this.queryRsIsDeduplicated = qIsDeduplicated;
 		this.queryRsDatabaseConfiguration = queryRsDbConfig;
-		this.queryToQueryBlockingConfiguration = queryToQueryBlocking;
 		this.referenceRsId = mId;
 		this.referenceRsType = mType;
 		this.referenceRsDatabaseConfiguration = refRsDbConfig;
-		this.queryToReferenceBlockingConfiguration = queryToRefBlocking;
 		this.task = taskType.name();
 		this.format = format;
 		this.graph = graph;
 	}
+
 	// END HACK FIXME REMOVEME
 
 	public final long getId() {

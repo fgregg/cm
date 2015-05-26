@@ -30,6 +30,9 @@ public class SimplePersonSqlServerTestConfiguration implements
 	public static final String RECORD_SOURCE_CLASS_NAME =
 		"com.choicemaker.cm.io.db.sqlserver.SQLServerSerializableParallelSerialRecordSource";
 
+	public static final String DATABASE_ACCESSOR_PLUGIN =
+		"com.choicemaker.cm.io.db.sqlserver.sqlServerDatabaseAccessor";
+
 	public static final String DEFAULT_DATASOURCE_JNDI_NAME =
 	// "/choicemaker/urm/jdbc/ChoiceMakerBlocking";
 		"/choicemaker/urm/jdbc/ChoiceMakerEjb";
@@ -344,6 +347,11 @@ public class SimplePersonSqlServerTestConfiguration implements
 			}
 
 			@Override
+			public String getDatabaseAccessor() {
+				return null;
+			}
+
+			@Override
 			public String getUUID() {
 				return delegate.getUUID();
 			}
@@ -411,6 +419,11 @@ public class SimplePersonSqlServerTestConfiguration implements
 			@Override
 			public String getDatabaseConfiguration() {
 				return DEFAULT_DATABASE_CONFIGURATION;
+			}
+
+			@Override
+			public String getDatabaseAccessor() {
+				return DATABASE_ACCESSOR_PLUGIN;
 			}
 
 			@Override

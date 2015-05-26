@@ -22,19 +22,19 @@ public interface WellKnownTestConfiguration {
 
 	int getSingleRecordMatchingThreshold();
 
+	ImmutableThresholds getThresholds();
+
+	String getBlockingConfiguration();
+
 	PersistableRecordSource getQueryRecordSource();
 	
 	boolean isQueryRsDeduplicated();
 
 	String getQueryDatabaseConfiguration();
 
-	String getBlockingConfiguration();
-
 	PersistableRecordSource getReferenceRecordSource();
 
 	String getReferenceDatabaseConfiguration();
-
-	ImmutableThresholds getThresholds();
 
 	boolean getTransitivityAnalysisFlag();
 

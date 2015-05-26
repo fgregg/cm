@@ -26,7 +26,6 @@ import javax.ejb.MessageDriven;
 import javax.sql.DataSource;
 
 import com.choicemaker.cm.args.BatchProcessingEvent;
-import com.choicemaker.cm.args.RecordAccess;
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ProcessingEvent;
@@ -114,7 +113,7 @@ public class SingleRecordMatchMDB extends AbstractOabaMDB {
 
 	@Override
 	protected void processOabaMessage(OabaJobMessage data, BatchJob batchJob,
-			RecordAccess dbParams, OabaParameters oabaParams,
+			OabaParameters oabaParams,
 			OabaSettings oabaSettings, ProcessingEventLog processingLog,
 			ServerConfiguration serverConfig, ImmutableProbabilityModel model)
 			throws BlockingException {
@@ -127,14 +126,13 @@ public class SingleRecordMatchMDB extends AbstractOabaMDB {
 
 		// run OABA on the staging data set.
 		long t = System.currentTimeMillis();
-		handleStageBatch(mSink, batchJob, dbParams, oabaParams, oabaSettings,
+		handleStageBatch(mSink, batchJob, oabaParams, oabaSettings,
 				processingLog, serverConfig, model);
 		log.info("Msecs in dedup stage " + (System.currentTimeMillis() - t));
 
 		// run single record match between stage and master.
 		t = System.currentTimeMillis();
-		handleSingleMatching(data, mSink, batchJob, dbParams, oabaParams,
-				oabaSettings);
+		handleSingleMatching(data, mSink, batchJob, oabaParams, oabaSettings);
 		log.info("Msecs in single matching " + (System.currentTimeMillis() - t));
 
 		String cachedFileName = mSink.getInfo();
@@ -150,8 +148,7 @@ public class SingleRecordMatchMDB extends AbstractOabaMDB {
 	 * @param data
 	 */
 	private void handleStageBatch(IMatchRecord2Sink mSinkFinal,
-			BatchJob batchJob, RecordAccess dbParams,
-			OabaParameters params, OabaSettings settings,
+			BatchJob batchJob, OabaParameters params, OabaSettings settings,
 			ProcessingEventLog processingLog, ServerConfiguration serverConfig,
 			ImmutableProbabilityModel model) throws BlockingException {
 
@@ -181,8 +178,13 @@ public class SingleRecordMatchMDB extends AbstractOabaMDB {
 			log.severe(msg);
 			throw new BlockingException(msg);
 		}
+		String blockingConfiguration = params.getBlockingConfiguration();
+		String databaseConfiguration =
+			this.getParametersController()
+					.getQueryDatabaseConfiguration(params);
 		RecValService2 rvService =
-			new RecValService2(staging, null, stageModel, dbParams,
+			new RecValService2(staging, null, stageModel,
+					blockingConfiguration, databaseConfiguration,
 					OabaFileUtils.getRecValFactory(batchJob),
 					mutableTranslator, processingEntry);
 		rvService.runService();
@@ -338,8 +340,8 @@ public class SingleRecordMatchMDB extends AbstractOabaMDB {
 	 */
 	private void handleSingleMatching(OabaJobMessage data,
 			IMatchRecord2Sink mSinkFinal, BatchJob batchJob,
-			RecordAccess dbParams, OabaParameters oabaParams,
-			OabaSettings oabaSettings) throws BlockingException {
+			OabaParameters oabaParams, OabaSettings oabaSettings)
+			throws BlockingException {
 
 		final String modelConfigId = oabaParams.getModelConfigurationName();
 		ImmutableProbabilityModel model =
@@ -412,7 +414,7 @@ public class SingleRecordMatchMDB extends AbstractOabaMDB {
 			log.info("... finished caching ABA statistics for staging records.");
 		}
 
-		String dbaName = dbParams.getDatabaseAccessor();
+		String dbaName = this.getParametersController().getReferenceDatabaseAccessor(oabaParams);
 		CMExtension dbaExt =
 			CMPlatformUtils.getExtension(DATABASE_ACCESSOR, dbaName);
 		DatabaseAccessor databaseAccessor = null;
@@ -481,10 +483,11 @@ public class SingleRecordMatchMDB extends AbstractOabaMDB {
 				int limitSBS = oabaSettings.getLimitSingleBlockingSet();
 				AbaStatistics stats =
 					getAbaStatisticsController().getStatistics(model);
-				String databaseConfiguration =
-					dbParams.getDatabaseQueryConfiguration();
 				String blockingConfiguration =
-					dbParams.getBlockingConfiguration();
+					oabaParams.getBlockingConfiguration();
+				String databaseConfiguration =
+					this.getParametersController()
+							.getQueryDatabaseConfiguration(oabaParams);
 				AutomatedBlocker rs =
 					new Blocker2(databaseAccessor, model, q, limitPBS, stbsgl,
 							limitSBS, stats, databaseConfiguration,

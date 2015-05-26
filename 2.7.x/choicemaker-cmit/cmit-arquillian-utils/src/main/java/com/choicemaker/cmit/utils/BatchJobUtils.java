@@ -120,14 +120,12 @@ public class BatchJobUtils {
 			EntityManagerUtils.createRandomBlockingConfigurationName(tag);
 		final String dbConfig1 =
 			EntityManagerUtils.createRandomDatabaseConfigurationName(tag);
-		final String blkConf1 =
-			EntityManagerUtils.createRandomBlockingConfigurationName(tag);
 		OabaParametersEntity retVal =
 			new OabaParametersEntity(
 					EntityManagerUtils.createRandomModelConfigurationName(tag),
 					thresholds.getDifferThreshold(),
-					thresholds.getMatchThreshold(), stage, dbConfig0, blkConf0,
-					master, dbConfig1, blkConf1, task);
+					thresholds.getMatchThreshold(), blkConf0, stage, dbConfig0,
+					master, dbConfig1, task);
 		te.add(retVal);
 		return retVal;
 	}
