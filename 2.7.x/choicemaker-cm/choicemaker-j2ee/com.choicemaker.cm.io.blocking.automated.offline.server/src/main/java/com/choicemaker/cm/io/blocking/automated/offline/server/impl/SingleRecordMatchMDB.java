@@ -41,7 +41,6 @@ import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.base.Match;
-import com.choicemaker.cm.core.base.MatchCandidateFactory;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.core.base.RecordDecisionMaker;
 import com.choicemaker.cm.io.blocking.automated.AbaStatistics;
@@ -65,6 +64,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.impl.BlockGroup;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.BlockMatcher2;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ValidatorBase;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SqlRecordSourceController;
 import com.choicemaker.cm.io.blocking.automated.offline.services.BlockDedupService;
 import com.choicemaker.cm.io.blocking.automated.offline.services.ChunkService2;
 import com.choicemaker.cm.io.blocking.automated.offline.services.MatchDedupService2;
@@ -113,10 +114,9 @@ public class SingleRecordMatchMDB extends AbstractOabaMDB {
 
 	@Override
 	protected void processOabaMessage(OabaJobMessage data, BatchJob batchJob,
-			OabaParameters oabaParams,
-			OabaSettings oabaSettings, ProcessingEventLog processingLog,
-			ServerConfiguration serverConfig, ImmutableProbabilityModel model)
-			throws BlockingException {
+			OabaParameters oabaParams, OabaSettings oabaSettings,
+			ProcessingEventLog processingLog, ServerConfiguration serverConfig,
+			ImmutableProbabilityModel model) throws BlockingException {
 
 		log.info("Starting Single Record Match with maxSingle = "
 				+ oabaSettings.getMaxSingle());
@@ -130,10 +130,18 @@ public class SingleRecordMatchMDB extends AbstractOabaMDB {
 				processingLog, serverConfig, model);
 		log.info("Msecs in dedup stage " + (System.currentTimeMillis() - t));
 
-		// run single record match between stage and master.
-		t = System.currentTimeMillis();
-		handleSingleMatching(data, mSink, batchJob, oabaParams, oabaSettings);
-		log.info("Msecs in single matching " + (System.currentTimeMillis() - t));
+		// run single record match between query and reference (if any)
+		final SqlRecordSourceController rsCtl = getSqlRecordSourceController();
+		DataSource stageDS = rsCtl.getStageDataSource(oabaParams);
+		assert stageDS != null;
+		DataSource masterDS = rsCtl.getMasterDataSource(oabaParams);
+		if (masterDS != null) {
+			t = System.currentTimeMillis();
+			handleSingleMatching(stageDS, masterDS, data, mSink, batchJob,
+					oabaParams, oabaSettings);
+			long duration = System.currentTimeMillis() - t;
+			log.info("Msecs in single matching " + duration);
+		}
 
 		String cachedFileName = mSink.getInfo();
 		log.info("Cached results file: " + cachedFileName);
@@ -179,12 +187,16 @@ public class SingleRecordMatchMDB extends AbstractOabaMDB {
 			throw new BlockingException(msg);
 		}
 		String blockingConfiguration = params.getBlockingConfiguration();
-		String databaseConfiguration =
+		String queryConfiguration =
 			this.getParametersController()
 					.getQueryDatabaseConfiguration(params);
+		String referenceConfiguration =
+			this.getParametersController().getReferenceDatabaseConfiguration(
+					params);
 		RecValService2 rvService =
 			new RecValService2(staging, null, stageModel,
-					blockingConfiguration, databaseConfiguration,
+					blockingConfiguration, queryConfiguration,
+					referenceConfiguration,
 					OabaFileUtils.getRecValFactory(batchJob),
 					mutableTranslator, processingEntry);
 		rvService.runService();
@@ -338,102 +350,49 @@ public class SingleRecordMatchMDB extends AbstractOabaMDB {
 	 * @param data
 	 * @throws Exception
 	 */
-	private void handleSingleMatching(OabaJobMessage data,
+	private void handleSingleMatching(DataSource stageDS,
+	DataSource masterDS, OabaJobMessage data,
 			IMatchRecord2Sink mSinkFinal, BatchJob batchJob,
 			OabaParameters oabaParams, OabaSettings oabaSettings)
 			throws BlockingException {
+		
+		if (stageDS == null) {
+			throw new IllegalArgumentException("null query data source");
+		}
+		if (masterDS == null) {
+			throw new IllegalArgumentException("null reference data source");
+		}
 
 		final String modelConfigId = oabaParams.getModelConfigurationName();
-		ImmutableProbabilityModel model =
+		final ImmutableProbabilityModel model =
 			PMManager.getModelInstance(modelConfigId);
-
 		if (model == null) {
 			String msg = "Invalid probability accessProvider: " + modelConfigId;
 			log.severe(msg);
 			throw new BlockingException(msg);
 		}
 
-		// Get the data sources for ABA queries
-		DataSource stageDS = null;
-		try {
-			stageDS = getSqlRecordSourceController().getStageDataSource(oabaParams);
-		} catch (BlockingException e) {
-			String msg = "Unable to acquire data source: " + e;
-			log.severe(msg);
-			throw e;
-		}
-		assert stageDS != null;
+		final int limitPBS = oabaSettings.getLimitPerBlockingSet();
+		final int stbsgl = oabaSettings.getSingleTableBlockingSetGraceLimit();
+		final int limitSBS = oabaSettings.getLimitSingleBlockingSet();
+		final String blockingConfiguration =
+			oabaParams.getBlockingConfiguration();
 
-		DataSource masterDS = null;
-		try {
-			masterDS =
-				getSqlRecordSourceController().getMasterDataSource(oabaParams);
-		} catch (BlockingException e) {
-			String msg = "Unable to acquire data source: " + e;
-			log.severe(msg);
-			throw e;
-		}
-		// assert masterDS != null;
+		final OabaParametersController pc = getParametersController();
+		final String databaseConfiguration =
+			pc.getReferenceDatabaseConfiguration(oabaParams);
+		log.fine("DataSource : " + masterDS);
+		log.fine("DatabaseConfiguration: " + databaseConfiguration);
 
-		// Staging is used for ABA statistics only if the master source
-		// isn't being used (i.e. it is null)
-		if (masterDS != null) {
-			// Cache ABA statistics for field-value counts from master
-			log.info("Caching ABA statistic for master records..");
-			try {
-				DatabaseAbstractionManager mgr =
-					new AggregateDatabaseAbstractionManager();
-				DatabaseAbstraction dba =
-					mgr.lookupDatabaseAbstraction(masterDS);
-				DbbCountsCreator cc = new DbbCountsCreator();
-				cc.setCacheCountSources(masterDS, dba,
-						getAbaStatisticsController());
-			} catch (SQLException | DatabaseException e) {
-				String msg = "Unable to cache master ABA statistics: " + e;
-				log.severe(msg);
-				throw new BlockingException(msg);
-			}
-			log.info("... finished caching ABA statistics for master records.");
+		cacheAbaStatistics(masterDS);
+		final AbaStatistics stats =
+				getAbaStatisticsController().getStatistics(model);
 
-		} else {
-			// Cache ABA statistics for field-value counts from staging
-			log.info("Caching ABA statistic for staging records..");
-			try {
-				DatabaseAbstractionManager mgr =
-					new AggregateDatabaseAbstractionManager();
-				DatabaseAbstraction dba =
-					mgr.lookupDatabaseAbstraction(stageDS);
-				DbbCountsCreator cc = new DbbCountsCreator();
-				cc.setCacheCountSources(stageDS, dba,
-						getAbaStatisticsController());
-			} catch (SQLException | DatabaseException e) {
-				String msg = "Unable to cache staging ABA statistics: " + e;
-				log.severe(msg);
-				throw new BlockingException(msg);
-			}
-			log.info("... finished caching ABA statistics for staging records.");
-		}
-
-		String dbaName = this.getParametersController().getReferenceDatabaseAccessor(oabaParams);
-		CMExtension dbaExt =
-			CMPlatformUtils.getExtension(DATABASE_ACCESSOR, dbaName);
-		DatabaseAccessor databaseAccessor = null;
-		try {
-			databaseAccessor =
-				(DatabaseAccessor) dbaExt.getConfigurationElements()[0]
-						.createExecutableExtension("class");
-		} catch (E2Exception e) {
-			String msg = "Unable to construct database accessor: " + e;
-			log.severe(msg);
-			throw new BlockingException(msg);
-		}
-		assert databaseAccessor != null;
+		final String dbaName = getReferenceAccessorName(oabaParams);
+		log.fine("DatabaseAccessor: " + dbaName);
+		final DatabaseAccessor databaseAccessor = getReferenceAccessor(dbaName);
 		databaseAccessor.setCondition("");
-		if (masterDS != null) {
-			databaseAccessor.setDataSource(masterDS);
-		} else {
-			databaseAccessor.setDataSource(stageDS);
-		}
+		databaseAccessor.setDataSource(masterDS);
 
 		RecordSource stage = null;
 		try {
@@ -443,51 +402,17 @@ public class SingleRecordMatchMDB extends AbstractOabaMDB {
 			log.severe(msg);
 			throw new BlockingException(msg);
 		}
+		assert stage != null;
 		assert stage.getModel() == model;
-		// stage.setModel(modelId);
 
-		MatchCandidateFactory matchCandidateFactory = null;
-		try {
-			CMExtension ext =
-				CMPlatformUtils.getExtension(MATCH_CANDIDATE,
-						"com.choicemaker.cm.core.beanMatchCandidate");
-			CMConfigurationElement[] configs = ext.getConfigurationElements();
-			CMConfigurationElement config = configs[0];
-			matchCandidateFactory =
-				(MatchCandidateFactory) config
-						.createExecutableExtension("class");
-			// matchCandidateFactory = (MatchCandidateFactory)
-			// CMPlatformUtils.getExtension(
-			// MATCH_CANDIDATE,
-			// "com.choicemaker.cm.core.beanMatchCandidate")
-			// .getConfigurationElements()[0]
-			// .createExecutableExtension("class");
-		} catch (E2Exception e) {
-			String msg = "Unable to create Match Candidate factory: " + e;
-			log.severe(msg);
-			throw new BlockingException(msg);
-		}
-
-		RecordDecisionMaker dm = new RecordDecisionMaker();
+		final RecordDecisionMaker dm = new RecordDecisionMaker();
 		try {
 			log.info("Finding matches of master records to staging records...");
 			stage.open();
 			mSinkFinal.append();
-			log.fine("MatchCandidateFactory class: "
-					+ matchCandidateFactory.getClass().getName());
 
 			while (stage.hasNext()) {
 				Record q = stage.getNext();
-				int limitPBS = oabaSettings.getLimitPerBlockingSet();
-				int stbsgl = oabaSettings.getSingleTableBlockingSetGraceLimit();
-				int limitSBS = oabaSettings.getLimitSingleBlockingSet();
-				AbaStatistics stats =
-					getAbaStatisticsController().getStatistics(model);
-				String blockingConfiguration =
-					oabaParams.getBlockingConfiguration();
-				String databaseConfiguration =
-					this.getParametersController()
-							.getQueryDatabaseConfiguration(oabaParams);
 				AutomatedBlocker rs =
 					new Blocker2(databaseAccessor, model, q, limitPBS, stbsgl,
 							limitSBS, stats, databaseConfiguration,
@@ -540,6 +465,77 @@ public class SingleRecordMatchMDB extends AbstractOabaMDB {
 			getProcessingController().getProcessingLog(batchJob);
 		processingEntry.setCurrentProcessingEvent(BatchProcessingEvent.DONE);
 
+	}
+
+	/** Cache ABA statistics for field-value counts from a reference source */
+	private void cacheAbaStatistics(DataSource ds) throws BlockingException {
+		log.info("Caching ABA statistics for reference records..");
+		try {
+			DatabaseAbstractionManager mgr =
+				new AggregateDatabaseAbstractionManager();
+			DatabaseAbstraction dba = mgr.lookupDatabaseAbstraction(ds);
+			DbbCountsCreator cc = new DbbCountsCreator();
+			cc.setCacheCountSources(ds, dba, getAbaStatisticsController());
+		} catch (SQLException | DatabaseException e) {
+			String msg = "Unable to cache master ABA statistics: " + e;
+			log.severe(msg);
+			throw new BlockingException(msg);
+		}
+		log.info("... finished caching ABA statistics for reference records.");
+	}
+
+	private String getReferenceAccessorName(OabaParameters oabaParams) {
+		final OabaParametersController pc = getParametersController();
+		final String retVal;
+		retVal = pc.getReferenceDatabaseAccessor(oabaParams);
+		if (retVal == null) {
+			String msg = "Null database accessor name for reference record source";
+			log.severe(msg);
+			throw new IllegalStateException(msg);
+		}
+		log.fine("Database accessor name: " + retVal);
+		return retVal;
+	}
+
+	private DatabaseAccessor getReferenceAccessor(String dbaName)
+			throws BlockingException {
+
+		final CMExtension dbaExt =
+			CMPlatformUtils.getExtension(DATABASE_ACCESSOR, dbaName);
+		if (dbaExt == null) {
+			String msg = "null DatabaseAccessor extension for: " + dbaName;
+			log.severe(msg);
+			throw new IllegalStateException(msg);
+		}
+
+		DatabaseAccessor retVal = null;
+		try {
+			final CMConfigurationElement[] configElements =
+				dbaExt.getConfigurationElements();
+			if (configElements == null || configElements.length == 0) {
+				String msg = "No database accessor configurations: " + dbaName;
+				log.severe(msg);
+				throw new IllegalStateException(msg);
+			} else if (configElements.length != 1) {
+				String msg =
+					"Multiple database accessor configurations for " + dbaName
+							+ ": " + configElements.length;
+				log.warning(msg);
+			} else {
+				assert configElements.length == 1;
+			}
+			final CMConfigurationElement configElement = configElements[0];
+			Object o = configElement.createExecutableExtension("class");
+			assert o != null;
+			assert o instanceof DatabaseAccessor;
+			retVal = (DatabaseAccessor) o;
+		} catch (E2Exception e) {
+			String msg = "Unable to construct database accessor: " + e;
+			log.severe(msg);
+			throw new BlockingException(msg);
+		}
+		assert retVal != null;
+		return retVal;
 	}
 
 	private void sendToUpdateStatus(BatchJob job, ProcessingEvent event,

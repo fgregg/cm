@@ -72,8 +72,8 @@ public class RecValService3 {
 	private final RecordSource stage;
 	private final ImmutableProbabilityModel model;
 	private final String blockingConfiguration;
-	private final String databaseConfiguration;
-
+	private final String queryConfiguration;
+	private final String referenceConfiguration;
 	private final int numBlockFields;
 
 	private final IRecValSinkSourceFactory rvFactory;
@@ -137,7 +137,7 @@ public class RecValService3 {
 	 */
 	public RecValService3(RecordSource queryRS, RecordSource refRS,
 			ImmutableProbabilityModel model, String blockName,
-			String dbConf,
+			String queryConf, String refConf,
 			IRecValSinkSourceFactory rvFactory, IRecordIdFactory recidFactory,
 			MutableRecordIdTranslator translator, ProcessingEventLog status,
 			IControl control) {
@@ -146,27 +146,65 @@ public class RecValService3 {
 		this.master = refRS;
 		this.model = model;
 		this.blockingConfiguration = blockName;
-		this.databaseConfiguration = dbConf;
+		this.queryConfiguration = queryConf;
+		this.referenceConfiguration = refConf;
 		this.mutableTranslator = translator;
 		this.rvFactory = rvFactory;
 		this.recidFactory = recidFactory;
 		this.status = status;
 		this.control = control;
 
-		BlockingAccessor ba = (BlockingAccessor) model.getAccessor();
+		BlockingAccessor ba0 = (BlockingAccessor) model.getAccessor();
 
-		IBlockingConfiguration bc =
-			ba.getBlockingConfiguration(blockName, dbConf);
-		IBlockingField[] bfs = bc.getBlockingFields();
+		IBlockingConfiguration bc0 =
+			ba0.getBlockingConfiguration(blockingConfiguration,
+					queryConfiguration);
+		IBlockingField[] bfs0 = bc0.getBlockingFields();
 
 		// log blocking info
-		for (int i = 0; i < bfs.length; i++) {
-			IDbField field = bfs[i].getDbField();
+		for (int i = 0; i < bfs0.length; i++) {
+			IDbField field = bfs0[i].getDbField();
 			log.info("i " + i + " field " + field.getName() + " number "
 					+ field.getNumber());
 		}
 
-		this.numBlockFields = countFields(bfs);
+		this.numBlockFields = countFields(bfs0);
+
+		// Check for consistency if a master record source is specified
+		if (master != null) {
+			BlockingAccessor ba1 = (BlockingAccessor) model.getAccessor();
+			IBlockingConfiguration bc1 =
+				ba1.getBlockingConfiguration(blockingConfiguration,
+						referenceConfiguration);
+			IBlockingField[] bfs1 = bc1.getBlockingFields();
+			if (bfs1.length != bfs0.length) {
+				String msg =
+					"Different number of blocking fields for query ("
+							+ bfs0.length + ") and reference (" + bfs1.length
+							+ ") database configurations";
+				throw new IllegalArgumentException(msg);
+			}
+			for (int i = 0; i < bfs0.length; i++) {
+				IDbField field0 = bfs0[i].getDbField();
+				IDbField field1 = bfs1[i].getDbField();
+				if (field0.getNumber() != field1.getNumber()) {
+					String msg =
+						"Different field numbers at index " + i + ": field0: "
+								+ field0.getNumber() + ", field1: "
+								+ field1.getNumber();
+					throw new IllegalArgumentException(msg);
+				}
+				if (!field0.getName().equals(field1.getName())) {
+					String msg =
+						"Different field names at index " + i + ": field0: '"
+								+ field0.getName() + "', field1: '"
+								+ field1.getName() + "'";
+					throw new IllegalArgumentException(msg);
+				}
+			}
+			int numRefBlockFields = countFields(bfs1);
+			assert numRefBlockFields == this.numBlockFields;
+		}
 	}
 
 	/**
@@ -270,7 +308,8 @@ public class RecValService3 {
 
 				BlockingAccessor ba = (BlockingAccessor) model.getAccessor();
 				IBlockingConfiguration bc =
-					ba.getBlockingConfiguration(blockingConfiguration, databaseConfiguration);
+					ba.getBlockingConfiguration(blockingConfiguration,
+							queryConfiguration);
 
 				while (stage.hasNext() && !stop) {
 					count++;
@@ -306,7 +345,8 @@ public class RecValService3 {
 
 				BlockingAccessor ba = (BlockingAccessor) model.getAccessor();
 				IBlockingConfiguration bc =
-						ba.getBlockingConfiguration(blockingConfiguration, databaseConfiguration);
+					ba.getBlockingConfiguration(blockingConfiguration,
+							referenceConfiguration);
 
 				// 2014-04-24 rphall: Commented out unused local variable.
 				// long lastID = Long.MIN_VALUE;
@@ -350,6 +390,7 @@ public class RecValService3 {
 	 */
 	private void writeRecord(IBlockingConfiguration bc, Record r,
 			ImmutableProbabilityModel model) throws BlockingException {
+
 		Object O = r.getId();
 		int internal = mutableTranslator.translate((Comparable) O);
 

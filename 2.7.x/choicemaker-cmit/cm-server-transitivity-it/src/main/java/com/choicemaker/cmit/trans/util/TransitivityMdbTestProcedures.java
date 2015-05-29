@@ -2,7 +2,7 @@ package com.choicemaker.cmit.trans.util;
 
 import static com.choicemaker.cm.args.BatchProcessing.EVT_DONE;
 import static com.choicemaker.cm.args.BatchProcessing.PCT_DONE;
-import static com.choicemaker.cm.batch.impl.AbstractPersistentObject.NONPERSISTENT_ID;
+import static com.choicemaker.cm.args.PersistentObject.NONPERSISTENT_ID;
 import static com.choicemaker.cmit.utils.JmsUtils.LONG_TIMEOUT_MILLIS;
 import static com.choicemaker.cmit.utils.JmsUtils.SHORT_TIMEOUT_MILLIS;
 import static org.junit.Assert.assertTrue;

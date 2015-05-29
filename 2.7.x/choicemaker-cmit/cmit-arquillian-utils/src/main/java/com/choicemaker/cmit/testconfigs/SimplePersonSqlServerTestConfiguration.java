@@ -10,6 +10,7 @@ import com.choicemaker.cm.args.AnalysisResultFormat;
 import com.choicemaker.cm.args.OabaLinkageType;
 import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.args.PersistableSqlRecordSource;
+import com.choicemaker.cm.args.PersistentObject;
 import com.choicemaker.cm.batch.impl.AbstractPersistentObject;
 import com.choicemaker.cm.core.IProbabilityModelManager;
 import com.choicemaker.cm.core.ISerializableDbRecordSource;
@@ -306,7 +307,7 @@ public class SimplePersonSqlServerTestConfiguration implements
 
 					@Override
 					public long getId() {
-						return AbstractPersistentObject.NONPERSISTENT_ID;
+						return PersistentObject.NONPERSISTENT_ID;
 					}
 
 				};
@@ -381,7 +382,7 @@ public class SimplePersonSqlServerTestConfiguration implements
 
 					@Override
 					public long getId() {
-						return AbstractPersistentObject.NONPERSISTENT_ID;
+						return PersistentObject.NONPERSISTENT_ID;
 					}
 
 				};

@@ -1,6 +1,6 @@
 package com.choicemaker.cmit.utils;
 
-import static com.choicemaker.cm.batch.impl.AbstractPersistentObject.NONPERSISTENT_ID;
+import static com.choicemaker.cm.args.PersistentObject.NONPERSISTENT_ID;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 

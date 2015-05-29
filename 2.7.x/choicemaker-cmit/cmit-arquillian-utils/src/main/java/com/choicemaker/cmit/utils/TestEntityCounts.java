@@ -17,13 +17,13 @@ import com.choicemaker.cm.args.AbaSettings;
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.PersistableRecordSource;
+import com.choicemaker.cm.args.PersistentObject;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.batch.BatchJobController;
 import com.choicemaker.cm.batch.OperationalPropertyController;
 import com.choicemaker.cm.batch.ProcessingController;
-import com.choicemaker.cm.batch.impl.BatchJobEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.DefaultServerConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.DefaultSettings;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ImmutableRecordIdTranslatorLocal;
@@ -872,7 +872,7 @@ public class TestEntityCounts {
 			}
 			final Class<?> c = job.getClass();
 			final long jobId = job.getId();
-			if (jobId != BatchJobEntity.NONPERSISTENT_ID) {
+			if (jobId != PersistentObject.NONPERSISTENT_ID) {
 				BatchJob refresh = (BatchJob) em.find(c, jobId);
 				if (refresh != null) {
 					em.merge(refresh);

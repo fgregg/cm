@@ -53,12 +53,12 @@ public class RecordDecisionMaker {
 			long t = System.currentTimeMillis();
 			src.open();
 			t = System.currentTimeMillis() - t;
-			profiler.info("Time in Blocker.open() " + t);
+			profiler.fine("Time in Blocker.open() " + t);
 			
 			t = System.currentTimeMillis();
 			Evaluator eval = model.getEvaluator();
 			t = System.currentTimeMillis() - t;
-			profiler.info("Time in model.getEvaluator() " + t);
+			profiler.fine("Time in model.getEvaluator() " + t);
 						
 			t = System.currentTimeMillis();
 			while (src.hasNext()) {
@@ -70,13 +70,13 @@ public class RecordDecisionMaker {
 				}
 			}
 			t = System.currentTimeMillis() - t;
-			profiler.info("Time in matching " + t);
+			profiler.fine("Time in matching " + t);
 			
 		} finally {
 			src.close();
 		}
-		if (logger.isLoggable(Level.INFO)) {
-			logger.info("Number matched: " + numMatched + ", number above lower threshold: " + numAdded);
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("Number matched: " + numMatched + ", number above lower threshold: " + numAdded);
 		}
 		return matches;
 	}
@@ -100,8 +100,8 @@ public class RecordDecisionMaker {
 		} finally {
 			src.close();
 		}
-		if (logger.isLoggable(Level.INFO)) {
-			logger.info("Number matched: " + numMatched);
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("Number matched: " + numMatched);
 		}
 		return matches;
 	}

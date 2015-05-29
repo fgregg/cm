@@ -56,6 +56,7 @@ import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 import javax.persistence.TemporalType;
 
+import com.choicemaker.cm.args.PersistentObject;
 import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.batch.BatchJobRigor;
 import com.choicemaker.cm.batch.BatchJobStatus;
@@ -375,9 +376,9 @@ public abstract class BatchJobEntity extends AbstractPersistentObject implements
 	}
 
 	protected BatchJobEntity() {
-		this(DISCRIMINATOR_VALUE, NONPERSISTENT_ID, NONPERSISTENT_ID,
-				NONPERSISTENT_ID, null, randomTransactionId(),
-				NONPERSISTENT_ID, NONPERSISTENT_ID, DEFAULT_RIGOR);
+		this(DISCRIMINATOR_VALUE, PersistentObject.NONPERSISTENT_ID, PersistentObject.NONPERSISTENT_ID,
+				PersistentObject.NONPERSISTENT_ID, null, randomTransactionId(),
+				PersistentObject.NONPERSISTENT_ID, PersistentObject.NONPERSISTENT_ID, DEFAULT_RIGOR);
 	}
 
 	/**

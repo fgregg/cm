@@ -94,7 +94,7 @@ public class SqlDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 			DbAccessor dbAccessor = (DbAccessor) model.getAccessor();
 			String[] dbcNames = dbAccessor.getDbConfigurations();
 			for (int j=0; j<dbcNames.length; j++) {
-				String dbcName = dbcNames[i];
+				String dbcName = dbcNames[j];
 				createObjects(w, model, dbcName, insertGo);
 			}
 		}

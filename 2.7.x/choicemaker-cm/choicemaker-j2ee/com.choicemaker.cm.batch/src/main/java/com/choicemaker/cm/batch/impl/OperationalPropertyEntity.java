@@ -31,6 +31,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 
+import com.choicemaker.cm.args.PersistentObject;
 import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.batch.OperationalProperty;
 
@@ -79,8 +80,8 @@ public class OperationalPropertyEntity extends AbstractPersistentObject
 	// -- Constructors
 
 	protected OperationalPropertyEntity() {
-		this.id = NONPERSISTENT_ID;
-		this.jobId = NONPERSISTENT_ID;
+		this.id = PersistentObject.NONPERSISTENT_ID;
+		this.jobId = PersistentObject.NONPERSISTENT_ID;
 		this.name = INVALID_NAME;
 		this.value = INVALID_VALUE;
 	}

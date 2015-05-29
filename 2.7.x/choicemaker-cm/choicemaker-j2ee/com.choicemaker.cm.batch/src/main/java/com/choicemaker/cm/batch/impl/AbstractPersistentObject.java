@@ -26,10 +26,8 @@ import com.choicemaker.cm.args.PersistentObject;
 @MappedSuperclass
 public abstract class AbstractPersistentObject implements PersistentObject {
 
-	public static final long NONPERSISTENT_ID = 0L;
-
 	public static boolean isPersistentId(long id) {
-		return id > NONPERSISTENT_ID;
+		return id > PersistentObject.NONPERSISTENT_ID;
 	}
 
 	@Column(name = CN_UUID, unique = true, nullable = false)

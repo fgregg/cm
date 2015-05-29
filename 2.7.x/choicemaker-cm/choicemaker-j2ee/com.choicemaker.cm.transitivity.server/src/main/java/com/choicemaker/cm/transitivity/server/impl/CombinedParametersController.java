@@ -95,12 +95,22 @@ public class CombinedParametersController implements
 
 	@Override
 	public String getQueryDatabaseConfiguration(OabaParameters oabaParams) {
-		throw new Error("not yet implemented");
+		return o.getQueryDatabaseConfiguration(oabaParams);
+	}
+
+	@Override
+	public String getQueryDatabaseAccessor(OabaParameters oabaParams) {
+		return o.getQueryDatabaseAccessor(oabaParams);
+	}
+
+	@Override
+	public String getReferenceDatabaseConfiguration(OabaParameters oabaParams) {
+		return o.getReferenceDatabaseConfiguration(oabaParams);
 	}
 
 	@Override
 	public String getReferenceDatabaseAccessor(OabaParameters oabaParams) {
-		throw new Error("not yet implemented");
+		return o.getReferenceDatabaseAccessor(oabaParams);
 	}
 
 }

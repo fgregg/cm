@@ -32,6 +32,20 @@ public interface OabaParametersController {
 
 	String getQueryDatabaseConfiguration(OabaParameters oabaParams);
 
+	/**
+	 * This accessor is not currently used. Database accessors are used with
+	 * online blocking, in which single query records against a database of
+	 * reference records. There is no current need to perform online blocking of
+	 * query records against other query records.
+	 */
+	String getQueryDatabaseAccessor(OabaParameters oabaParams);
+
+	String getReferenceDatabaseConfiguration(OabaParameters oabaParams);
+
+	/**
+	 * This accessor is used to perform online blocking of single query records
+	 * against a database of reference records.
+	 */
 	String getReferenceDatabaseAccessor(OabaParameters oabaParams);
 
 }

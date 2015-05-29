@@ -24,6 +24,7 @@ import javax.persistence.NamedQuery;
 
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
+import com.choicemaker.cm.args.PersistentObject;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.batch.BatchJobRigor;
@@ -92,7 +93,7 @@ public class OabaJobEntity extends BatchJobEntity implements IControl {
 			ServerConfiguration serverConfig, BatchJob urmJob, String externalId) {
 		this(OabaJobJPA.DISCRIMINATOR_VALUE, params.getId(), settings.getId(),
 				serverConfig.getId(), externalId, randomTransactionId(),
-				NONPERSISTENT_ID, urmJob == null ? NONPERSISTENT_ID : urmJob
+				PersistentObject.NONPERSISTENT_ID, urmJob == null ? PersistentObject.NONPERSISTENT_ID : urmJob
 						.getId(), DEFAULT_RIGOR);
 	}
 
@@ -115,8 +116,8 @@ public class OabaJobEntity extends BatchJobEntity implements IControl {
 			BatchJobRigor bjr) {
 		this(OabaJobJPA.DISCRIMINATOR_VALUE, params.getId(), settings.getId(),
 				serverConfig.getId(), externalId, randomTransactionId(),
-				urmJob == null ? NONPERSISTENT_ID : urmJob
-						.getId(), NONPERSISTENT_ID, bjr);
+				urmJob == null ? PersistentObject.NONPERSISTENT_ID : urmJob
+						.getId(), PersistentObject.NONPERSISTENT_ID, bjr);
 	}
 
 	public OabaJobEntity(BatchJob o) {

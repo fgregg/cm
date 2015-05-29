@@ -13,6 +13,8 @@ package com.choicemaker.cm.args;
  */
 public interface PersistentObject {
 	
+	public static final long NONPERSISTENT_ID = 0L;
+
 	/** Physical key */
 	public long getId();
 

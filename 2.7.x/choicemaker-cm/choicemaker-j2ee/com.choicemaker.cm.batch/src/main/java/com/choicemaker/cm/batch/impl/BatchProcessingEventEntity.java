@@ -35,6 +35,7 @@ import javax.persistence.TemporalType;
 
 import com.choicemaker.cm.args.BatchProcessing;
 import com.choicemaker.cm.args.BatchProcessingEvent;
+import com.choicemaker.cm.args.PersistentObject;
 import com.choicemaker.cm.args.ProcessingEvent;
 import com.choicemaker.cm.batch.BatchJobProcessingEvent;
 
@@ -96,7 +97,7 @@ public class BatchProcessingEventEntity extends AbstractPersistentObject
 	protected final Date eventTimestamp;
 
 	protected BatchProcessingEventEntity() {
-		this.jobId = NONPERSISTENT_ID;
+		this.jobId = PersistentObject.NONPERSISTENT_ID;
 		this.type = DISCRIMINATOR_VALUE;
 		this.eventName = INVALID_EVENT_NAME;
 		this.eventSequenceNumber = INVALID_EVENT_SEQNUM;
@@ -107,7 +108,7 @@ public class BatchProcessingEventEntity extends AbstractPersistentObject
 
 	protected BatchProcessingEventEntity(long jobId, String type, String evtName,
 			int eventSeqNum, float fractionComplete, String info) {
-		if (jobId == NONPERSISTENT_ID) {
+		if (jobId == PersistentObject.NONPERSISTENT_ID) {
 			throw new IllegalArgumentException("invalid jobId: " + jobId);
 		}
 		if (type == null || !type.equals(type.trim()) || type.isEmpty()) {

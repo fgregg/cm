@@ -101,6 +101,22 @@ public class Blocker2 implements AutomatedBlocker {
 		String blockingConfigurationName) {
 		
 		final String METHOD = "Blocker2.<init>: ";
+		if (databaseAccessor == null) {
+			String msg = METHOD + "null database accessor";
+			throw new IllegalArgumentException(msg);
+		}
+		if (model == null) {
+			String msg = METHOD + "null model";
+			throw new IllegalArgumentException(msg);
+		}
+		if (q == null) {
+			String msg = METHOD + "null record";
+			throw new IllegalArgumentException(msg);
+		}
+		if (abaStatistics == null) {
+			String msg = METHOD + "null ABA statistics";
+			throw new IllegalArgumentException(msg);
+		}
 		if (databaseAccessor == null || model == null || q == null
 				|| abaStatistics == null) {
 			String msg = METHOD + "null constructor argument";
@@ -108,13 +124,18 @@ public class Blocker2 implements AutomatedBlocker {
 		}
 		if (limitPerBlockingSet <= 0 || singleTableBlockingSetGraceLimit <= 0
 				|| limitSingleBlockingSet <= 0 ) {
-			String msg = "non-positive blocking limit";
+			String msg =
+				"non-positive blocking limit: limitPerBlockingSet="
+						+ limitPerBlockingSet
+						+ ", singleTableBlockingSetGraceLimit="
+						+ singleTableBlockingSetGraceLimit
+						+ ", limitSingleBlockingSet=" + limitSingleBlockingSet;
 			throw new IllegalArgumentException(msg);
 		}
 		if (dbConfigurationName == null || dbConfigurationName.isEmpty()
 				|| blockingConfigurationName == null
 				|| blockingConfigurationName.isEmpty()) {
-			String msg = "null or blank configuration name";
+			String msg = "null or blank database configuration name";
 			throw new IllegalArgumentException(msg);
 		}
 

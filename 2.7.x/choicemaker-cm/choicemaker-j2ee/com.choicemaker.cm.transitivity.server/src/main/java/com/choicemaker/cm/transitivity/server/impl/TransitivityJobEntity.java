@@ -24,6 +24,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
 import com.choicemaker.cm.args.OabaSettings;
+import com.choicemaker.cm.args.PersistentObject;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.BatchJob;
@@ -64,7 +65,7 @@ public class TransitivityJobEntity extends BatchJobEntity implements IControl {
 			BatchJob urmJob, String externalId) {
 		this(DISCRIMINATOR_VALUE, params.getId(), settings.getId(), sc.getId(),
 				externalId, randomTransactionId(), parent.getId(),
-				urmJob == null ? NONPERSISTENT_ID : urmJob.getId(),
+				urmJob == null ? PersistentObject.NONPERSISTENT_ID : urmJob.getId(),
 				BatchJob.DEFAULT_RIGOR);
 	}
 
@@ -73,7 +74,7 @@ public class TransitivityJobEntity extends BatchJobEntity implements IControl {
 			BatchJob urmJob, String externalId, BatchJobRigor bjr) {
 		this(DISCRIMINATOR_VALUE, params.getId(), settings.getId(), sc.getId(),
 				externalId, randomTransactionId(), parent.getId(),
-				urmJob == null ? NONPERSISTENT_ID : urmJob.getId(), bjr);
+				urmJob == null ? PersistentObject.NONPERSISTENT_ID : urmJob.getId(), bjr);
 	}
 
 	public TransitivityJobEntity(BatchJob o) {

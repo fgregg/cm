@@ -63,13 +63,14 @@ public class RecValService2 {
 	private final RecordSource stage;
 	private final ImmutableProbabilityModel model;
 	private final String blockingConfiguration;
-	private final String databaseConfiguration;
+	private final String queryConfiguration;
+	private final String referenceConfiguration;
 	private final int numBlockFields;
+
 	private final IRecValSinkSourceFactory rvFactory;
 	private final MutableRecordIdTranslator mutableTranslator;
 	private final ProcessingEventLog status;
 
-	private IBlockingConfiguration bc;
 	private IRecValSink[] sinks;
 	private int stageType = -1;
 	private boolean firstStage = true;
@@ -98,7 +99,8 @@ public class RecValService2 {
 	 *            - current status of the system
 	 */
 	public RecValService2(RecordSource stage, RecordSource master,
-			ImmutableProbabilityModel model, String blockName, String dbConf,
+			ImmutableProbabilityModel model, String blockName,
+			String queryConf, String refConf,
 			IRecValSinkSourceFactory rvFactory,
 			MutableRecordIdTranslator translator, ProcessingEventLog status) {
 
@@ -106,30 +108,63 @@ public class RecValService2 {
 		this.master = master;
 		this.model = model;
 		this.blockingConfiguration = blockName;
-		this.databaseConfiguration = dbConf;
+		this.queryConfiguration = queryConf;
+		this.referenceConfiguration = refConf;
 		this.mutableTranslator = translator;
 		this.rvFactory = rvFactory;
 		this.status = status;
 
-		// this.blockName = blockName;
-		// this.dbConf = dbConf;
+		BlockingAccessor ba0 = (BlockingAccessor) model.getAccessor();
 
-		BlockingAccessor ba = (BlockingAccessor) model.getAccessor();
-		IBlockingConfiguration bc =
-			ba.getBlockingConfiguration(blockingConfiguration,
-					databaseConfiguration);
-		IBlockingField[] bfs = bc.getBlockingFields();
+		IBlockingConfiguration bc0 =
+			ba0.getBlockingConfiguration(blockingConfiguration,
+					queryConfiguration);
+		IBlockingField[] bfs0 = bc0.getBlockingFields();
 
-		// print blocking info
-		for (int i = 0; i < bfs.length; i++) {
-			IDbField field = bfs[i].getDbField();
+		// log blocking info
+		for (int i = 0; i < bfs0.length; i++) {
+			IDbField field = bfs0[i].getDbField();
 			log.info("i " + i + " field " + field.getName() + " number "
 					+ field.getNumber());
 		}
 
-		this.numBlockFields = countFields(bfs);
+		this.numBlockFields = countFields(bfs0);
 
-		// System.out.println ("Numfields " + numBlockFields);
+		// Check for consistency if a master record source is specified
+		if (master != null) {
+			BlockingAccessor ba1 = (BlockingAccessor) model.getAccessor();
+			IBlockingConfiguration bc1 =
+				ba1.getBlockingConfiguration(blockingConfiguration,
+						referenceConfiguration);
+			IBlockingField[] bfs1 = bc1.getBlockingFields();
+			if (bfs1.length != bfs0.length) {
+				String msg =
+					"Different number of blocking fields for query ("
+							+ bfs0.length + ") and reference (" + bfs1.length
+							+ ") database configurations";
+				throw new IllegalArgumentException(msg);
+			}
+			for (int i = 0; i < bfs0.length; i++) {
+				IDbField field0 = bfs0[i].getDbField();
+				IDbField field1 = bfs1[i].getDbField();
+				if (field0.getNumber() != field1.getNumber()) {
+					String msg =
+						"Different field numbers at index " + i + ": field0: "
+								+ field0.getNumber() + ", field1: "
+								+ field1.getNumber();
+					throw new IllegalArgumentException(msg);
+				}
+				if (!field0.getName().equals(field1.getName())) {
+					String msg =
+						"Different field names at index " + i + ": field0: '"
+								+ field0.getName() + "', field1: '"
+								+ field1.getName() + "'";
+					throw new IllegalArgumentException(msg);
+				}
+			}
+			int numRefBlockFields = countFields(bfs1);
+			assert numRefBlockFields == this.numBlockFields;
+		}
 	}
 
 	/**
@@ -255,9 +290,9 @@ public class RecValService2 {
 				stage.open();
 
 				BlockingAccessor ba = (BlockingAccessor) model.getAccessor();
-				bc =
+				IBlockingConfiguration bc =
 					ba.getBlockingConfiguration(blockingConfiguration,
-							databaseConfiguration);
+							queryConfiguration);
 
 				while (stage.hasNext()) {
 					count++;
@@ -268,7 +303,7 @@ public class RecValService2 {
 					if (count % INTERVAL == 0)
 						MemoryEstimator.writeMem();
 
-					writeRecord(r, model);
+					writeRecord(bc, r, model);
 
 					// This checks the id type
 					if (firstStage) {
@@ -293,9 +328,9 @@ public class RecValService2 {
 				master.open();
 
 				BlockingAccessor ba = (BlockingAccessor) model.getAccessor();
-				bc =
+				IBlockingConfiguration bc =
 					ba.getBlockingConfiguration(blockingConfiguration,
-							databaseConfiguration);
+							referenceConfiguration);
 
 				while (master.hasNext()) {
 					count++;
@@ -304,7 +339,7 @@ public class RecValService2 {
 					if (count % INTERVAL == 0)
 						MemoryEstimator.writeMem();
 
-					writeRecord(r, model);
+					writeRecord(bc, r, model);
 
 					if (firstMaster) {
 						firstMaster = false;
@@ -331,8 +366,8 @@ public class RecValService2 {
 	 * This method writes 1 record's rec_id and val_id.
 	 *
 	 */
-	private void writeRecord(Record r, ImmutableProbabilityModel model)
-			throws BlockingException {
+	private void writeRecord(IBlockingConfiguration bc, Record r,
+			ImmutableProbabilityModel model) throws BlockingException {
 
 		Object O = r.getId();
 		int internal = mutableTranslator.translate((Comparable) O);

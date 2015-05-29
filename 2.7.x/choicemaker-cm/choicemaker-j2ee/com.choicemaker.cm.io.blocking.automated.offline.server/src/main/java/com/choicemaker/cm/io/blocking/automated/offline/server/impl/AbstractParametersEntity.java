@@ -45,6 +45,7 @@ import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 
 import com.choicemaker.cm.args.OabaLinkageType;
+import com.choicemaker.cm.args.PersistentObject;
 import com.choicemaker.cm.batch.impl.AbstractPersistentObject;
 import com.choicemaker.cm.core.base.ImmutableThresholds;
 
@@ -131,7 +132,7 @@ public class AbstractParametersEntity extends AbstractPersistentObject
 		this.lowThreshold = INVALID_THRESHOLD;
 		this.highThreshold = INVALID_THRESHOLD;
 		this.blockingConfiguration = null;
-		this.queryRsId = NONPERSISTENT_ID;
+		this.queryRsId = PersistentObject.NONPERSISTENT_ID;
 		this.queryRsType = null;
 		this.queryRsIsDeduplicated = false;
 		this.queryRsDatabaseConfiguration = null;

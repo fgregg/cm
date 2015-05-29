@@ -25,6 +25,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import com.choicemaker.cm.args.PersistentObject;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.batch.OperationalProperty;
@@ -160,10 +161,10 @@ public class OperationalPropertyControllerBeanIT {
 
 		OabaJobEntity _job = createEphemeralOabaJobEntity(te, METHOD, true);
 		assertTrue(_job != null);
-		assertTrue(_job.getId() == OabaJobEntity.NONPERSISTENT_ID);
+		assertTrue(_job.getId() == PersistentObject.NONPERSISTENT_ID);
 		BatchJob job = oabaController.save(_job);
 		final long jobId = job.getId();
-		assertTrue(jobId != OabaJobEntity.NONPERSISTENT_ID);
+		assertTrue(jobId != PersistentObject.NONPERSISTENT_ID);
 
 		Set<String> _expectedNames = new LinkedHashSet<>();
 		Set<String> _expectedValues = new LinkedHashSet<>();

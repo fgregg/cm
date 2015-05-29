@@ -174,15 +174,20 @@ public class StartOabaMDB extends AbstractOabaMDB {
 					// create rec_id, val_id files
 					String blockingConfiguration =
 						oabaParams.getBlockingConfiguration();
-					String databaseConfiguration =
+					String queryConfiguration =
 						this.getParametersController()
 								.getQueryDatabaseConfiguration(oabaParams);
+					String referenceConfiguration =
+							this.getParametersController()
+									.getReferenceDatabaseConfiguration(oabaParams);
 					RecValSinkSourceFactory recvalFactory =
 						OabaFileUtils.getRecValFactory(batchJob);
 					RecValService3 rvService =
 						new RecValService3(staging, master, model,
-								blockingConfiguration, databaseConfiguration,								recvalFactory, getRecordIdController(),
-								translator, processingEntry, batchJob);
+								blockingConfiguration, queryConfiguration,
+								referenceConfiguration, recvalFactory,
+								getRecordIdController(), translator,
+								processingEntry, batchJob);
 					rvService.runService();
 					getLogger().info(
 							"Done creating rec_id, val_id files: "
