@@ -1,0 +1,187 @@
+<?xml version="1.0"?>
+<project
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+  xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+>
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.choicemaker.cm</groupId>
+    <artifactId>choicemaker-base</artifactId>
+    <version>2.7.1-SNAPSHOT</version>
+    <relativePath>../../choicemaker-base/pom.xml</relativePath>
+  </parent>
+
+  <groupId>com.choicemaker.cmit</groupId>
+  <artifactId>cmit-objectmakers</artifactId>
+ 
+  <name>Integration Test: ObjectMaker Plugins</name>
+  <description><![CDATA[
+  Integration test for plugins providing ObjectMaker extensions
+  ]]></description>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <eclipse.application.dir>${project.build.testOutputDirectory}/eclipse.application.dir</eclipse.application.dir>
+    <eclipse.application.examples.dir>${eclipse.application.dir}/examples</eclipse.application.examples.dir>
+    <!-- <eclipse.application.examples.dir>${project.build.testOutputDirectory}</eclipse.application.examples.dir> -->
+  </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <compilerVersion>1.7</compilerVersion>
+          <source>1.7</source>
+          <target>1.7</target>
+          <compilerArgument>-g</compilerArgument>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>examples</id>
+            <phase>pre-integration-test</phase>
+            <goals>
+              <goal>unpack-dependencies</goal>
+            </goals>
+            <configuration>
+              <includeArtifactIds>simple_person_matching</includeArtifactIds>
+              <excludeTransitive>true</excludeTransitive>
+              <outputDirectory>${eclipse.application.examples.dir}</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>integration-test</goal>
+              <goal>verify</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.choicemaker.e2</groupId>
+      <artifactId>com.choicemaker.e2</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.e2</groupId>
+      <artifactId>com.choicemaker.e2.embed</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.e2it</groupId>
+      <artifactId>com.choicemaker.e2it</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>simple_person_matching</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>org.eclipse.core.boot</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.compiler</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.core</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>
+      com.choicemaker.cm.io.blocking.automated.base</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>
+      com.choicemaker.cm.io.blocking.automated.inmemory</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.io.blocking.base</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>
+      com.choicemaker.cm.io.blocking.exact.base</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.io.composite.base</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.io.db.base</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.io.db.sqlserver</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.io.flatfile.base</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.io.xml.base</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.sun.tools</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>org.apache.ant</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>org.apache.bcel</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>org.jdom</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+  </dependencies>
+
+</project>
