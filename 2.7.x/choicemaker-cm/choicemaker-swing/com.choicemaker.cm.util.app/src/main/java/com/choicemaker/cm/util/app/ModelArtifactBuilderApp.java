@@ -63,7 +63,7 @@ public class ModelArtifactBuilderApp implements CMPlatformRunnable {
 	 *            <li>-conf &lt;<em>path to a configuration file</em>&gt>;<br>
 	 *            e.g.
 	 *            <code>-conf C:/eclipse/workspace/projects/citeseer/project.xml</code>
-	 *            <li>
+	 *            </li>
 	 *            </ul>
 	 *            Another is optional:
 	 *            <ul>
@@ -144,7 +144,7 @@ public class ModelArtifactBuilderApp implements CMPlatformRunnable {
 	 *            <li>-conf &lt;<em>path to a configuration file</em>&gt>;<br>
 	 *            e.g.
 	 *            <code>-conf C:/eclipse/workspace/projects/citeseer/project.xml</code>
-	 *            <li>
+	 *            </li>
 	 *            </ul>
 	 *            Another is optional:
 	 *            <ul>

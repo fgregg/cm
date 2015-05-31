@@ -11,10 +11,6 @@ import com.choicemaker.cm.core.compiler.CompilationArguments;
 import com.choicemaker.cm.core.compiler.ICompiler;
 import com.choicemaker.cm.core.compiler.InstallableCompiler;
 
-/**
- * Hello world!
- *
- */
 public class Main {
 
 	public static final int ARG_CONFIGURATION_FILE = 0;
