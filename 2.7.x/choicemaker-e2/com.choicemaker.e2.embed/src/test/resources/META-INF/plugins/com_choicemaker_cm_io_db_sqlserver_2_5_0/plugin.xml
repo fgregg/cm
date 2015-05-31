@@ -38,8 +38,8 @@
       </application>
    </extension>
    <extension
-         id="sqlServer"
-         name="sqlServer"
+         id="sqlServerDatabaseAccessor"
+         name="sqlServerDatabaseAccessor"
          point="com.choicemaker.cm.io.blocking.automated.base.databaseAccessor">
       <databaseAccessor
             class="com.choicemaker.cm.io.db.sqlserver.blocking.SqlDatabaseAccessor">

@@ -18,22 +18,14 @@
          id="Model1"
          point="com.choicemaker.cm.core.modelConfiguration">
       <modelConfiguration
-         model="etc/models/SimplePerson.model"
-         databaseAbstraction="com.choicemaker.cm.io.db.sqlserver.sqlServerDatabaseAbstraction"
-         databaseAccessor="com.choicemaker.cm.io.db.sqlserver.sqlServerDatabaseAccessor"
-         databaseConfiguration="default"
-         blockingConfiguration="defaultAutomated"/>
+         model="etc/models/SimplePerson.model"/>
    </extension>
 
    <extension
          id="Model2"
          point="com.choicemaker.cm.core.modelConfiguration">
       <modelConfiguration
-         model="etc/models/SimplePerson2.model"
-         databaseAbstraction="com.choicemaker.cm.io.db.oracle.oracleDatabaseAbstraction"
-         databaseAccessor="com.choicemaker.cm.io.db.oracle.oracleDatabaseAccessor"
-         databaseConfiguration="default"
-         blockingConfiguration="defaultAutomated"/>
+         model="etc/models/SimplePerson2.model"/>
    </extension>
 
 </plugin>

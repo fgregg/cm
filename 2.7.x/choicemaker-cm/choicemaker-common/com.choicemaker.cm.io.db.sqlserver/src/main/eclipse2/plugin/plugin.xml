@@ -20,7 +20,7 @@
 
 
    <extension
-         id="SqlDbObjectMaker"
+         id="SqlDbObjectMakerApp"
          point="com.choicemaker.e2.applications">
       <application>
          <run
@@ -29,19 +29,12 @@
       </application>
    </extension>
    <extension
+         id="sqlDbObjectMaker"
          point="com.choicemaker.cm.core.objectGenerator">
       <generator
             description="SQL Server Custom Objects (DDL)"
             class="com.choicemaker.cm.io.db.sqlserver.dbom.SqlDbObjectMaker">
       </generator>
-   </extension>
-   <extension
-         id="sqlServer"
-         name="sqlServer"
-         point="com.choicemaker.cm.io.blocking.automated.base.databaseAccessor">
-      <databaseAccessor
-            class="com.choicemaker.cm.io.db.sqlserver.blocking.SqlDatabaseAccessor">
-      </databaseAccessor>
    </extension>
    <extension
          id="sqlServerDatabaseAccessor"
