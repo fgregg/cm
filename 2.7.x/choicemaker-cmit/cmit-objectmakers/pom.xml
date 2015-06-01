@@ -89,7 +89,7 @@
 
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
-      <artifactId>simple_person_matching</artifactId>
+      <artifactId>simple-person-plugin</artifactId>
     </dependency>
 
     <dependency>
@@ -97,6 +97,11 @@
       <artifactId>org.eclipse.core.boot</artifactId>
     </dependency>
 
+    <dependency>
+      <groupId>org.apache.maven.shared</groupId>
+      <artifactId>maven-verifier</artifactId>
+      <version>1.2</version>
+    </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
@@ -113,6 +118,17 @@
       <artifactId>com.choicemaker.cm.core</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.ml.me.base</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cmit</groupId>
+      <artifactId>cmit-utils</artifactId>
+      <scope>test</scope>
+    </dependency>
+
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>

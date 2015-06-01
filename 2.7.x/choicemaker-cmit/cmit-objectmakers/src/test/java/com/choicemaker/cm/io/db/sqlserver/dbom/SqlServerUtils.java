@@ -37,18 +37,19 @@ class SqlServerUtils {
 		CMExtension extension =
 			CMPlatformUtils.getExtension(CM_CORE_OBJECTGENERATOR, uid);
 		CMConfigurationElement[] els = extension.getConfigurationElements();
-		List<ObjectMaker> sqlServerMakers = new ArrayList<>();
+		List<ObjectMaker> makers = new ArrayList<>();
 		for (CMConfigurationElement element : els) {
 			try {
 				Object o = element.createExecutableExtension("class");
 				assertTrue(o instanceof ObjectMaker);
 				ObjectMaker maker = (ObjectMaker) o;
+				makers.add(maker);
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
 		}
-		assertTrue(EXPECTED_OBJECTGENERATOR_COUNT == sqlServerMakers.size());
-		ObjectMaker retVal = sqlServerMakers.get(0);
+		assertTrue(EXPECTED_OBJECTGENERATOR_COUNT == makers.size());
+		ObjectMaker retVal = makers.get(0);
 		return retVal;
 	}
 

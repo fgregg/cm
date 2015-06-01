@@ -1,0 +1,14 @@
+DELETE FROM TB_CMT_CURSORS WHERE config = 'Person:r:default';
+DELETE FROM TB_CMT_CONFIG WHERE config = 'Person:r:default';
+INSERT INTO TB_CMT_CONFIG VALUES('Person:r:default', 'MASTERID', 'record_id');
+CREATE OR REPLACE VIEW vw_cmt_Person_r_default0 AS SELECT person.linkage_role,person.entity_id,person.record_id,person.ssn,person.first_name,person.middle_name,person.last_name,person.street_number,person.street_name,person.apartment_number,person.city,person.state_code,person.zip_code FROM person;
+INSERT INTO TB_CMT_CURSORS VALUES('Person:r:default','SELECT /*+ RULE */ * FROM vw_cmt_Person_r_default0 WHERE record_id IN (SELECT ID FROM tb_cmt_temp_ids)', 'SELECT * FROM vw_cmt_Person_r_default0 WHERE record_id IN ','','D',1);
+DELETE FROM tb_cmt_config WHERE Config='Person:b:defaultAutomated:default' AND Name='MASTERID';
+INSERT INTO tb_cmt_config (Config, Name, Value) VALUES('Person:b:defaultAutomated:default','MASTERID','record_id');
+DELETE FROM TB_CMT_CURSORS WHERE config = 'Person2:r:default';
+DELETE FROM TB_CMT_CONFIG WHERE config = 'Person2:r:default';
+INSERT INTO TB_CMT_CONFIG VALUES('Person2:r:default', 'MASTERID', 'record_id');
+CREATE OR REPLACE VIEW vw_cmt_Person2_r_default0 AS SELECT person.linkage_role,person.entity_id,person.record_id,person.ssn,person.first_name,person.middle_name,person.last_name,person.street_number,person.street_name,person.apartment_number,person.city,person.state_code,person.zip_code FROM person;
+INSERT INTO TB_CMT_CURSORS VALUES('Person2:r:default','SELECT /*+ RULE */ * FROM vw_cmt_Person2_r_default0 WHERE record_id IN (SELECT ID FROM tb_cmt_temp_ids)', 'SELECT * FROM vw_cmt_Person2_r_default0 WHERE record_id IN ','','D',1);
+DELETE FROM tb_cmt_config WHERE Config='Person2:b:defaultAutomated:default' AND Name='MASTERID';
+INSERT INTO tb_cmt_config (Config, Name, Value) VALUES('Person2:b:defaultAutomated:default','MASTERID','record_id');

@@ -1,0 +1,12 @@
+IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'vw_cmt_Person_r_default0') DROP VIEW vw_cmt_Person_r_default0
+Go
+CREATE VIEW dbo.vw_cmt_Person_r_default0 AS SELECT person.linkage_role,person.entity_id,person.record_id,person.ssn,person.first_name,person.middle_name,person.last_name,person.street_number,person.street_name,person.apartment_number,person.city,person.state_code,person.zip_code FROM person
+Go
+IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'vw_cmt_Person_r_default0') DROP VIEW vw_cmt_Person_r_default0
+Go
+CREATE VIEW dbo.vw_cmt_Person_r_default0 AS SELECT person.linkage_role,person.entity_id,person.record_id,person.ssn,person.first_name,person.middle_name,person.last_name,person.street_number,person.street_name,person.apartment_number,person.city,person.state_code,person.zip_code FROM person
+Go
+IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'vw_cmt_Person2_r_default0') DROP VIEW vw_cmt_Person2_r_default0
+Go
+CREATE VIEW dbo.vw_cmt_Person2_r_default0 AS SELECT person.linkage_role,person.entity_id,person.record_id,person.ssn,person.first_name,person.middle_name,person.last_name,person.street_number,person.street_name,person.apartment_number,person.city,person.state_code,person.zip_code FROM person
+Go
