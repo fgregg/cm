@@ -24,6 +24,7 @@ import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.core.compiler.ICompiler;
 import com.choicemaker.cm.core.util.CommandLineArguments;
+import com.choicemaker.cm.core.util.ModelUtils;
 import com.choicemaker.cm.core.util.ObjectMaker;
 import com.choicemaker.cm.core.xmlconf.ProbabilityModelsXmlConf;
 import com.choicemaker.cm.core.xmlconf.XmlConfigurator;
@@ -73,6 +74,10 @@ public class DbDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 		Set alreadyHandledRetrieval = new HashSet();
 		Set alreadyHandledBlocking = new HashSet();
 		ImmutableProbabilityModel[] iModels = PMManager.getModels();
+
+		// This sort makes the output repeatable, independent of plugin order
+		ModelUtils.sort(iModels);
+
 		for (int i = 0; i < iModels.length; i++) {
 			ImmutableProbabilityModel model = iModels[i];
 			final DbAccessor dbAccessor = (DbAccessor) model.getAccessor();
