@@ -31,8 +31,6 @@ public class TransitivityDeploymentUtils {
 				+ "|com.choicemaker.e2.ejb.*.jar"
 				+ "|com.choicemaker.cm.batch.*.jar"
 				+ "|com.choicemaker.cm.transitivity.server.*.jar"
-//				+ "|cmit-server-oaba-it.*.jar"
-//				+ "|cmit-server-transitivity-it.*.jar"
 	;
 
 	public static final String[] removedPaths(Class<?>[] removedClasses) {

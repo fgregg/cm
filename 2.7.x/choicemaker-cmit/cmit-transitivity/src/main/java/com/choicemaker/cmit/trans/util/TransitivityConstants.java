@@ -6,7 +6,7 @@ public class TransitivityConstants {
 		"src/test/resources/jboss/sqlserver/persistence.xml";
 
 	public static final String CURRENT_MAVEN_COORDINATES =
-		"com.choicemaker.cmit:cmit-server-transitivity-it:2.7.1-SNAPSHOT";
+		"com.choicemaker.cmit:cmit-transitivity:2.7.1-SNAPSHOT";
 
 	private TransitivityConstants() {
 	}
