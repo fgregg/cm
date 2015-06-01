@@ -19,7 +19,7 @@ import com.choicemaker.cm.core.base.DefaultProbabilityModelManager;
 import com.choicemaker.cm.core.base.ImmutableThresholds;
 import com.choicemaker.cm.core.base.Thresholds;
 import com.choicemaker.cm.io.db.sqlserver.SQLServerSerializableParallelSerialRecordSource;
-import com.choicemaker.cmit.utils.WellKnownTestConfiguration;
+import com.choicemaker.cmit.utils.j2ee.WellKnownTestConfiguration;
 import com.choicemaker.e2.CMPluginRegistry;
 
 public class SimplePersonSqlServerTestConfiguration implements

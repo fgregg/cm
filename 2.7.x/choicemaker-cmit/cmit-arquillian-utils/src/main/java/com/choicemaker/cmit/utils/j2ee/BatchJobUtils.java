@@ -1,4 +1,4 @@
-package com.choicemaker.cmit.utils;
+package com.choicemaker.cmit.utils.j2ee;
 
 import static com.choicemaker.cm.args.AbaSettings.DEFAULT_LIMIT_PER_BLOCKING_SET;
 import static com.choicemaker.cm.args.AbaSettings.DEFAULT_LIMIT_SINGLE_BLOCKING_SET;

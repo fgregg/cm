@@ -1,4 +1,4 @@
-package com.choicemaker.cmit.utils;
+package com.choicemaker.cmit.utils.j2ee;
 
 import java.beans.PropertyChangeListener;
 import java.io.IOException;

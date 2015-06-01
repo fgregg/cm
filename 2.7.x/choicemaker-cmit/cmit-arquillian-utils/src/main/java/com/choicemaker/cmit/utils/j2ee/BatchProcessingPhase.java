@@ -1,4 +1,4 @@
-package com.choicemaker.cmit.utils;
+package com.choicemaker.cmit.utils.j2ee;
 
 public enum BatchProcessingPhase {
 	INITIAL(true), INTERMEDIATE(true), FINAL(false);

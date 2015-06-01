@@ -54,9 +54,9 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.impl.RecordIdSink
 import com.choicemaker.cmit.oaba.util.OabaDeploymentUtils;
 import com.choicemaker.cmit.oaba.util.OabaMdbTestProcedures;
 import com.choicemaker.cmit.testconfigs.SimplePersonSqlServerTestConfiguration;
-import com.choicemaker.cmit.utils.EntityManagerUtils;
-import com.choicemaker.cmit.utils.TestEntityCounts;
-import com.choicemaker.cmit.utils.WellKnownTestConfiguration;
+import com.choicemaker.cmit.utils.j2ee.EntityManagerUtils;
+import com.choicemaker.cmit.utils.j2ee.TestEntityCounts;
+import com.choicemaker.cmit.utils.j2ee.WellKnownTestConfiguration;
 import com.choicemaker.e2.CMPluginRegistry;
 import com.choicemaker.e2.ejb.EjbPlatform;
 

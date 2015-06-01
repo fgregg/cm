@@ -1,4 +1,4 @@
-package com.choicemaker.cmit.utils;
+package com.choicemaker.cmit.utils.j2ee;
 
 import java.io.IOException;
 import java.util.Properties;

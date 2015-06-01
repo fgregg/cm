@@ -3,8 +3,8 @@ package com.choicemaker.cmit.trans.util;
 import static com.choicemaker.cm.args.BatchProcessing.EVT_DONE;
 import static com.choicemaker.cm.args.BatchProcessing.PCT_DONE;
 import static com.choicemaker.cm.args.PersistentObject.NONPERSISTENT_ID;
-import static com.choicemaker.cmit.utils.JmsUtils.LONG_TIMEOUT_MILLIS;
-import static com.choicemaker.cmit.utils.JmsUtils.SHORT_TIMEOUT_MILLIS;
+import static com.choicemaker.cmit.utils.j2ee.JmsUtils.LONG_TIMEOUT_MILLIS;
+import static com.choicemaker.cmit.utils.j2ee.JmsUtils.SHORT_TIMEOUT_MILLIS;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -38,13 +38,13 @@ import com.choicemaker.cm.transitivity.server.ejb.TransitivityJobController;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityService;
 import com.choicemaker.cm.transitivity.server.impl.TransitivityParametersEntity;
 import com.choicemaker.cmit.trans.AbstractTransitivityMdbTest;
-import com.choicemaker.cmit.utils.BatchProcessingPhase;
-import com.choicemaker.cmit.utils.EntityManagerUtils;
-import com.choicemaker.cmit.utils.JmsUtils;
-import com.choicemaker.cmit.utils.OabaTestUtils;
-import com.choicemaker.cmit.utils.TestEntityCounts;
-import com.choicemaker.cmit.utils.TransitivityTestParameters;
-import com.choicemaker.cmit.utils.WellKnownTestConfiguration;
+import com.choicemaker.cmit.utils.j2ee.BatchProcessingPhase;
+import com.choicemaker.cmit.utils.j2ee.EntityManagerUtils;
+import com.choicemaker.cmit.utils.j2ee.JmsUtils;
+import com.choicemaker.cmit.utils.j2ee.OabaTestUtils;
+import com.choicemaker.cmit.utils.j2ee.TestEntityCounts;
+import com.choicemaker.cmit.utils.j2ee.TransitivityTestParameters;
+import com.choicemaker.cmit.utils.j2ee.WellKnownTestConfiguration;
 import com.choicemaker.e2.CMPluginRegistry;
 
 public class TransitivityMdbTestProcedures {

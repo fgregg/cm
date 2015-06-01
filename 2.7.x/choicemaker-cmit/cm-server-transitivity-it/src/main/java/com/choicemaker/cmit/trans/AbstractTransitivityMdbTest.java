@@ -35,11 +35,11 @@ import com.choicemaker.cm.transitivity.server.ejb.TransitivityJobController;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityParametersController;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityService;
 import com.choicemaker.cmit.trans.util.TransitivityMdbTestProcedures;
-import com.choicemaker.cmit.utils.BatchProcessingPhase;
-import com.choicemaker.cmit.utils.JmsUtils;
-import com.choicemaker.cmit.utils.TestEntityCounts;
-import com.choicemaker.cmit.utils.TransitivityTestParameters;
-import com.choicemaker.cmit.utils.WellKnownTestConfiguration;
+import com.choicemaker.cmit.utils.j2ee.BatchProcessingPhase;
+import com.choicemaker.cmit.utils.j2ee.JmsUtils;
+import com.choicemaker.cmit.utils.j2ee.TestEntityCounts;
+import com.choicemaker.cmit.utils.j2ee.TransitivityTestParameters;
+import com.choicemaker.cmit.utils.j2ee.WellKnownTestConfiguration;
 import com.choicemaker.e2.CMPluginRegistry;
 import com.choicemaker.e2.ejb.EjbPlatform;
 

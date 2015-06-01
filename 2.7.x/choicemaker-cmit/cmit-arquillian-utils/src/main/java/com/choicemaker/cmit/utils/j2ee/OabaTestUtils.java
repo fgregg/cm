@@ -1,4 +1,4 @@
-package com.choicemaker.cmit.utils;
+package com.choicemaker.cmit.utils.j2ee;
 
 import static com.choicemaker.cm.args.PersistentObject.NONPERSISTENT_ID;
 import static org.junit.Assert.assertTrue;

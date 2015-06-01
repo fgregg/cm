@@ -35,8 +35,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceC
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJobController;
 import com.choicemaker.cmit.trans.util.TransitivityDeploymentUtils;
-import com.choicemaker.cmit.utils.BatchJobUtils;
-import com.choicemaker.cmit.utils.TestEntityCounts;
+import com.choicemaker.cmit.utils.j2ee.BatchJobUtils;
+import com.choicemaker.cmit.utils.j2ee.TestEntityCounts;
 
 @RunWith(Arquillian.class)
 public class TransitivityJobEntityIT {

@@ -16,7 +16,7 @@ import com.choicemaker.cm.transitivity.server.impl.TransMatchSchedulerMDB;
 import com.choicemaker.cm.transitivity.server.impl.TransMatchSchedulerSingleton;
 import com.choicemaker.cmit.testconfigs.SimplePersonSqlServerTestConfiguration;
 import com.choicemaker.cmit.trans.util.TransitivityDeploymentUtils;
-import com.choicemaker.cmit.utils.BatchProcessingPhase;
+import com.choicemaker.cmit.utils.j2ee.BatchProcessingPhase;
 
 @RunWith(Arquillian.class)
 public class StartTransitivityMdbIT extends

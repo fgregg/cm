@@ -42,8 +42,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigu
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbaSettingsEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaSettingsEntity;
 import com.choicemaker.cmit.oaba.util.OabaDeploymentUtils;
-import com.choicemaker.cmit.utils.MutableProbabilityModelStub;
-import com.choicemaker.cmit.utils.TestEntityCounts;
+import com.choicemaker.cmit.utils.j2ee.MutableProbabilityModelStub;
+import com.choicemaker.cmit.utils.j2ee.TestEntityCounts;
 
 @RunWith(Arquillian.class)
 public class SettingsControllerBeanIT {

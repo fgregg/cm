@@ -1,7 +1,7 @@
 package com.choicemaker.cmit.oaba.util;
 
-import static com.choicemaker.cmit.utils.JmsUtils.LONG_TIMEOUT_MILLIS;
-import static com.choicemaker.cmit.utils.JmsUtils.SHORT_TIMEOUT_MILLIS;
+import static com.choicemaker.cmit.utils.j2ee.JmsUtils.LONG_TIMEOUT_MILLIS;
+import static com.choicemaker.cmit.utils.j2ee.JmsUtils.SHORT_TIMEOUT_MILLIS;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -22,13 +22,13 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessa
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
 import com.choicemaker.cmit.oaba.AbstractOabaMdbTest;
-import com.choicemaker.cmit.utils.BatchProcessingPhase;
-import com.choicemaker.cmit.utils.EntityManagerUtils;
-import com.choicemaker.cmit.utils.JmsUtils;
-import com.choicemaker.cmit.utils.OabaTestParameters;
-import com.choicemaker.cmit.utils.OabaTestUtils;
-import com.choicemaker.cmit.utils.TestEntityCounts;
-import com.choicemaker.cmit.utils.WellKnownTestConfiguration;
+import com.choicemaker.cmit.utils.j2ee.BatchProcessingPhase;
+import com.choicemaker.cmit.utils.j2ee.EntityManagerUtils;
+import com.choicemaker.cmit.utils.j2ee.JmsUtils;
+import com.choicemaker.cmit.utils.j2ee.OabaTestParameters;
+import com.choicemaker.cmit.utils.j2ee.OabaTestUtils;
+import com.choicemaker.cmit.utils.j2ee.TestEntityCounts;
+import com.choicemaker.cmit.utils.j2ee.WellKnownTestConfiguration;
 import com.choicemaker.e2.CMPluginRegistry;
 
 /**

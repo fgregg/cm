@@ -40,9 +40,9 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParamete
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityParametersController;
 import com.choicemaker.cm.transitivity.server.impl.TransitivityParametersEntity;
 import com.choicemaker.cmit.trans.util.TransitivityDeploymentUtils;
-import com.choicemaker.cmit.utils.EntityManagerUtils;
-import com.choicemaker.cmit.utils.FakePersistableRecordSource;
-import com.choicemaker.cmit.utils.TestEntityCounts;
+import com.choicemaker.cmit.utils.j2ee.EntityManagerUtils;
+import com.choicemaker.cmit.utils.j2ee.FakePersistableRecordSource;
+import com.choicemaker.cmit.utils.j2ee.TestEntityCounts;
 
 @RunWith(Arquillian.class)
 public class TransitivityParametersEntityIT {

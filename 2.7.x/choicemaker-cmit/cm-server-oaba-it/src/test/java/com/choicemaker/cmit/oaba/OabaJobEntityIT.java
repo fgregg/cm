@@ -35,9 +35,9 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceC
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobEntity;
 import com.choicemaker.cmit.oaba.util.OabaDeploymentUtils;
-import com.choicemaker.cmit.utils.BatchJobUtils;
-import com.choicemaker.cmit.utils.EntityManagerUtils;
-import com.choicemaker.cmit.utils.TestEntityCounts;
+import com.choicemaker.cmit.utils.j2ee.BatchJobUtils;
+import com.choicemaker.cmit.utils.j2ee.EntityManagerUtils;
+import com.choicemaker.cmit.utils.j2ee.TestEntityCounts;
 
 @RunWith(Arquillian.class)
 public class OabaJobEntityIT {

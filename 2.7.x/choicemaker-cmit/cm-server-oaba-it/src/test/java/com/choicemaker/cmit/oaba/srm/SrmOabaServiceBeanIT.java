@@ -16,7 +16,7 @@ import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cmit.oaba.AbstractOabaMdbTest;
 import com.choicemaker.cmit.oaba.util.OabaDeploymentUtils;
 import com.choicemaker.cmit.testconfigs.SimplePersonSqlServerSRMConfiguration;
-import com.choicemaker.cmit.utils.BatchProcessingPhase;
+import com.choicemaker.cmit.utils.j2ee.BatchProcessingPhase;
 
 @RunWith(Arquillian.class)
 public class SrmOabaServiceBeanIT extends

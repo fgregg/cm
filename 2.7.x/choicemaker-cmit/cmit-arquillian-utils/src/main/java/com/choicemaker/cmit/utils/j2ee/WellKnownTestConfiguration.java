@@ -1,4 +1,4 @@
-package com.choicemaker.cmit.utils;
+package com.choicemaker.cmit.utils.j2ee;
 
 import com.choicemaker.cm.args.AnalysisResultFormat;
 import com.choicemaker.cm.args.OabaLinkageType;

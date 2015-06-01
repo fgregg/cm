@@ -41,7 +41,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultServe
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationControllerBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationEntity;
 import com.choicemaker.cmit.oaba.util.OabaDeploymentUtils;
-import com.choicemaker.cmit.utils.TestEntityCounts;
+import com.choicemaker.cmit.utils.j2ee.TestEntityCounts;
 
 @RunWith(Arquillian.class)
 public class ServerConfigurationManagerBeanIT {

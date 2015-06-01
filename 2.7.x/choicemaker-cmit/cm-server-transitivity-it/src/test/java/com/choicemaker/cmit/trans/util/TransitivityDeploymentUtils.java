@@ -2,14 +2,14 @@ package com.choicemaker.cmit.trans.util;
 
 import static com.choicemaker.cmit.trans.util.TransitivityConstants.CURRENT_MAVEN_COORDINATES;
 import static com.choicemaker.cmit.trans.util.TransitivityConstants.PERSISTENCE_CONFIGURATION;
-import static com.choicemaker.cmit.utils.DeploymentUtils.DEFAULT_HAS_BEANS;
-import static com.choicemaker.cmit.utils.DeploymentUtils.DEFAULT_MODULE_NAME;
-import static com.choicemaker.cmit.utils.DeploymentUtils.DEFAULT_POM_FILE;
-import static com.choicemaker.cmit.utils.DeploymentUtils.DEFAULT_TEST_CLASSES_PATH;
-import static com.choicemaker.cmit.utils.DeploymentUtils.createEAR;
-import static com.choicemaker.cmit.utils.DeploymentUtils.createJAR;
-import static com.choicemaker.cmit.utils.DeploymentUtils.resolveDependencies;
-import static com.choicemaker.cmit.utils.DeploymentUtils.resolvePom;
+import static com.choicemaker.cmit.utils.j2ee.DeploymentUtils.DEFAULT_HAS_BEANS;
+import static com.choicemaker.cmit.utils.j2ee.DeploymentUtils.DEFAULT_MODULE_NAME;
+import static com.choicemaker.cmit.utils.j2ee.DeploymentUtils.DEFAULT_POM_FILE;
+import static com.choicemaker.cmit.utils.j2ee.DeploymentUtils.DEFAULT_TEST_CLASSES_PATH;
+import static com.choicemaker.cmit.utils.j2ee.DeploymentUtils.createEAR;
+import static com.choicemaker.cmit.utils.j2ee.DeploymentUtils.createJAR;
+import static com.choicemaker.cmit.utils.j2ee.DeploymentUtils.resolveDependencies;
+import static com.choicemaker.cmit.utils.j2ee.DeploymentUtils.resolvePom;
 
 import java.io.File;
 import java.util.LinkedHashSet;
