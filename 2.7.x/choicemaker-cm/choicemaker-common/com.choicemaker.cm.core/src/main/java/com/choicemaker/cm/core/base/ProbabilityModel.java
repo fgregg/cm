@@ -24,9 +24,6 @@ import com.choicemaker.cm.core.ModelConfigurationException;
  * cluesToEval.length == clueSet.size() AND weights != null AND weights.length
  * == clueSet.size
  * 
- * This class is both a probability model as well as the collection of all
- * configured probability models.
- * 
  * @author Martin Buechi
  * @author S. Yoakum-Stover
  * @author rphall (Split this class into separate instance and manager types)

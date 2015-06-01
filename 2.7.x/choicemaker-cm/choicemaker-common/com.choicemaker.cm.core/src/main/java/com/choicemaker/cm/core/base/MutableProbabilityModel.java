@@ -756,5 +756,11 @@ public class MutableProbabilityModel implements IProbabilityModel {
 		this.databaseConfigurationName = dbc;
 	}
 
+//	@Override
+	public String toString() {
+		return "ProbabilityModel [modelName=" + modelName
+				+ ", clueFile=" + clueFilePath + "]";
+	}
+
 }
 

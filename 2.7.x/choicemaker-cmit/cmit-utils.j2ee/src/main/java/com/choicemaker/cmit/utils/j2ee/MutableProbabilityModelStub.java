@@ -427,4 +427,10 @@ public class MutableProbabilityModelStub implements IProbabilityModel {
 
 	}
 
+	@Override
+	public String toString() {
+		return "MutableProbabilityModelStub [modelName=" + modelName
+				+ ", clueFile=" + clueFilePath + "]";
+	}
+
 }
