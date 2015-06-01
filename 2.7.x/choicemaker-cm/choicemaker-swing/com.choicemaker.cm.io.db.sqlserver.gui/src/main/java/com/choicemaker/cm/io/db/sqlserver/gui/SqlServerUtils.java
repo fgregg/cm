@@ -8,6 +8,7 @@ import java.awt.Component;
 import java.awt.Cursor;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Properties;
 import java.util.Vector;
 
 import javax.sql.DataSource;
@@ -107,10 +108,10 @@ public class SqlServerUtils {
 	/**
 	 * NOTE: RecordReader is a SQLServer-specific piece of code.
 	 */
-	static Record readRecord(ImmutableProbabilityModel model, String dbConf,
-			DataSource ds, String id) throws IOException {
+	static Record readRecord(ImmutableProbabilityModel model,
+			String dbConf, DataSource ds, Properties p, String id) throws IOException {
 		String condition = createCondition(model, dbConf, id);
-		RecordReader reader = new RecordReader(model, dbConf, ds, condition);
+		RecordReader reader = new RecordReader(model, dbConf, ds, p, condition);
 
 		Record ret = null;
 		try {

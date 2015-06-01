@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.NoSuchElementException;
+import java.util.Properties;
 
 import javax.sql.DataSource;
 import javax.swing.JButton;
@@ -58,7 +59,6 @@ public class SqlServerPairViewerDialog extends JDialog {
 	
 	private ModelMaker modelMaker;
 	private ImmutableProbabilityModel model;
-
 	private JComboBox dataSource;
 	private JComboBox dbConfiguration;
 	private JTextField qId, mId;
@@ -191,10 +191,11 @@ public class SqlServerPairViewerDialog extends JDialog {
 	private void getPair() {		
 		SqlServerUtils.setWaitCursor(modelMaker, this);
 
-		DataSource ds = getDataSource();
+		final DataSource ds = getDataSource();
+		final Properties p = new Properties();
 		String dbConfiguration = getDbConfiguration();
-		model.properties().put(SqlServerXmlUtils.PN_DB_CONFIGURATION, dbConfiguration);
-		model.properties().put(SqlDbObjectMaker.getMultiKey(model, dbConfiguration),
+		p.setProperty(SqlServerXmlUtils.PN_DB_CONFIGURATION, dbConfiguration);
+		p.setProperty(SqlDbObjectMaker.getMultiKey(model, dbConfiguration),
 							 SqlDbObjectMaker.getMultiQuery(model, dbConfiguration));
 				
 		String qId = getQId(), mId = getMId();
@@ -203,8 +204,8 @@ public class SqlServerPairViewerDialog extends JDialog {
 		String errorMsg = null;
 		Exception ex = null;
 		try {
-			q = SqlServerUtils.readRecord(model, dbConfiguration, ds, qId);
-			m = SqlServerUtils.readRecord(model, dbConfiguration, ds, mId);
+			q = SqlServerUtils.readRecord(model, dbConfiguration, ds, p, qId);
+			m = SqlServerUtils.readRecord(model, dbConfiguration, ds, p, mId);
 		} catch (IOException ex2) {
 			errorMsg = "Error reading record " + (q == null ? qId : mId);
 			ex = ex2;
@@ -236,7 +237,8 @@ public class SqlServerPairViewerDialog extends JDialog {
 	}
 
 	private void updateEnabledness() {
-		ok.setEnabled(getDataSource() != null && 
+		DataSource ds = getDataSource();
+		ok.setEnabled(ds != null && 
 					  getDbConfiguration() != null && 
 					  getQId() != null && getMId() != null);
 	}

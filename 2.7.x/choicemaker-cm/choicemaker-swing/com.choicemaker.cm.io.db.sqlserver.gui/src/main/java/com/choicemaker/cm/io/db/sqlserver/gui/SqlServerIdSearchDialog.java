@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.Properties;
 import java.util.SortedSet;
 import java.util.logging.Logger;
 
@@ -285,27 +286,34 @@ public class SqlServerIdSearchDialog extends JDialog {
 			}
 		});
 	}
-	
+
 	private void findMatches() {
 		SqlServerUtils.setWaitCursor(modelMaker, this);
 
 		DataSource ds = getDataSource();
+		Properties p = ds == null ? null : new Properties();
 		DatabaseAccessor dbAccessor = SqlServerUtils.createDatabaseAccessor(ds);
-		
-		String dbConfiguration = blockingParametersPanel.getSelectedDbConfiguration();
-		String blockingConfiguration = blockingParametersPanel.getSelectedBlockingConfiguration();
+
+		String dbConfiguration =
+			blockingParametersPanel.getSelectedDbConfiguration();
+		String blockingConfiguration =
+			blockingParametersPanel.getSelectedBlockingConfiguration();
 		int lpbs = blockingParametersPanel.getLPBS();
 		int stbsgl = blockingParametersPanel.getSTBSGL();
 		int lsbs = blockingParametersPanel.getLSBS();
-		
-		model.properties().put(SqlServerXmlUtils.PN_DB_CONFIGURATION, dbConfiguration);
-		model.properties().put(SqlServerXmlUtils.PN_BLOCKING_CONFIGURATION, blockingConfiguration);
-		model.properties().put(SqlServerXmlUtils.PN_LIMITPERBLOCKINGSET, String.valueOf(lpbs));
-		model.properties().put(SqlServerXmlUtils.PN_SINGLETABLEBLOCKINGSETGRACELIMIT, String.valueOf(stbsgl));
-		model.properties().put(SqlServerXmlUtils.PN_LIMITSINGLEBLOCKINGSET, String.valueOf(lsbs));
-		model.properties().put(SqlDbObjectMaker.getMultiKey(model, dbConfiguration),
-							 SqlDbObjectMaker.getMultiQuery(model, dbConfiguration));		
-		
+
+		p.setProperty(SqlServerXmlUtils.PN_DB_CONFIGURATION, dbConfiguration);
+		p.setProperty(SqlServerXmlUtils.PN_BLOCKING_CONFIGURATION,
+				blockingConfiguration);
+		p.setProperty(SqlServerXmlUtils.PN_LIMITPERBLOCKINGSET,
+				String.valueOf(lpbs));
+		p.setProperty(SqlServerXmlUtils.PN_SINGLETABLEBLOCKINGSETGRACELIMIT,
+				String.valueOf(stbsgl));
+		p.setProperty(SqlServerXmlUtils.PN_LIMITSINGLEBLOCKINGSET,
+				String.valueOf(lsbs));
+		p.setProperty(SqlDbObjectMaker.getMultiKey(model, dbConfiguration),
+				SqlDbObjectMaker.getMultiQuery(model, dbConfiguration));
+
 		// FIXME temporary HACK
 		AbaStatisticsCache statsCache = null;
 		String msg =
@@ -317,21 +325,23 @@ public class SqlServerIdSearchDialog extends JDialog {
 			SqlServerUtils.maybeUpdateCounts(ds, model, statsCache);
 		} catch (SQLException ex) {
 			SqlServerUtils.setDefaultCursor(modelMaker, this);
-			ErrorDialog.showErrorDialog(this, "Error updating counts: " + ex, ex);
+			ErrorDialog.showErrorDialog(this, "Error updating counts: " + ex,
+					ex);
 			return;
 		} catch (DatabaseException e) {
 			SqlServerUtils.setDefaultCursor(modelMaker, this);
 			ErrorDialog.showErrorDialog(this, "Error updating counts: " + e, e);
 			return;
 		}
-								
+
 		String qId = getQId();
 		Record q = null;
 		try {
-			q = SqlServerUtils.readRecord(model, dbConfiguration, ds, qId);
+			q = SqlServerUtils.readRecord(model, dbConfiguration, ds, p, qId);
 		} catch (IOException ex) {
 			SqlServerUtils.setDefaultCursor(modelMaker, this);
-			ErrorDialog.showErrorDialog(this, "Error reading record with ID " + qId, ex);
+			ErrorDialog.showErrorDialog(this, "Error reading record with ID "
+					+ qId, ex);
 			return;
 		} catch (NoSuchElementException ex) {
 			SqlServerUtils.setDefaultCursor(modelMaker, this);
@@ -362,41 +372,46 @@ public class SqlServerIdSearchDialog extends JDialog {
 		Thresholds t = modelMaker.getThresholds();
 		SortedSet matches = null;
 		try {
-			matches = RecordDecisionMaker.getPairs(q, blocker, model, t.getDifferThreshold(), t.getMatchThreshold());
+			matches =
+				RecordDecisionMaker.getPairs(q, blocker, model,
+						t.getDifferThreshold(), t.getMatchThreshold());
 		} catch (IOException ex) {
 			SqlServerUtils.setDefaultCursor(modelMaker, this);
 			ErrorDialog.showErrorDialog(this, "Internal Error", ex);
 			return;
 		}
-						
+
 		Object actualId = q.getId();
-		ArrayList pairs = new ArrayList(matches.size());				
+		ArrayList pairs = new ArrayList(matches.size());
 		Iterator it = matches.iterator();
 		while (it.hasNext()) {
-			Match match = (Match)it.next();
+			Match match = (Match) it.next();
 			Record m = match.m;
 			if (!actualId.equals(m.getId())) {
-				pairs.add(new MutableMarkedRecordPair(q, m, Decision.HOLD, new Date(), "", "", ""));
+				pairs.add(new MutableMarkedRecordPair(q, m, Decision.HOLD,
+						new Date(), "", "", ""));
 			}
 		}
-		
+
 		// check to make sure we actually have something...
 		if (pairs.size() == 0) {
 			SqlServerUtils.setDefaultCursor(modelMaker, this);
 			modelMaker.setMultiSource(1, null);
-			ErrorDialog.showErrorDialog(this, "No records returned from blocking for ID " + qId);
+			ErrorDialog.showErrorDialog(this,
+					"No records returned from blocking for ID " + qId);
 			return;
 		}
-				
+
 		// open and evaluate the pairs
-		MarkedRecordPairSource mrps = MarkedRecordPairBinder.getMarkedRecordPairSource(pairs);
+		MarkedRecordPairSource mrps =
+			MarkedRecordPairBinder.getMarkedRecordPairSource(pairs);
 		modelMaker.setMultiSource(1, mrps);
 		modelMaker.setMultiIncludeHolds(1, true);
 
 		SqlServerUtils.setDefaultCursor(modelMaker, this);
 
 		modelMaker.evaluateClues();
-				
+
 		// select all
 		modelMaker.getFilter().reset();
 		modelMaker.filterMarkedRecordPairList();

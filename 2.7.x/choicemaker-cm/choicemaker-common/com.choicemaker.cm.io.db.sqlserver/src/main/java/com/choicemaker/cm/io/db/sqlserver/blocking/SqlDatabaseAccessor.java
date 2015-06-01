@@ -16,6 +16,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Properties;
 import java.util.logging.Logger;
 
 import javax.sql.DataSource;
@@ -43,23 +44,50 @@ import com.choicemaker.util.StringUtils;
 public class SqlDatabaseAccessor implements DatabaseAccessor {
 	private static Logger logger = Logger.getLogger(SqlDatabaseAccessor.class.getName());
 
+	// These two objects have the same life span -- see isConsistent()
 	private DataSource ds;
+	private Properties p;
+
 	private Connection connection;
 	private DbReaderSequential dbr;
 	private Statement stmt;
 	private String condition;
 
-	public SqlDatabaseAccessor() { }
+	/**
+	 * An invariant for this class
+	 */
+	protected boolean isConsistent() {
+		boolean isConsistent =
+			(ds == null && p == null) || (ds != null && p != null);
+		return isConsistent;
+	}
+
+	public SqlDatabaseAccessor() {
+		assert isConsistent();
+	}
 
 	public SqlDatabaseAccessor(DataSource ds, String condition) {
 		setDataSource(ds);
 		setCondition(condition);
 	}
-	
+
 	public void setDataSource(DataSource dataSource) {
+		assert isConsistent();
 		this.ds = dataSource;
+		this.p = ds == null ? null : new Properties();
+		assert isConsistent();
 	}
-	
+
+	private DataSource getDataSource() {
+		assert isConsistent();
+		return ds;
+	}
+
+	private Properties getProperties() {
+		assert isConsistent();
+		return p;
+	}
+
 	public void setCondition(Object condition) {
 		this.condition = (String)condition;
 	}
@@ -75,8 +103,8 @@ public class SqlDatabaseAccessor implements DatabaseAccessor {
 		dbr = ((DbAccessor) acc).getDbReaderSequential(databaseConfiguration);
 		String query = null;
 		try {
-			query = getQuery(blocker, dbr);
-			connection = ds.getConnection();
+			query = getQuery(getProperties(), blocker, dbr);
+			connection = getDataSource().getConnection();
 //			connection.setAutoCommit(false); // 2015-04-01a EJB3 CHANGE rphall
 			stmt = connection.createStatement();
 			stmt.setFetchSize(100);
@@ -164,7 +192,7 @@ public class SqlDatabaseAccessor implements DatabaseAccessor {
 		return dbr.getNext();
 	}
 
-	private String getQuery(AutomatedBlocker blocker, DbReaderSequential dbr) {
+	private String getQuery(final Properties p, AutomatedBlocker blocker, DbReaderSequential dbr) {
 		StringBuffer b = new StringBuffer(16000);
 		String id = dbr.getMasterId();
 		b.append("DECLARE @ids TABLE (id " + dbr.getMasterIdType() + ")" + Constants.LINE_SEPARATOR + "INSERT INTO @ids");
@@ -232,35 +260,31 @@ public class SqlDatabaseAccessor implements DatabaseAccessor {
 		}
 		b.append(Constants.LINE_SEPARATOR);
 		//b.append((String) blocker.accessProvider.properties.get(dbr.getName() + ":SQLServer"));
-		b.append(getMultiQuery(blocker, dbr));
+		b.append(getMultiQuery(p, blocker, dbr));
 		
 		logger.fine(b.toString());
 		
 		return b.toString();
 	}
 
-	private String getMultiQuery(AutomatedBlocker blocker, DbReaderSequential dbr) {
+	private String getMultiQuery(Properties p, AutomatedBlocker blocker,
+			DbReaderSequential dbr) {
 		String key = dbr.getName() + ":SQLServer";
-		if (!blocker.getModel().properties().containsKey(key)) {
+		if (!p.containsKey(key)) {
 			try {
-				// NOTE: this loads the multi string into accessProvider.properties
-				SqlDbObjectMaker.getAllModels();
+				// NOTE: this loads the multi string into the properties
+				SqlDbObjectMaker.getAllModels(p);
 			} catch (IOException ex) {
 				logger.severe(ex.toString());
 			}
 		}
-		
-		return (String) blocker.getModel().properties().get(key);
+
+		return (String) p.getProperty(key);
 	}
 
 	private boolean mustQuote(String type) {
-		return !(
-			type == "byte"
-				|| type == "short"
-				|| type == "int"
-				|| type == "long"
-				|| type == "float"
-				|| type == "double");
+		return !(type == "byte" || type == "short" || type == "int"
+				|| type == "long" || type == "float" || type == "double");
 	}
 
 	private String escape(String s) {

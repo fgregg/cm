@@ -3,7 +3,6 @@ package com.choicemaker.cmit.utils.j2ee;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.util.Date;
-import java.util.Map;
 import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.Accessor;
@@ -293,12 +292,6 @@ public class MutableProbabilityModelStub implements IProbabilityModel {
 	public int numTrainCluesToEvaluate() {
 		log.exiting(CLASSNAME, "numTrainCluesToEvaluate", 0);
 		return 0;
-	}
-
-	@Override
-	public Map<String, String> properties() {
-		log.exiting(CLASSNAME, "properties", null);
-		return null;
 	}
 
 	@Override

@@ -13,7 +13,6 @@ package com.choicemaker.cm.core;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.util.Date;
-import java.util.Map;
 
 import com.choicemaker.cm.core.base.Evaluator;
 import com.choicemaker.cm.core.report.Report;
@@ -287,12 +286,6 @@ public interface ImmutableProbabilityModel {
 	boolean needsRecompilation();
 
 	int numTrainCluesToEvaluate();
-
-	/**
-	 * This method is going away in version 2.8
-	 * @deprecated
-	 */
-	Map properties();
 
 	void removePropertyChangeListener(PropertyChangeListener l);
 

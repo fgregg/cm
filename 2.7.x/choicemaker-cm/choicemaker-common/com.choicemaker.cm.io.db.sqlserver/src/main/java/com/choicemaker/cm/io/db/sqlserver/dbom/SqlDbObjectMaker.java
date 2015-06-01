@@ -18,8 +18,10 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
+import java.util.Properties;
 import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.compiler.impl.CompilerFactory;
 import com.choicemaker.cm.core.Accessor;
@@ -48,6 +50,9 @@ import com.choicemaker.e2.CMPlatformRunnable;
  */
 public class SqlDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 
+	private static final Logger logger = Logger
+			.getLogger(SqlDbObjectMaker.class.getName());
+
 	public Object run(Object args) throws Exception {
 		CommandLineArguments cla = new CommandLineArguments();
 		cla.addExtensions();
@@ -67,21 +72,23 @@ public class SqlDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 		final boolean fromResource = false;
 		ProbabilityModelsXmlConf.loadProductionProbabilityModels(compiler,
 				fromResource);
+		Properties unused = new Properties();
 		Writer w = new FileWriter(args[2]);
-		processAllModels(w, true);
+		processAllModels(unused, w, true);
 		w.close();
 	}
 	
 	public void generateObjects(File outDir) throws IOException {
 		File outFile = new File(outDir, "SqlServer_Custom_Objects.txt").getAbsoluteFile();
 		Writer w = new FileWriter(outFile);
-		processAllModels(w, true);
+		Properties unused = new Properties();
+		processAllModels(unused, w, true);
 		w.close();
 	}
 	
-	public static String[] getAllModels() throws IOException {
+	public static String[] getAllModels(final Properties p) throws IOException {
 		StringWriter w = new StringWriter();
-		processAllModels(w, false);
+		processAllModels(p, w, false);
 		StringTokenizer st = new StringTokenizer(w.toString(), Constants.LINE_SEPARATOR);
 		String[] res = new String[st.countTokens()];
 		for (int i = 0; i < res.length; i++) {
@@ -90,8 +97,8 @@ public class SqlDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 		return res;
 	}
 
-	public static void processAllModels(Writer w, boolean insertGo)
-			throws IOException {
+	public static Properties processAllModels(final Properties p,
+			final Writer w, final boolean insertGo) throws IOException {
 		ImmutableProbabilityModel[] models = PMManager.getModels();
 
 		// This sort makes the output repeatable, independent of plugin order
@@ -103,19 +110,47 @@ public class SqlDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 			Set uniqueNames = new LinkedHashSet();
 			String[] dbcNames = dbAccessor.getDbConfigurations();
 			Arrays.sort(dbcNames);
-			for (int j=0; j<dbcNames.length; j++) {
+			for (int j = 0; j < dbcNames.length; j++) {
 				String dbcName = dbcNames[j];
 				boolean isUnique = uniqueNames.add(dbcName);
 				if (isUnique) {
-					createObjects(w, model, dbcName, insertGo);
+					createObjects(p, w, model, dbcName, insertGo);
 				}
 			}
 		}
+		return p;
 	}
 
-	public static void createObjects(Writer w, ImmutableProbabilityModel model,
-			String dbConfiguration, boolean insertGo) throws IOException {
-		if (dbConfiguration != null) {
+	/**
+	 * Updates and returns the specified properties <code>p</code> with SQL DDL
+	 * statements that create the views used by the SqlServer database accessor.
+	 *
+	 * @param p
+	 *            a non-null Properties instance, which is update and returned.
+	 * @param w
+	 *            an output writer to which SQL DDL statements are also written.
+	 * @param model
+	 *            an non-null probability model
+	 * @param dbConfiguration
+	 *            the name of a database configuration specified by the model
+	 *            record-layout schema
+	 * @param insertGo
+	 *            a flag indicating with SqlServer <code>GO</code> directives
+	 *            should be written to the output writer
+	 * @return a modified copy of the input properties
+	 * @throws IOException
+	 */
+	public static Properties createObjects(final Properties p, final Writer w,
+			final ImmutableProbabilityModel model, final String dbConfiguration,
+			final boolean insertGo) throws IOException {
+		if (p == null || w == null || model == null) {
+			String msg = "null argument";
+			logger.severe(msg);
+			throw new IllegalArgumentException(msg);
+		}
+		if (dbConfiguration == null || dbConfiguration.trim().isEmpty()) {
+			logger.warning("null or blank database configuration");
+		} else {
 			Accessor accessor = model.getAccessor();
 			if (accessor instanceof DbAccessor) {
 				String viewBase = "vw_cmt_" + accessor.getSchemaName() + "_r_" + dbConfiguration;
@@ -174,9 +209,10 @@ public class SqlDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 				}
 				String multiStr = multi.toString();
 				//w.write("INSERT INTO TB_CMT_CURSORS VALUES('" + dbConf + "','" + multiStr + "');" + Constants.LINE_SEPARATOR);
-				model.properties().put(dbConf + ":SQLServer", multiStr);
+				p.setProperty(dbConf + ":SQLServer", multiStr);
 			}
 		}
+		return p;
 	}
 
 	public static String getMultiKey(ImmutableProbabilityModel model, String dbConfiguration) {

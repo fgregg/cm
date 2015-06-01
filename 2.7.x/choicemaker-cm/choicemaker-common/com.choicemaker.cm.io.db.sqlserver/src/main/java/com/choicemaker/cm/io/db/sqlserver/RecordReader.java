@@ -16,6 +16,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Properties;
 import java.util.logging.Logger;
 
 import javax.sql.DataSource;
@@ -37,38 +38,62 @@ import com.choicemaker.cm.io.db.base.DbReaderSequential;
 public class RecordReader implements RecordSource {
 	private static Logger logger = Logger.getLogger(RecordReader.class.getName());
 
+	// These two objects have the same life span -- see isConsistent()
+	private final DataSource ds;
+	private final Properties p;
+
 	private ImmutableProbabilityModel model;
 	private final String databaseConfiguration;
-	private DataSource ds;
 	private Connection connection;
 	private DbReaderSequential dbr;
 	private Statement stmt;
 	private String condition;
 	private String name;
 
+	protected static boolean isConsistent(DataSource ds, Properties p) {
+		boolean isConsistent =
+			(ds == null && p == null) || (ds != null && p != null);
+		return isConsistent;
+	}
+
+	/**
+	 * An invariant for this class
+	 */
+	protected boolean isConsistent() {
+		return isConsistent(getDataSource(), getProperties());
+	}
+
 	public RecordReader(ImmutableProbabilityModel model, String dbConf,
-			DataSource ds, String condition) {
+			DataSource ds, Properties p, String condition) {
+		if (!isConsistent(ds,p)) {
+			throw new IllegalArgumentException("inconsistent data source and  properties");
+		}
 		this.model = model;
 		this.databaseConfiguration = dbConf;
 		this.ds = ds;
+		this.p = p;
 		this.condition = condition;
+		assert isConsistent();
 	}
 
-//	public RecordReader(ImmutableProbabilityModel model, Connection connection,
-//			String condition) {
-//		this.model = model;
-//		this.connection = connection;
-//		this.condition = condition;
-//	}
+	private DataSource getDataSource() {
+		assert isConsistent();
+		return ds;
+	}
+
+	private Properties getProperties() {
+		assert isConsistent();
+		return p;
+	}
 
 	public void open() throws IOException {
 		Accessor acc = model.getAccessor();
 		dbr = ((DbAccessor) acc).getDbReaderSequential(databaseConfiguration);
 		try {
-			String query = getQuery();
+			String query = getQuery(getProperties());
 			logger.fine(query);
 			if (connection == null) {
-				connection = ds.getConnection();
+				connection = getDataSource().getConnection();
 			}
 //			connection.setAutoCommit(false); // 2015-04-01a EJB3 CHANGE rphall
 			stmt = connection.createStatement();
@@ -92,7 +117,7 @@ public class RecordReader implements RecordSource {
 			ex = e;
 			logger.severe("Closing statement: " + e.toString());
 		}
-		if (ds != null) {
+		if (getDataSource() != null) {
 			if (connection != null) {
 				// EJB3 CHANGE 2015-04-01 rphall
 				// Record readers are used sometimes used with EJB3 managed
@@ -134,13 +159,14 @@ public class RecordReader implements RecordSource {
 		return dbr.getNext();
 	}
 
-	private String getQuery() {
+	private String getQuery(final Properties p) {
+		assert p != null;
 		StringBuffer b = new StringBuffer(16000);
 		b.append(
 			"DECLARE @ids TABLE (id " + dbr.getMasterIdType() + ")" + Constants.LINE_SEPARATOR + "INSERT INTO @ids ");
 		b.append(condition);
 		b.append(Constants.LINE_SEPARATOR);
-		b.append((String) model.properties().get(dbr.getName() + ":SQLServer"));
+		b.append((String) p.getProperty(dbr.getName() + ":SQLServer"));
 		return b.toString();
 	}
 
@@ -176,4 +202,5 @@ public class RecordReader implements RecordSource {
 		return "RecordReader [model=" + model + ", condition=" + condition
 				+ ", name=" + name + "]";
 	}
+
 }
