@@ -21,6 +21,7 @@ import org.apache.maven.it.util.ResourceExtractor;
 
 import com.choicemaker.cmit.utils.DefaultFileContentListener;
 import com.choicemaker.cmit.utils.FileTreeComparator;
+import com.choicemaker.cmit.utils.PathComparison;
 import com.choicemaker.util.FileUtilities;
 import com.choicemaker.util.SystemPropertyUtils;
 
@@ -338,15 +339,15 @@ public class SmokeTest extends AbstractMavenIntegrationTestCase {
 	}
 
 	private void verifyGeneratedSourcesDirectory() {
-		// Check that the file tree of expected code exists
+		// File tree of expected code
 		File f = new File(workingDir, EXPECTED_CODE_ROOT);
-		assertTrue(f.exists() && f.canRead());
 		Path rootExpectedSource = Paths.get(f.toURI());
 
-		// Check that the file tree of generated code exists
+		// File tree of generated code
 		f = new File(workingDir, GENERATED_SOURCE_ROOT);
-		assertTrue(f.exists() && f.canRead());
 		Path rootGeneratedSource = Paths.get(f.toURI());
+		
+		PathComparison.assertSameContent(rootExpectedSource, rootGeneratedSource, MAX_REPORTED_DIFFERENCES, EXCLUDED_COMPARISONS);
 
 		// Compare the generated tree against the expected tree
 		final int maxCollected = MAX_REPORTED_DIFFERENCES + 1;
