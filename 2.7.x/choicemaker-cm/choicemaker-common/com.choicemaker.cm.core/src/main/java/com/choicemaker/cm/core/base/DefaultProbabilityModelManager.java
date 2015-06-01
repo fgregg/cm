@@ -166,6 +166,12 @@ public class DefaultProbabilityModelManager implements IProbabilityModelManager 
 					IProbabilityModel model =
 						ProbabilityModelsXmlConf.readModel(fileName, is,
 								compiler, compilerMessages, cl, allowCompile);
+					// HACK
+					assert model instanceof MutableProbabilityModel;
+					MutableProbabilityModel mpm =
+						(MutableProbabilityModel) model;
+					mpm.setModelName(ext.getUniqueIdentifier());
+					// END HACK
 					DefaultProbabilityModelManager.getInstance()
 							.addModel(model);
 					++retVal;
@@ -177,7 +183,7 @@ public class DefaultProbabilityModelManager implements IProbabilityModelManager 
 					logger.severe(ex.toString());
 					throw ex;
 				}
-				
+
 			}
 		}
 		return retVal;
