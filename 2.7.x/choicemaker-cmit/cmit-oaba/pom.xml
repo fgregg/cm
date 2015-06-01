@@ -13,7 +13,7 @@
   </parent>
 
   <groupId>com.choicemaker.cmit</groupId>
-  <artifactId>cmit-server-oaba-it</artifactId>
+  <artifactId>cmit-oaba</artifactId>
   <name>Integration Test: Offline Auto Block Algo (OABA)</name>
   <packaging>jar</packaging>
 

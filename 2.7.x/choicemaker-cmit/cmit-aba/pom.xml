@@ -13,7 +13,7 @@
   </parent>
 
   <groupId>com.choicemaker.cmit</groupId>
-  <artifactId>cm-aba-it</artifactId>
+  <artifactId>cmit-aba</artifactId>
  
   <name>Integration Test: ChoiceMaker ABA</name>
   <description><![CDATA[

@@ -13,7 +13,7 @@
   </parent>
 
   <groupId>com.choicemaker.cmit</groupId>
-  <artifactId>cmit-server-transitivity-it</artifactId>
+  <artifactId>cmit-transitivity</artifactId>
   <name>Integration Test: Transitivity</name>
   <packaging>jar</packaging>
 
@@ -97,7 +97,7 @@
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cmit</groupId>
-      <artifactId>cmit-server-oaba-it</artifactId>
+      <artifactId>cmit-oaba</artifactId>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>

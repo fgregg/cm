@@ -1369,7 +1369,17 @@ END: C-E Exclusion -->
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cmit</groupId>
-        <artifactId>cmit-server-oaba-it</artifactId>
+        <artifactId>cmit-aba</artifactId>
+        <version>${choicemaker.current.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cmit</groupId>
+        <artifactId>cmit-oaba</artifactId>
+        <version>${choicemaker.current.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cmit</groupId>
+        <artifactId>cmit-transitivity</artifactId>
         <version>${choicemaker.current.version}</version>
       </dependency>
       <dependency>
