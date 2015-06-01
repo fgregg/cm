@@ -1,9 +1,5 @@
 package com.choicemaker.demo.simple_person_matching;
 
-import static com.choicemaker.cm.core.ProbabilityModelConfiguration.AN_BLOCKING_CONFIGURATION;
-import static com.choicemaker.cm.core.ProbabilityModelConfiguration.AN_DATABASE_ABSTRACTION;
-import static com.choicemaker.cm.core.ProbabilityModelConfiguration.AN_DATABASE_ACCESSOR;
-import static com.choicemaker.cm.core.ProbabilityModelConfiguration.AN_DATABASE_CONFIGURATION;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -95,7 +91,7 @@ public final class SimplePersonPluginTesting {
 		// Note: this method duplicates many of the steps of
 		// PMManager.loadModelPlugins(), but checks assertions for
 		// intermediate results.
-		
+
 		CMExtension[] exts = CMPlatformUtils.getPluginExtensions(SP_PLUGIN_ID);
 		assertTrue(exts != null);
 		for (CMExtension ext : exts) {
@@ -106,23 +102,25 @@ public final class SimplePersonPluginTesting {
 
 			String[] attributeNames = cmce.getAttributeNames();
 			assertTrue(attributeNames != null);
-			assertTrue(attributeNames.length == 5);
+			assertTrue(attributeNames.length == 1);
 
-			String dbAbstraction = cmce.getAttribute(AN_DATABASE_ABSTRACTION);
-			assertTrue(dbAbstraction != null);
-			assertTrue(EXPECTED_DATABASE_ABSTRACTIONS.contains(dbAbstraction));
-
-			String dbAccessor = cmce.getAttribute(AN_DATABASE_ACCESSOR);
-			assertTrue(dbAccessor != null);
-			assertTrue(EXPECTED_DATABASE_ACCESSORS.contains(dbAccessor));
-
-			String dbConfig = cmce.getAttribute(AN_DATABASE_CONFIGURATION);
-			assertTrue(dbConfig != null);
-			assertTrue(EXPECTED_DATABASE_CONFIG.equals(dbConfig));
-
-			String blockConfig = cmce.getAttribute(AN_BLOCKING_CONFIGURATION);
-			assertTrue(blockConfig != null);
-			assertTrue(EXPECTED_BLOCKING_CONFIG.equals(blockConfig));
+			// String dbAbstraction =
+			// cmce.getAttribute(AN_DATABASE_ABSTRACTION);
+			// assertTrue(dbAbstraction != null);
+			// assertTrue(EXPECTED_DATABASE_ABSTRACTIONS.contains(dbAbstraction));
+			//
+			// String dbAccessor = cmce.getAttribute(AN_DATABASE_ACCESSOR);
+			// assertTrue(dbAccessor != null);
+			// assertTrue(EXPECTED_DATABASE_ACCESSORS.contains(dbAccessor));
+			//
+			// String dbConfig = cmce.getAttribute(AN_DATABASE_CONFIGURATION);
+			// assertTrue(dbConfig != null);
+			// assertTrue(EXPECTED_DATABASE_CONFIG.equals(dbConfig));
+			//
+			// String blockConfig =
+			// cmce.getAttribute(AN_BLOCKING_CONFIGURATION);
+			// assertTrue(blockConfig != null);
+			// assertTrue(EXPECTED_BLOCKING_CONFIG.equals(blockConfig));
 
 			String modelFile = cmce.getAttribute(AN_MODEL_FILE);
 			assertTrue(modelFile != null);
