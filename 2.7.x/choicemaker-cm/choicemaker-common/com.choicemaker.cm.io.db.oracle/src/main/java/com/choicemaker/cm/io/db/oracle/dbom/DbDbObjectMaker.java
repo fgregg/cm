@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -82,6 +83,7 @@ public class DbDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 			ImmutableProbabilityModel model = iModels[i];
 			final DbAccessor dbAccessor = (DbAccessor) model.getAccessor();
 			String[] dbcNames = dbAccessor.getDbConfigurations();
+			Arrays.sort(dbcNames);
 			for (int k = 0; k < dbcNames.length; k++) {
 				final String dcName = dbcNames[k];
 				String key = model.getAccessor().getSchemaName() + "|" + dcName;
@@ -91,6 +93,7 @@ public class DbDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 				BlockingAccessor bAccessor =
 					(BlockingAccessor) model.getAccessor();
 				String[] bcNames = bAccessor.getBlockingConfigurations();
+				Arrays.sort(bcNames);
 				for (int j = 0; j < bcNames.length; j++) {
 					final String bcName = bcNames[j];
 					key =

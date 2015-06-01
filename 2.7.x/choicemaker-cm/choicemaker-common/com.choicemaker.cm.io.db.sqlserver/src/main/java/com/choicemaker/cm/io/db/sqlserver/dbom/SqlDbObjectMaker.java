@@ -16,6 +16,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.Arrays;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 import com.choicemaker.cm.compiler.impl.CompilerFactory;
@@ -97,10 +100,15 @@ public class SqlDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 		for (int i = 0; i < models.length; i++) {
 			ImmutableProbabilityModel model = models[i];
 			DbAccessor dbAccessor = (DbAccessor) model.getAccessor();
+			Set uniqueNames = new LinkedHashSet();
 			String[] dbcNames = dbAccessor.getDbConfigurations();
+			Arrays.sort(dbcNames);
 			for (int j=0; j<dbcNames.length; j++) {
 				String dbcName = dbcNames[j];
-				createObjects(w, model, dbcName, insertGo);
+				boolean isUnique = uniqueNames.add(dbcName);
+				if (isUnique) {
+					createObjects(w, model, dbcName, insertGo);
+				}
 			}
 		}
 	}

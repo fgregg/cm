@@ -10,7 +10,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.util.ObjectMaker;
 import com.choicemaker.e2.CMConfigurationElement;
 import com.choicemaker.e2.CMExtension;
@@ -52,10 +51,6 @@ class SqlServerUtils {
 		ObjectMaker retVal = makers.get(0);
 		return retVal;
 	}
-
-//	public static Set<ImmutableProbabilityModel> getModels() {
-//
-//	}
 
 	static Set<ExtensionDeclaration> getExpectedExtensions() {
 		Set<ExtensionDeclaration> retVal = new HashSet<>();
