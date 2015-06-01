@@ -1,4 +1,4 @@
-package com.choicemaker.mvnit.util;
+package com.choicemaker.cmit.utils;
 
 import java.nio.file.Path;
 

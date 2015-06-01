@@ -14,7 +14,7 @@
 
   <groupId>com.choicemaker.cmit</groupId>
   <artifactId>cmit-utils.j2ee</artifactId>
-  <name>Integration Test: Arquillian Utilities</name>
+  <name>Integration Test J2EE Utilities</name>
   <packaging>jar</packaging>
 
   <properties>

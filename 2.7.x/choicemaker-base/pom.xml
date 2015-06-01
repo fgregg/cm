@@ -1359,6 +1359,11 @@
 END: C-E Exclusion -->
       <dependency>
         <groupId>com.choicemaker.cmit</groupId>
+        <artifactId>cmit-utils</artifactId>
+        <version>${choicemaker.current.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cmit</groupId>
         <artifactId>cmit-utils.j2ee</artifactId>
         <version>${choicemaker.current.version}</version>
       </dependency>

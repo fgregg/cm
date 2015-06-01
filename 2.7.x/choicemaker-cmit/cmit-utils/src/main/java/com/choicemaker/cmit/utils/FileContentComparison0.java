@@ -8,7 +8,7 @@
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
-package com.choicemaker.mvnit.util;
+package com.choicemaker.cmit.utils;
 
 import java.io.ObjectStreamException;
 import java.io.Serializable;

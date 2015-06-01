@@ -19,9 +19,10 @@
   <modules>
     <module>cm-analyzer-ce-it</module>
     <module>cm-analyzer-ce-it2</module>
-    <module>cm-aba-it</module>
-    <module>cmit-utils.j2ee</module>
     <module>simple-person-plugin-it</module>
+    <module>cmit-utils</module>
+    <module>cmit-utils.j2ee</module>
+    <module>cm-aba-it</module>
     <module>cm-server-oaba-it</module>
     <module>cm-server-transitivity-it</module>
   </modules>

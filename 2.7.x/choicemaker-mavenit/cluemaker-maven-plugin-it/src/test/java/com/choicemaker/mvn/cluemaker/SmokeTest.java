@@ -19,9 +19,8 @@ import org.apache.maven.it.VerificationException;
 import org.apache.maven.it.Verifier;
 import org.apache.maven.it.util.ResourceExtractor;
 
-import com.choicemaker.mvn.cluemaker.ClueMakerMojo;
-import com.choicemaker.mvnit.util.DefaultFileContentListener;
-import com.choicemaker.mvnit.util.FileTreeComparator;
+import com.choicemaker.cmit.utils.DefaultFileContentListener;
+import com.choicemaker.cmit.utils.FileTreeComparator;
 import com.choicemaker.util.FileUtilities;
 import com.choicemaker.util.SystemPropertyUtils;
 

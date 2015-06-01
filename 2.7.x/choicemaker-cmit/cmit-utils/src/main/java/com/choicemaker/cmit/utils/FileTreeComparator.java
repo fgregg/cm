@@ -1,4 +1,4 @@
-package com.choicemaker.mvnit.util;
+package com.choicemaker.cmit.utils;
 
 import java.io.File;
 import java.io.IOException;
