@@ -27,7 +27,6 @@ import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.IProbabilityModelManager;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.ModelConfigurationException;
-import com.choicemaker.cm.core.ProbabilityModelConfiguration;
 import com.choicemaker.cm.core.compiler.DoNothingCompiler;
 import com.choicemaker.cm.core.compiler.ICompiler;
 import com.choicemaker.cm.core.report.Reporter;
@@ -154,14 +153,6 @@ public class DefaultProbabilityModelManager implements IProbabilityModelManager 
 				final CMConfigurationElement el = els[j];
 				final String KEY_FILE = "model";
 				String file = el.getAttribute(KEY_FILE);
-//				String databaseAbstraction =
-//					el.getAttribute(ProbabilityModelConfiguration.AN_DATABASE_ABSTRACTION);
-				String databaseAccessor =
-					el.getAttribute(ProbabilityModelConfiguration.AN_DATABASE_ACCESSOR);
-				String databaseConfig =
-					el.getAttribute(ProbabilityModelConfiguration.AN_DATABASE_CONFIGURATION);
-				String blockingConfig =
-					el.getAttribute(ProbabilityModelConfiguration.AN_BLOCKING_CONFIGURATION);
 				try {
 					final String fileName = new File(file).getName();
 					final URL rUrl = new URL(pUrl, file);
@@ -175,16 +166,6 @@ public class DefaultProbabilityModelManager implements IProbabilityModelManager 
 					IProbabilityModel model =
 						ProbabilityModelsXmlConf.readModel(fileName, is,
 								compiler, compilerMessages, cl, allowCompile);
-					// HACK
-					assert model instanceof MutableProbabilityModel;
-					MutableProbabilityModel mpm =
-						(MutableProbabilityModel) model;
-					mpm.setBlockingConfigurationName(blockingConfig);
-//					mpm.setDatabaseAbstractionName(databaseAbstraction);
-					mpm.setDatabaseAccessorName(databaseAccessor);
-					mpm.setDatabaseConfigurationName(databaseConfig);
-					mpm.setModelName(ext.getUniqueIdentifier());
-					// END HACK
 					DefaultProbabilityModelManager.getInstance()
 							.addModel(model);
 					++retVal;
