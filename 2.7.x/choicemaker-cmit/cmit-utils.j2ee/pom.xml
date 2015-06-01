@@ -13,7 +13,7 @@
   </parent>
 
   <groupId>com.choicemaker.cmit</groupId>
-  <artifactId>cmit-arquillian-utils</artifactId>
+  <artifactId>cmit-utils.j2ee</artifactId>
   <name>Integration Test: Arquillian Utilities</name>
   <packaging>jar</packaging>
 

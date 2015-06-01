@@ -98,7 +98,7 @@
   <dependencies>
     <dependency>
       <groupId>com.choicemaker.cmit</groupId>
-      <artifactId>cmit-arquillian-utils</artifactId>
+      <artifactId>cmit-utils.j2ee</artifactId>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
