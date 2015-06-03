@@ -237,9 +237,7 @@ public class SettingsControllerBeanIT {
 		MutableProbabilityModelStub mpm = new MutableProbabilityModelStub();
 		final String m0 = mpm.getModelName();
 		final String d0 = randomString();
-		mpm.databaseConfigurationName = d0;
 		final String b0 = randomString();
-		mpm.blockingConfigurationName = b0;
 		final AbaSettings aba0 =
 			oabaSettingsController.findDefaultAbaSettings(m0, d0, b0);
 		assertTrue(aba0 == null);
@@ -281,9 +279,7 @@ public class SettingsControllerBeanIT {
 		MutableProbabilityModelStub mpm = new MutableProbabilityModelStub();
 		final String m0 = mpm.getModelName();
 		final String d0 = randomString();
-		mpm.databaseConfigurationName = d0;
 		final String b0 = randomString();
-		mpm.blockingConfigurationName = b0;
 		final OabaSettings oaba0 =
 			oabaSettingsController.findDefaultOabaSettings(m0, d0, b0);
 		assertTrue(oaba0 == null);

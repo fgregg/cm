@@ -72,31 +72,6 @@ public interface ImmutableProbabilityModel {
 	String getAccessorClassName();
 
 	/**
-	 * Get the ant command
-	 * 
-	 * @deprecated
-	 */
-	String getAntCommand();
-	
-//	/**
-//	 * When a model configuration is loaded as a plugin extension, this method
-//	 * returns the name of the blocking configuration that is specified for the
-//	 * configuration. When a model is loaded outside of a plugin, there will be
-//	 * no (single) blocking specified, although its schema will may define
-//	 * several, so this method will throw an IllegalStateException.<br/>
-//	 * <br/>
-//	 * In practice, only CM Server expects to deal with model configurations in
-//	 * which a blocking configuration has been set, and CM Server uses only
-//	 * models configurations that are loaded as plugin extensions.<br/>
-//	 * <br/>
-//	 * FIXME: this method should move to {@link ProbabilityModelConfiguration}
-//	 * 
-//	 * @see ProbabilityModelConfiguration
-//	 * @see #getDatabaseConfigurationName()
-//	 */
-//	String getBlockingConfigurationName();
-
-	/**
 	 * Returns the file path of the ClueMaker file that defines the ClueSet of
 	 * this model. In future versions of ChoiceMaker, models may not be
 	 * associated with schema ClueMaker files, if and when other languages
@@ -138,44 +113,6 @@ public interface ImmutableProbabilityModel {
 	boolean[] getCluesToEvaluate();
 
 	String getClueText(int clueNum) throws IOException;
-
-//	/**
-//	 * When a model configuration is loaded as a plugin extension, this method
-//	 * returns the name of the database configuration that is specified for the
-//	 * configuration. When a model is loaded outside of a plugin, there will be
-//	 * no (single) database specified, although its schema will may define
-//	 * several, so this method will throw an IllegalStateException.<br/>
-//	 * <br/>
-//	 * In practice, only CM Server expects to deal with model configurations in
-//	 * which a database configuration has been set, and CM Server uses only
-//	 * models configurations that are loaded as plugin extensions.<br/>
-//	 * <br/>
-//	 * FIXME: this method should move to {@link ProbabilityModelConfiguration}
-//	 * 
-//	 * @see ProbabilityModelConfiguration
-//	 * @see #getBlockingConfigurationName()
-//	 * @see #getDatabaseAccessorName()
-//	 */
-//	String getDatabaseConfigurationName();
-
-//	/**
-//	 * When a model configuration is loaded as a plugin extension, this method
-//	 * returns the name of the database accessor that is specified for the
-//	 * configuration. When a model is loaded outside of a plugin, there will be
-//	 * not be an accessor specified, so this method will throw an IllegalStateException.<br/>
-//	 * <br/>
-//	 * In practice, only CM Server expects to deal with model configurations in
-//	 * which a database accessor has been set, and CM Server uses only
-//	 * models configurations that are loaded as plugin extensions.<br/>
-//	 * <br/>
-//	 * FIXME: this method should move to {@link ProbabilityModelConfiguration}
-//	 * 
-//	 * @see ProbabilityModelConfiguration
-//	 * @see #getDatabaseConfigurationName()
-//	 */
-//	String getDatabaseAccessorName();
-
-	// String getDatabaseAbstractionName();
 
 	int getDecisionDomainSize();
 
@@ -273,13 +210,6 @@ public interface ImmutableProbabilityModel {
 	boolean isEnableAllRulesBeforeTraining();
 
 	boolean isTrainedWithHolds();
-
-	/**
-	 * Check whether to use the value of Ant
-	 * 
-	 * @deprecated
-	 */
-	boolean isUseAnt();
 
 	void machineLearnerChanged(Object oldValue, Object newValue);
 

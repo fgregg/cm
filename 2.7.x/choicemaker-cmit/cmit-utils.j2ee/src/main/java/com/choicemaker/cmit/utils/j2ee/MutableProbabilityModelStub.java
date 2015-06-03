@@ -3,6 +3,7 @@ package com.choicemaker.cmit.utils.j2ee;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.util.Date;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.Accessor;
@@ -21,9 +22,15 @@ public class MutableProbabilityModelStub implements IProbabilityModel {
 			.getName();
 
 	private static final Logger log = Logger.getLogger(CLASSNAME);
+	
+	public static String createRandomModelName() {
+		String retVal =
+			MutableProbabilityModelStub.class.getSimpleName() + "_"
+					+ UUID.randomUUID().toString() + "_" + new Date().getTime();
+		return retVal;
+	}
 
-	public final String modelName = MutableProbabilityModelStub.class
-			.getSimpleName() + "_" + new Date().getTime();
+	public final String modelName = createRandomModelName();
 
 	public final String evaluatorSignature = Signature
 			.calculateSignature(modelName + "_Evaluator");
@@ -45,12 +52,7 @@ public class MutableProbabilityModelStub implements IProbabilityModel {
 
 	// Instance data that can be tweaked for testing
 	public String accessorClassName;
-	public String antCommand;
-	public String blockingConfigurationName;
 	public String clueFilePath;
-//	public String databaseAbstractionName;
-//	public String databaseAccessorName;
-	public String databaseConfigurationName;
 	public String modelFilePath;
 	public String trainingSource;
 
@@ -103,12 +105,6 @@ public class MutableProbabilityModelStub implements IProbabilityModel {
 	}
 
 	@Override
-	public String getAntCommand() {
-		log.exiting(CLASSNAME, "getAntCommand", antCommand);
-		return antCommand;
-	}
-
-	@Override
 	public String getClueFilePath() {
 		log.exiting(CLASSNAME, "getClueFilePath", clueFilePath);
 		return clueFilePath;
@@ -145,26 +141,26 @@ public class MutableProbabilityModelStub implements IProbabilityModel {
 		return null;
 	}
 
-//	@Override
-//	public String getDatabaseAbstractionName() {
-//		log.exiting(CLASSNAME, "getDatabaseAbstractionName",
-//				databaseAbstractionName);
-//		return databaseAbstractionName;
-//	}
+	// @Override
+	// public String getDatabaseAbstractionName() {
+	// log.exiting(CLASSNAME, "getDatabaseAbstractionName",
+	// databaseAbstractionName);
+	// return databaseAbstractionName;
+	// }
 
-//	@Override
-//	public String getDatabaseAccessorName() {
-//		log.exiting(CLASSNAME, "getDatabaseAccessorName",
-//				databaseAccessorName);
-//		return databaseAccessorName;
-//	}
+	// @Override
+	// public String getDatabaseAccessorName() {
+	// log.exiting(CLASSNAME, "getDatabaseAccessorName",
+	// databaseAccessorName);
+	// return databaseAccessorName;
+	// }
 
-//	@Override
-//	public String getDatabaseConfigurationName() {
-//		log.exiting(CLASSNAME, "getDatabaseConfigurationName",
-//				databaseConfigurationName);
-//		return databaseConfigurationName;
-//	}
+	// @Override
+	// public String getDatabaseConfigurationName() {
+	// log.exiting(CLASSNAME, "getDatabaseConfigurationName",
+	// databaseConfigurationName);
+	// return databaseConfigurationName;
+	// }
 
 	@Override
 	public int getDecisionDomainSize() {
@@ -269,12 +265,6 @@ public class MutableProbabilityModelStub implements IProbabilityModel {
 	}
 
 	@Override
-	public boolean isUseAnt() {
-		log.exiting(CLASSNAME, "isUseAnt", false);
-		return false;
-	}
-
-	@Override
 	public void machineLearnerChanged(Object oldValue, Object newValue) {
 		log.entering(CLASSNAME, "machineLearnerChanged", new Object[] {
 				oldValue, newValue });
@@ -324,13 +314,6 @@ public class MutableProbabilityModelStub implements IProbabilityModel {
 	public void setAccessor(Accessor newAcc) {
 		log.entering(CLASSNAME, "setAccessor", newAcc);
 		log.exiting(CLASSNAME, "setAccessor");
-
-	}
-
-	@Override
-	public void setAntCommand(String v) {
-		log.entering(CLASSNAME, "setAntCommand", v);
-		log.exiting(CLASSNAME, "setAntCommand");
 
 	}
 
@@ -402,13 +385,6 @@ public class MutableProbabilityModelStub implements IProbabilityModel {
 	public void setTrainingSource(String v) {
 		log.entering(CLASSNAME, "setTrainingSource", v);
 		log.exiting(CLASSNAME, "setTrainingSource");
-
-	}
-
-	@Override
-	public void setUseAnt(boolean v) {
-		log.entering(CLASSNAME, "setUseAnt", v);
-		log.exiting(CLASSNAME, "setUseAnt");
 
 	}
 

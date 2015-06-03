@@ -12,11 +12,9 @@ package com.choicemaker.cm.core;
 
 import java.io.Serializable;
 
-import com.choicemaker.cm.core.base.ProbabilityModel;
-
 
 /**
- * Provides access to the clue set.
+ * Provides access to the clue set and other generated features.
  * <p>
  * This interface is implemented by the generated accessor class, which
  * also implements the translator accessor interfaces of the configured

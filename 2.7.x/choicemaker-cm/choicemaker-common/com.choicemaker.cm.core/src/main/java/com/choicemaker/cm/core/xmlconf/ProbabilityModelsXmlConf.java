@@ -39,11 +39,9 @@ import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.MachineLearner;
 import com.choicemaker.cm.core.ModelAttributeNames;
 import com.choicemaker.cm.core.ModelConfigurationException;
-import com.choicemaker.cm.core.ProbabilityModelConfiguration;
 import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.base.MutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
-import com.choicemaker.cm.core.base.ProbabilityModel;
 import com.choicemaker.cm.core.compiler.CompilationArguments;
 import com.choicemaker.cm.core.compiler.CompilerException;
 import com.choicemaker.cm.core.compiler.ICompiler;
@@ -122,11 +120,11 @@ public class ProbabilityModelsXmlConf {
 		setAttribute(m,
 			ModelAttributeNames.AN_ENABLE_ALL_RULES_BEFORE_TRAINING,
 			String.valueOf(model.isEnableAllRulesBeforeTraining()));
-		Accessor acc = model.getAccessor();
+
 		// AJW 1/8/04: the actual accessor class is a dynamic proxy...
+		Accessor acc = model.getAccessor();
 		setAttribute(m,ModelAttributeNames.AN_ACCESSOR_CLASS, model.getAccessorClassName());
-		setAttribute(m,ModelAttributeNames.AN_USE_ANT, String.valueOf(model.isUseAnt()));
-		setAttribute(m,ModelAttributeNames.AN_ANT_COMMAND, model.getAntCommand());
+
 		MlModelConf mlc = model.getMachineLearner().getModelConf();
 		Element mle = new Element("machineLearner");
 		mle.setAttribute("class", mlc.getExtensionPointId());
@@ -206,12 +204,6 @@ public class ProbabilityModelsXmlConf {
 			"true".equals(m
 					.getAttributeValue(ModelAttributeNames.AN_ENABLE_ALL_RULES_BEFORE_TRAINING));
 		String userName = m.getAttributeValue(ModelAttributeNames.AN_USER_NAME);
-		boolean useAnt =
-			"true".equals(m.getAttributeValue(ModelAttributeNames.AN_USE_ANT));
-		String antCommand =
-			m.getAttributeValue(ModelAttributeNames.AN_ANT_COMMAND);
-		if (antCommand == null)
-			antCommand = "";
 		String accessorName =
 			m.getAttributeValue(ModelAttributeNames.AN_ACCESSOR_CLASS);
 		if (accessorName == null || accessorName.trim().isEmpty()) {
@@ -229,7 +221,7 @@ public class ProbabilityModelsXmlConf {
 		}
 		logger.fine("classLoader == " + customClassLoader);
 
-		ProbabilityModel retVal = null;
+		MutableProbabilityModel retVal = null;
 		try {
 			if (allowCompile && classLoader instanceof URLClassLoader) {
 				String resourcePath = accessorName.replace('.', '/') + ".class";
@@ -298,9 +290,9 @@ public class ProbabilityModelsXmlConf {
 						ChoiceMakerExtensionPoint.CM_CORE_MACHINELEARNER, name);
 			ml = mc.readMachineLearner(mle, accessor, cl, oldClueNums);
 			retVal =
-				new ProbabilityModel(fileName, clueFileName, accessor, ml,
+				new MutableProbabilityModel(fileName, clueFileName, accessor, ml,
 						cluesToEvaluate, trainingSource, trainedWithHolds,
-						lastTrainingDate, useAnt, antCommand);
+						lastTrainingDate);
 			retVal.setFiringThreshold(firingThreshold);
 			retVal.setEnableAllCluesBeforeTraining(enableAllCluesBeforeTraining);
 			retVal.setEnableAllRulesBeforeTraining(enableAllRulesBeforeTraining);
@@ -355,7 +347,7 @@ public class ProbabilityModelsXmlConf {
 				String name = e.getAttributeValue("name");
 				String fileName = e.getAttributeValue("file");
 
-				ProbabilityModel m;
+				MutableProbabilityModel m;
 				final boolean allowRecompile = !fromResource;
 				final ClassLoader customCL = null;
 				if (fromResource) {
@@ -363,7 +355,7 @@ public class ProbabilityModelsXmlConf {
 						ProbabilityModelsXmlConf.class.getClassLoader()
 								.getResourceAsStream("META-INF/" + fileName);
 					m =
-						(ProbabilityModel) readModel(null, is, compiler,
+						(MutableProbabilityModel) readModel(null, is, compiler,
 								new StringWriter(), customCL, allowRecompile);
 				} else {
 					InputStream is;
@@ -377,7 +369,7 @@ public class ProbabilityModelsXmlConf {
 						throw new ModelConfigurationException(msg);
 					}
 					m =
-						(ProbabilityModel) readModel(fileName, is, compiler,
+						(MutableProbabilityModel) readModel(fileName, is, compiler,
 								new StringWriter(), customCL, allowRecompile);
 				}
 				
@@ -390,27 +382,23 @@ public class ProbabilityModelsXmlConf {
 				}
 
 				List props = e.getChildren("property");
-				Iterator iProps = props.iterator();
-				while (iProps.hasNext()) {
-					Element p = (Element) iProps.next();
-					String key = p.getAttributeValue("name").intern();
-					String value = p.getAttributeValue("value").intern();
-					m.properties().put(key,value);
-					if (key.equals(ProbabilityModelConfiguration.PN_DB_CONFIGURATION)) {
-						m.setDatabaseConfigurationName(value);
-//					} else if (key.equals(ProbabilityModelConfiguration.PN_DATABASE_ABSTRACTION)) {
-//						m.setDatabaseAbstractionName(value);
-					} else if (key.equals(ProbabilityModelConfiguration.PN_DATABASE_ACCESSOR)) {
-						m.setDatabaseAccessorName(value);
-					} else if (key.equals(ProbabilityModelConfiguration.PN_BLOCKING_CONFIGURATION)) {
-						m.setBlockingConfigurationName(value);
+				if (props != null && props.size() > 0) {
+					logger.warning("Model properties are deprecated.");
+					for (Iterator iProps = props.iterator(); iProps.hasNext();) {
+						Element p = (Element) iProps.next();
+						String key = p.getAttributeValue("name").intern();
+						String value = p.getAttributeValue("value").intern();
+						String msg =
+							"Ignoring model property/value: " + key + "/"
+									+ value;
+						logger.warning(msg);
 					}
 				}
 
 				PMManager.addModel(m);
 			}
 		} else {
-			logger.warning("Missing Element 'productionProbabilityModels'");
+			logger.info("No 'productionProbabilityModels' element");
 		}
 	}
 

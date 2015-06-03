@@ -48,7 +48,6 @@ import javax.swing.event.EventListenerList;
 import com.choicemaker.cm.analyzer.filter.BooleanFilterCondition;
 import com.choicemaker.cm.analyzer.filter.FilterCondition;
 import com.choicemaker.cm.analyzer.filter.RuleFilterCondition;
-import com.choicemaker.cm.compiler.gen.ant.CallAnt;
 import com.choicemaker.cm.compiler.impl.CompilerFactory;
 import com.choicemaker.cm.core.ClueDesc;
 import com.choicemaker.cm.core.Constants;
@@ -809,21 +808,16 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 		multiSourceLists[0] = null;
 		multiSourceLists[1] = null;
 		setEvaluated(false);
-		boolean success = true;
-		if (pm.isUseAnt()) {
-			success = CallAnt.callAnt(pm.getAntCommand(), messagePanel.getPrintStream());
-		}
-		if (success) {
-			try {
-				CompilerFactory factory = CompilerFactory.getInstance ();
-				ICompiler compiler = factory.getDefaultCompiler();
-				success = compiler.compile(pm, messagePanel.getWriter());
-			} catch (CompilerException ex) {
-				// TODO FIXME error message for compiler exception
-				logger.severe(
-						new LoggingObject("TODO FIXME", probabilityModel
-								.getModelFilePath()).toString() + ": " + ex);
-			}
+		boolean success = false;
+		try {
+			CompilerFactory factory = CompilerFactory.getInstance ();
+			ICompiler compiler = factory.getDefaultCompiler();
+			success = compiler.compile(pm, messagePanel.getWriter());
+		} catch (CompilerException ex) {
+			// TODO FIXME error message for compiler exception
+			logger.severe(
+					new LoggingObject("TODO FIXME", probabilityModel
+							.getModelFilePath()).toString() + ": " + ex);
 		}
 		setCursor(cursor);
 		return success;

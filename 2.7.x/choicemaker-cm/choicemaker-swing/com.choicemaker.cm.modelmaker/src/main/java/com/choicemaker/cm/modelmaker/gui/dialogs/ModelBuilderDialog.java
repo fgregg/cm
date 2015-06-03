@@ -19,7 +19,6 @@ import java.io.File;
 import java.util.logging.Logger;
 
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -31,7 +30,7 @@ import com.choicemaker.cm.core.Constants;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.OperationFailedException;
 import com.choicemaker.cm.core.base.DoNothingMachineLearning;
-import com.choicemaker.cm.core.base.ProbabilityModel;
+import com.choicemaker.cm.core.base.MutableProbabilityModel;
 import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 import com.choicemaker.cm.core.util.LoggingObject;
 import com.choicemaker.cm.gui.utils.JavaHelpUtils;
@@ -64,10 +63,6 @@ public class ModelBuilderDialog extends JDialog implements Enable {
 	private JButton cluesFileNameBrowseButton;
 	private JLabel cluesRelativeLabel;
 	private JComboBox cluesRelativeBox;
-	private JLabel useAnt;
-	private JCheckBox useAntCheckBox;
-	private JLabel antCommand;
-	private JTextField antCommandField;
 	private JButton buildButton;
 	private JButton cancelButton;
 	private boolean isNewModel;
@@ -96,8 +91,6 @@ public class ModelBuilderDialog extends JDialog implements Enable {
 		} else {
 			cluesRelativeBox.setSelectedItem(RELATIVE);	
 		}
-		useAntCheckBox.setSelected(pm.isUseAnt());
-		antCommandField.setText(pm.getAntCommand());
 		setEnabledness();
 	}
 
@@ -108,7 +101,6 @@ public class ModelBuilderDialog extends JDialog implements Enable {
 
 	public void setEnabledness() {
 		buildButton.setEnabled(modelFileNameField.getText().length() > 0 && cluesFileNameField.getText().length() > 0);
-		antCommandField.setEnabled(useAntCheckBox.isSelected());
 	}
 
 	private boolean buildModel() {
@@ -148,9 +140,7 @@ public class ModelBuilderDialog extends JDialog implements Enable {
 			cluesFileName = FileUtilities.getRelativeFile(rel, cluesFileName).toString();	
 		}
 		
-		IProbabilityModel pm = new ProbabilityModel(modelFileName, cluesFileName);
-		pm.setUseAnt(useAntCheckBox.isSelected());
-		pm.setAntCommand(antCommandField.getText());
+		IProbabilityModel pm = new MutableProbabilityModel(modelFileName, cluesFileName);
 		pm.setMachineLearner(new DoNothingMachineLearning());
 		boolean success = parent.buildProbabilityModel(pm);
 		if (success) {
@@ -208,12 +198,6 @@ public class ModelBuilderDialog extends JDialog implements Enable {
 		modelFileNameField.getDocument().addDocumentListener(dl);
 		cluesFileNameField.getDocument().addDocumentListener(dl);
 
-		useAntCheckBox.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				setEnabledness();
-			}
-		});
-
 		JavaHelpUtils.enableHelpKey(this, "train.gui.dialog.modelbuilder");
 	}
 
@@ -229,12 +213,6 @@ public class ModelBuilderDialog extends JDialog implements Enable {
 		cluesRelativeBox = new JComboBox();
 		cluesRelativeBox.addItem(RELATIVE);
 		cluesRelativeBox.addItem(ABSOLUTE);
-		useAnt = new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.dialog.model.builder.useant"));
-		useAntCheckBox = new JCheckBox();
-		useAntCheckBox.setSelected(false);
-		antCommand = new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.dialog.model.builder.antcommand"));
-		antCommandField = new JTextField(35);
-		antCommandField.setText("-Dnomain=true compile");
 		buildButton = new JButton(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.dialog.model.builder.build"));
 		cancelButton = new JButton(ChoiceMakerCoreMessages.m.formatMessage("cancel"));
 	}
@@ -298,31 +276,31 @@ public class ModelBuilderDialog extends JDialog implements Enable {
 		c.fill = GridBagConstraints.NONE;
 		content.add(cluesRelativeBox, c);
 
+//		//Row 3 ........................................
+//		c.gridy = 3;
+//		c.gridx = 0;
+//		c.fill = GridBagConstraints.NONE;
+//		c.anchor = GridBagConstraints.EAST;
+//		content.add(useAnt, c);
+//
+//		c.gridx = 1;
+//		c.anchor = GridBagConstraints.WEST;
+//		content.add(useAntCheckBox, c);
+//
+//		//Row 4 ........................................
+//		c.gridy = 4;
+//		c.gridx = 0;
+//		c.fill = GridBagConstraints.NONE;
+//		content.add(antCommand, c);
+//
+//		c.gridx = 1;
+//		c.gridwidth = 2;
+//		c.fill = GridBagConstraints.HORIZONTAL;
+//		content.add(antCommandField, c);
+//		c.gridwidth = 1;
+
 		//Row 3 ........................................
 		c.gridy = 3;
-		c.gridx = 0;
-		c.fill = GridBagConstraints.NONE;
-		c.anchor = GridBagConstraints.EAST;
-		content.add(useAnt, c);
-
-		c.gridx = 1;
-		c.anchor = GridBagConstraints.WEST;
-		content.add(useAntCheckBox, c);
-
-		//Row 4 ........................................
-		c.gridy = 4;
-		c.gridx = 0;
-		c.fill = GridBagConstraints.NONE;
-		content.add(antCommand, c);
-
-		c.gridx = 1;
-		c.gridwidth = 2;
-		c.fill = GridBagConstraints.HORIZONTAL;
-		content.add(antCommandField, c);
-		c.gridwidth = 1;
-
-		//Row 4 ........................................
-		c.gridy = 5;
 		c.gridx = 2;
 		c.fill = GridBagConstraints.NONE;
 		c.anchor = GridBagConstraints.EAST;

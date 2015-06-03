@@ -18,9 +18,6 @@ import java.io.IOException;
 import java.lang.reflect.Proxy;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Map;
-import java.util.logging.Logger;
 
 import javax.swing.event.SwingPropertyChangeSupport;
 
@@ -47,34 +44,30 @@ import com.choicemaker.util.ArrayHelper;
 import com.choicemaker.util.FileUtilities;
 
 /**
- * A probability model consisting of holder classes, translators, a clue set, weights, and
- * a list of clues to be evaluated.
+ * A probability model consisting of holder classes, translators, a clue set,
+ * weights, and a list of clues to be evaluated.
  *
- * Class invariant:
- * clueSet != null <=>
- *   cluesToEval != null AND cluesToEval.length == clueSet.size() AND
- *   weights != null AND weights.length == clueSet.size
+ * Class invariant: clueSet != null <=> cluesToEval != null AND
+ * cluesToEval.length == clueSet.size() AND weights != null AND weights.length
+ * == clueSet.size
  *
  * @author Martin Buechi
  * @author S. Yoakum-Stover
- * @author rphall (Split ProbabilityModel into separate instance and manager types)
+ * @author rphall (Split ProbabilityModel into separate instance and manager
+ *         types)
  * @version $Revision: 1.1 $ $Date: 2010/03/24 18:02:30 $
  * @see PMManager
  */
 public class MutableProbabilityModel implements IProbabilityModel {
-	
-	private static final Logger logger = Logger
-			.getLogger(MutableProbabilityModel.class.getName());
+
+	// private static final Logger logger = Logger
+	// .getLogger(MutableProbabilityModel.class.getName());
 
 	private Accessor acc;
 	private String accessorClassName;
-	private String blockingConfigurationName;
 	private String clueFilePath;
 	private File clueFile;
 	private boolean[] cluesToEvaluate;
-//	private String databaseAbstractionName;
-	private String databaseAccessorName;
-	private String databaseConfigurationName;
 	private int decisionDomainSize;
 	private boolean enableAllCluesBeforeTraining;
 	private boolean enableAllRulesBeforeTraining;
@@ -88,27 +81,11 @@ public class MutableProbabilityModel implements IProbabilityModel {
 	private String trainingSource;
 	private String userName;
 
-	/** @deprecated */
-	private Hashtable properties;
-
-	/** @deprecated */
-	private String antCommand;
-
-	/** @deprecated */
-	private boolean useAnt;
-
 	// listeners
-	private SwingPropertyChangeSupport propertyChangeListeners = new SwingPropertyChangeSupport(this);
+	private SwingPropertyChangeSupport propertyChangeListeners =
+		new SwingPropertyChangeSupport(this);
 
-	/**
-	 * Constructor.
-	 */
-	MutableProbabilityModel() {
-		this.properties = new Hashtable();
-	}
-
-	MutableProbabilityModel(String modelFilePath, String clueFilePath) {
-		this();
+	public MutableProbabilityModel(String modelFilePath, String clueFilePath) {
 		setModelFilePath(modelFilePath);
 		setClueFilePath(clueFilePath);
 		setMachineLearner(new DoNothingMachineLearning());
@@ -116,55 +93,22 @@ public class MutableProbabilityModel implements IProbabilityModel {
 
 	public MutableProbabilityModel(ProbabilityModelSpecification spec,
 			Accessor acc) throws ModelConfigurationException {
-		this();
 		setModelFilePath(spec.getWeightFilePath());
 		setClueFilePath(spec.getClueFilePath());
 		setMachineLearner(spec.getMachineLearner());
 		this.setAccessor(acc);
 	}
 
-	MutableProbabilityModel(
-			String modelFilePath,
-			String clueFilePath,
-			Accessor acc,
-			MachineLearner ml,
-			boolean[] cluesToEvaluate,
-			String trainingSource,
-			boolean trainedWithHolds,
-			Date lastTrainingDate)
-			throws IllegalArgumentException, ModelConfigurationException {
-		this (
-				modelFilePath,
-				clueFilePath,
-				acc,
-				ml,
-				cluesToEvaluate,
-				trainingSource,
-				trainedWithHolds,
-				lastTrainingDate,
-				/* useAnt */ false,
-				/* String */ null);
-		}
-
-	private MutableProbabilityModel(
-		String modelFilePath,
-		String clueFilePath,
-		Accessor acc,
-		MachineLearner ml,
-		boolean[] cluesToEvaluate,
-		String trainingSource,
-		boolean trainedWithHolds,
-		Date lastTrainingDate,
-		boolean useAnt,
-		String antCommand)
-		throws IllegalArgumentException, ModelConfigurationException {
+	public MutableProbabilityModel(String modelFilePath, String clueFilePath,
+			Accessor acc, MachineLearner ml, boolean[] cluesToEvaluate,
+			String trainingSource, boolean trainedWithHolds,
+			Date lastTrainingDate) throws IllegalArgumentException,
+			ModelConfigurationException {
 		this(modelFilePath, clueFilePath);
 		setAccessorInternal(acc);
 		this.trainingSource = trainingSource;
 		this.trainedWithHolds = trainedWithHolds;
 		this.lastTrainingDate = lastTrainingDate;
-		this.useAnt = useAnt;
-		this.antCommand = antCommand;
 		acc.getClueSet(); // Make sure the clue set gets loaded
 		setMachineLearner(ml);
 		setCluesToEvaluate(cluesToEvaluate);
@@ -174,7 +118,7 @@ public class MutableProbabilityModel implements IProbabilityModel {
 	/**
 	 * Returns the number of active clues in this <code>ClueSet</code>.
 	 *
-	 * @return  The number of active clues in this <code>ProbabilityModel</code>.
+	 * @return The number of active clues in this <code>ProbabilityModel</code>.
 	 */
 	public int activeSize() {
 		int r = 0;
@@ -190,8 +134,8 @@ public class MutableProbabilityModel implements IProbabilityModel {
 	 * Returns the number of clues predicting <code>Decision<code>
 	 * <code>d</code> in this <code>ProbabilityModel</code>.
 	 *
-	 * @return  The number of clues predicting <code>Decision</code>
-	 *            <code>d</code> in this <code>ProbabilityModel</code>.
+	 * @return The number of clues predicting <code>Decision</code>
+	 *         <code>d</code> in this <code>ProbabilityModel</code>.
 	 */
 	public int activeSize(Decision d) {
 		ClueDesc[] cd = acc.getClueSet().getClueDesc();
@@ -218,7 +162,8 @@ public class MutableProbabilityModel implements IProbabilityModel {
 
 	public void changedCluesToEvaluate() {
 		if (!multiPropertyChange) {
-			propertyChangeListeners.firePropertyChange(CLUES_TO_EVALUATE, null, cluesToEvaluate);
+			propertyChangeListeners.firePropertyChange(CLUES_TO_EVALUATE, null,
+					cluesToEvaluate);
 		}
 	}
 
@@ -228,13 +173,14 @@ public class MutableProbabilityModel implements IProbabilityModel {
 
 	public void endMultiPropertyChange() {
 		multiPropertyChange = false;
-		propertyChangeListeners.firePropertyChange(null, new Object(), new Object());
+		propertyChangeListeners.firePropertyChange(null, new Object(),
+				new Object());
 	}
 
 	/**
 	 * Returns the translator accessors.
 	 *
-	 * @return  The translator accessors.
+	 * @return The translator accessors.
 	 */
 	public Accessor getAccessor() {
 		return acc;
@@ -243,9 +189,9 @@ public class MutableProbabilityModel implements IProbabilityModel {
 	/**
 	 * Returns the name of the Accessor class.
 	 *
-	 * Note: this is not the same as getAccessor().getClass().getName()
-	 * because getAccessor() returns a dynamic proxy, so the class name
-	 * is something like $Proxy0.
+	 * Note: this is not the same as getAccessor().getClass().getName() because
+	 * getAccessor() returns a dynamic proxy, so the class name is something
+	 * like $Proxy0.
 	 *
 	 * @return The name of the accessor class.
 	 */
@@ -256,15 +202,15 @@ public class MutableProbabilityModel implements IProbabilityModel {
 	/**
 	 * Returns an instance of the clue set.
 	 *
-	 * @return   An instance of the clue set.
+	 * @return An instance of the clue set.
 	 */
 	public ClueSet getClueSet() {
 		return acc.getClueSet();
 	}
 
-//	public String getClueSetPath() {
-//		return clueSetPath;
-//	}
+	// public String getClueSetPath() {
+	// return clueSetPath;
+	// }
 
 	public String getClueFilePath() {
 		return clueFilePath;
@@ -277,7 +223,7 @@ public class MutableProbabilityModel implements IProbabilityModel {
 	/**
 	 * Returns the list of clues to evaluate.
 	 *
-	 * @return  The list of clues to evaluate.
+	 * @return The list of clues to evaluate.
 	 */
 	public boolean[] getCluesToEvaluate() {
 		return cluesToEvaluate;
@@ -288,7 +234,8 @@ public class MutableProbabilityModel implements IProbabilityModel {
 		int start = cd.getStartLineNumber();
 		int end = cd.getEndLineNumber();
 		int len = end - start;
-		BufferedReader in = new BufferedReader(new FileReader(getClueFilePath()));
+		BufferedReader in =
+			new BufferedReader(new FileReader(getClueFilePath()));
 		for (int i = 1; i < start && in.ready(); ++i) {
 			in.readLine();
 		}
@@ -311,7 +258,7 @@ public class MutableProbabilityModel implements IProbabilityModel {
 	/**
 	 * Returns the file name of the probability model.
 	 *
-	 * @return   The file name of the probability model.
+	 * @return The file name of the probability model.
 	 */
 	public String getModelFilePath() {
 		return modelFilePath;
@@ -319,6 +266,7 @@ public class MutableProbabilityModel implements IProbabilityModel {
 
 	/**
 	 * Get the value of firingThreshold.
+	 * 
 	 * @return value of firingThreshold.
 	 */
 	public int getFiringThreshold() {
@@ -327,6 +275,7 @@ public class MutableProbabilityModel implements IProbabilityModel {
 
 	/**
 	 * Get the value of lastTrainingDate.
+	 * 
 	 * @return value of lastTrainingDate.
 	 */
 	public Date getLastTrainingDate() {
@@ -340,7 +289,7 @@ public class MutableProbabilityModel implements IProbabilityModel {
 	/**
 	 * Returns the model name of the probability model.
 	 *
-	 * @return   The model name of the probability model.
+	 * @return The model name of the probability model.
 	 */
 	public String getModelName() {
 		return modelName;
@@ -357,6 +306,7 @@ public class MutableProbabilityModel implements IProbabilityModel {
 
 	/**
 	 * Get the value of trainingSource.
+	 * 
 	 * @return value of trainingSource.
 	 */
 	public String getTrainingSource() {
@@ -365,6 +315,7 @@ public class MutableProbabilityModel implements IProbabilityModel {
 
 	/**
 	 * Get the value of userName.
+	 * 
 	 * @return value of userName.
 	 */
 	public String getUserName() {
@@ -373,6 +324,7 @@ public class MutableProbabilityModel implements IProbabilityModel {
 
 	/**
 	 * Get the value of enableAllCluesBeforeTraining.
+	 * 
 	 * @return value of enableAllCluesBeforeTraining.
 	 */
 	public boolean isEnableAllCluesBeforeTraining() {
@@ -381,6 +333,7 @@ public class MutableProbabilityModel implements IProbabilityModel {
 
 	/**
 	 * Get the value of enableAllRulesBeforeTraining.
+	 * 
 	 * @return value of enableAllRulesBeforeTraining.
 	 */
 	public boolean isEnableAllRulesBeforeTraining() {
@@ -392,7 +345,8 @@ public class MutableProbabilityModel implements IProbabilityModel {
 	}
 
 	public void machineLearnerChanged(Object oldValue, Object newValue) {
-		propertyChangeListeners.firePropertyChange(MACHINE_LEARNER_PROPERTY, oldValue, newValue);
+		propertyChangeListeners.firePropertyChange(MACHINE_LEARNER_PROPERTY,
+				oldValue, newValue);
 	}
 
 	public boolean needsRecompilation() {
@@ -400,7 +354,9 @@ public class MutableProbabilityModel implements IProbabilityModel {
 			return true;
 		} else {
 			long cd = acc.getCreationDate();
-			return cd < getClueFile().lastModified() || cd < new File(acc.getSchemaFileName()).getAbsoluteFile().lastModified();
+			return cd < getClueFile().lastModified()
+					|| cd < new File(acc.getSchemaFileName()).getAbsoluteFile()
+							.lastModified();
 		}
 	}
 
@@ -413,10 +369,6 @@ public class MutableProbabilityModel implements IProbabilityModel {
 			}
 		}
 		return res;
-	}
-
-	public Map properties() {
-		return this.properties;
 	}
 
 	public void removePropertyChangeListener(PropertyChangeListener l) {
@@ -443,8 +395,9 @@ public class MutableProbabilityModel implements IProbabilityModel {
 	/**
 	 * Sets the translator accessors.
 	 *
-	 * @param   newAcc  The translator accessors.
-	 * @throws ModelConfigurationException 
+	 * @param newAcc
+	 *            The translator accessors.
+	 * @throws ModelConfigurationException
 	 */
 	public void setAccessor(Accessor newAcc) throws ModelConfigurationException {
 		Accessor oldAccessor = acc;
@@ -493,7 +446,8 @@ public class MutableProbabilityModel implements IProbabilityModel {
 	private void setAccessorInternal(Accessor accessor)
 			throws ModelConfigurationException {
 		CMExtension[] exts =
-			CMPlatformUtils.getExtensions(ChoiceMakerExtensionPoint.CM_CORE_ACCESSOR);
+			CMPlatformUtils
+					.getExtensions(ChoiceMakerExtensionPoint.CM_CORE_ACCESSOR);
 		Class[] interfaces = new Class[exts.length];
 		for (int i = 0; i < interfaces.length; i++) {
 			CMExtension ext = exts[i];
@@ -535,12 +489,15 @@ public class MutableProbabilityModel implements IProbabilityModel {
 	/**
 	 * Sets the clues to evaluate.
 	 *
-	 * @param   cluesToEvaluate  The clues to evaluate.
+	 * @param cluesToEvaluate
+	 *            The clues to evaluate.
 	 */
-	public void setCluesToEvaluate(boolean[] cluesToEvaluate) throws IllegalArgumentException {
+	public void setCluesToEvaluate(boolean[] cluesToEvaluate)
+			throws IllegalArgumentException {
 		ClueSet clueSet = getClueSet();
 		if (clueSet != null) {
-			if (cluesToEvaluate == null || cluesToEvaluate.length != clueSet.size()) {
+			if (cluesToEvaluate == null
+					|| cluesToEvaluate.length != clueSet.size()) {
 				throw new IllegalArgumentException("Illegal cluesToEvaluate.");
 			}
 		} else if (cluesToEvaluate != null) {
@@ -548,13 +505,16 @@ public class MutableProbabilityModel implements IProbabilityModel {
 		}
 		this.cluesToEvaluate = cluesToEvaluate;
 		if (!multiPropertyChange) {
-			propertyChangeListeners.firePropertyChange(CLUES_TO_EVALUATE, null, cluesToEvaluate);
+			propertyChangeListeners.firePropertyChange(CLUES_TO_EVALUATE, null,
+					cluesToEvaluate);
 		}
 	}
 
 	/**
 	 * Set the value of enableAllCluesBeforeTraining.
-	 * @param v  Value to assign to enableAllCluesBeforeTraining.
+	 * 
+	 * @param v
+	 *            Value to assign to enableAllCluesBeforeTraining.
 	 */
 	public void setEnableAllCluesBeforeTraining(boolean v) {
 		this.enableAllCluesBeforeTraining = v;
@@ -562,7 +522,9 @@ public class MutableProbabilityModel implements IProbabilityModel {
 
 	/**
 	 * Set the value of enableAllRulesBeforeTraining.
-	 * @param v  Value to assign to enableAllRulesBeforeTraining.
+	 * 
+	 * @param v
+	 *            Value to assign to enableAllRulesBeforeTraining.
 	 */
 	public void setEnableAllRulesBeforeTraining(boolean v) {
 		this.enableAllRulesBeforeTraining = v;
@@ -572,8 +534,8 @@ public class MutableProbabilityModel implements IProbabilityModel {
 	 * Sets the path to the probability model weights file (*.model)
 	 * 
 	 * If this model is in the collection of probability models, the
-	 * {@link #getModelName() model configuration name} that is
-	 * associated with in the collection is not changed.
+	 * {@link #getModelName() model configuration name} that is associated with
+	 * in the collection is not changed.
 	 * 
 	 * @param modelFilePath
 	 *            The new file path.
@@ -585,7 +547,9 @@ public class MutableProbabilityModel implements IProbabilityModel {
 
 	/**
 	 * Set the value of firingThreshold.
-	 * @param v  Value to assign to firingThreshold.
+	 * 
+	 * @param v
+	 *            Value to assign to firingThreshold.
 	 */
 	public void setFiringThreshold(int v) {
 		this.firingThreshold = v;
@@ -593,7 +557,9 @@ public class MutableProbabilityModel implements IProbabilityModel {
 
 	/**
 	 * Set the value of lastTrainingDate.
-	 * @param v  Value to assign to lastTrainingDate.
+	 * 
+	 * @param v
+	 *            Value to assign to lastTrainingDate.
 	 */
 	public void setLastTrainingDate(Date v) {
 		this.lastTrainingDate = v;
@@ -604,7 +570,8 @@ public class MutableProbabilityModel implements IProbabilityModel {
 		this.ml = ml;
 		ml.setProbabilityModel(this);
 		if (!multiPropertyChange) {
-			propertyChangeListeners.firePropertyChange(MACHINE_LEARNER, old, ml);
+			propertyChangeListeners
+					.firePropertyChange(MACHINE_LEARNER, old, ml);
 		}
 	}
 
@@ -619,7 +586,9 @@ public class MutableProbabilityModel implements IProbabilityModel {
 	public void setClueFilePath(String fn) {
 		this.clueFilePath = fn;
 		if (fn != null && modelFilePath != null) {
-			this.clueFile = FileUtilities.getAbsoluteFile(new File(modelFilePath).getParentFile(), fn);
+			this.clueFile =
+				FileUtilities.getAbsoluteFile(
+						new File(modelFilePath).getParentFile(), fn);
 		} else if (fn != null) {
 			this.clueFile = new File(fn).getAbsoluteFile();
 		} else {
@@ -633,7 +602,9 @@ public class MutableProbabilityModel implements IProbabilityModel {
 
 	/**
 	 * Set the value of trainingSource.
-	 * @param v  Value to assign to trainingSource.
+	 * 
+	 * @param v
+	 *            Value to assign to trainingSource.
 	 */
 	public void setTrainingSource(String v) {
 		this.trainingSource = v;
@@ -641,38 +612,12 @@ public class MutableProbabilityModel implements IProbabilityModel {
 
 	/**
 	 * Set the value of userName.
-	 * @param v  Value to assign to userName.
+	 * 
+	 * @param v
+	 *            Value to assign to userName.
 	 */
 	public void setUserName(String v) {
 		this.userName = v;
-	}
-	
-	/** @deprecated */
-	public boolean isUseAnt() {
-		assert useAnt == false;
-		return useAnt;
-	}
-
-	/** @deprecated */
-	public void setUseAnt(boolean ignored) {
-		assert this.useAnt == false;
-	}
-
-	/**
-	 * Get the value of antCommand.
-	 * @return value of antCommand.
-	 */
-	public String getAntCommand() {
-		assert antCommand == null;
-		return antCommand;
-	}
-
-	/**
-	 * Set the value of antCommand.
-	 * @param v  Value to assign to antCommand.
-	 */
-	public void setAntCommand(String ignored) {
-		assert antCommand == null;
 	}
 
 	public String getClueSetName() {
@@ -706,61 +651,10 @@ public class MutableProbabilityModel implements IProbabilityModel {
 		return e == null ? "" : e.getSignature();
 	}
 
-	public String getBlockingConfigurationName() {
-		String retVal = blockingConfigurationName;
-		if (retVal == null) {
-			logger.warning("Blocking configuration has not been set.");
-		}
-		return retVal;
-	}
-
-//	public String getDatabaseAbstractionName() {
-//		return databaseAbstractionName;
-//	}
-
-	public String getDatabaseAccessorName() {
-		return databaseAccessorName;
-	}
-
-	public String getDatabaseConfigurationName() {
-		String retVal = databaseConfigurationName;
-		if (retVal == null) {
-			logger.warning("Database configuration has not been set.");
-		}
-		return retVal;
-	}
-
-	public void setBlockingConfigurationName(String bc) {
-		/*
-		if (bc == null || bc.trim().isEmpty()) {
-			throw new IllegalArgumentException("null or blank blocking configuration");
-		}
-		*/
-		this.blockingConfigurationName = bc;
-	}
-
-//	public void setDatabaseAbstractionName(String databaseAbstractionName) {
-//		this.databaseAbstractionName = databaseAbstractionName;
-//	}
-
-	public void setDatabaseAccessorName(String databaseAccessorName) {
-		this.databaseAccessorName = databaseAccessorName;
-	}
-
-	public void setDatabaseConfigurationName(String dbc) {
-		/*
-		if (dbc == null || dbc.trim().isEmpty()) {
-			logger.warning("null or blank database configuration");
-		}
-		*/
-		this.databaseConfigurationName = dbc;
-	}
-
-//	@Override
+	// @Override
 	public String toString() {
-		return "ProbabilityModel [modelName=" + modelName
-				+ ", clueFile=" + clueFilePath + "]";
+		return "ProbabilityModel [modelName=" + modelName + ", clueFile="
+				+ clueFilePath + "]";
 	}
 
 }
-

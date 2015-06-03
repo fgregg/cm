@@ -7,7 +7,6 @@ package com.choicemaker.cm.core;
  */
 public interface ModelAttributeNames {
 	String AN_ACCESSOR_CLASS = "accessorClass";
-	String AN_ANT_COMMAND = "antCommand";
 	String AN_CLASS = "class";
 	String AN_CLUE_FILE_NAME = "clueFileName";
 	String AN_ENABLE_ALL_CLUES_BEFORE_TRAINING = "enableAllCluesBeforeTraining";
@@ -16,7 +15,6 @@ public interface ModelAttributeNames {
 	String AN_LAST_TRAINING_DATE = "lastTrainingDate";
 	String AN_TRAINED_WITH_HOLDS = "trainedWithHolds";
 	String AN_TRAINING_SOURCE = "trainingSource";
-	String AN_USE_ANT = "useAnt";
 	String AN_USER_NAME = "userName";
 	String AN_BUILD_VERSION = "buildVersion";
 }
