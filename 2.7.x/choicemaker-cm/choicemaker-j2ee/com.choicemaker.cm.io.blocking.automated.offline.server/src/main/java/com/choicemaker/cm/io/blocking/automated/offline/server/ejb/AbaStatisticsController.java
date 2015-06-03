@@ -11,10 +11,10 @@ import com.choicemaker.cm.io.blocking.automated.AbaStatisticsCache;
 @Local
 public interface AbaStatisticsController extends AbaStatisticsCache {
 
-	void updateMasterAbaStatistics(OabaParameters params)
+	void updateReferenceStatistics(OabaParameters params)
 			throws DatabaseException;
 
-	void updateAbaStatistics(String urlString) throws DatabaseException;
+	void updateReferenceStatistics(String urlString) throws DatabaseException;
 
 	void putStatistics(ImmutableProbabilityModel model, AbaStatistics counts);
 

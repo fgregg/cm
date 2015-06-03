@@ -177,7 +177,7 @@ public class AbaStatisticsControllerIT {
 	public void testUpdateMasterAbaStatistics() throws Exception {
 		final String METHOD = "testUpdateMasterAbaStatistics";
 		OabaParameters params = createPersistentOabaParameters(METHOD);
-		statsController.updateMasterAbaStatistics(params);
+		statsController.updateReferenceStatistics(params);
 		checkCounts();
 	}
 

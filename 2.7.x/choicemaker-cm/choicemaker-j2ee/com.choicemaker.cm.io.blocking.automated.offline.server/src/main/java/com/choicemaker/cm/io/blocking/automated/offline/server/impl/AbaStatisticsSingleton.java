@@ -54,18 +54,19 @@ public class AbaStatisticsSingleton implements AbaStatisticsController {
 	private Map<String, AbaStatistics> cachedStats = new Hashtable<>();
 
 	@Override
-	public void updateMasterAbaStatistics(OabaParameters params)
+	public void updateReferenceStatistics(OabaParameters params)
 			throws DatabaseException {
 		final long rsId = params.getReferenceRsId();
 		final String type = PersistableSqlRecordSource.TYPE;
 		PersistableSqlRecordSource rs =
 			this.getSqlRecordSourceController().find(rsId, type);
 		String dsJndiUrl = rs.getDataSource();
-		updateAbaStatistics(dsJndiUrl);
+		updateReferenceStatistics(dsJndiUrl);
 	}
 
 	@Override
-	public void updateAbaStatistics(String urlString) throws DatabaseException {
+	public void updateReferenceStatistics(String urlString)
+			throws DatabaseException {
 		DataSource ds = null;
 		log.fine("url" + urlString);
 		if (urlString == null || urlString.length() == 0)

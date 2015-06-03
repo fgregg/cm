@@ -53,19 +53,6 @@ public class DbbCountsCreator {
 	private static Logger logger = Logger.getLogger(DbbCountsCreator.class
 			.getName());
 
-	// private final DatabaseAbstractionManager databaseAbstractionManager;
-	//
-	// public DbbCountsCreator(DatabaseAbstractionManager mgr) {
-	// if (mgr == null) {
-	// throw new IllegalArgumentException("null database abstraction manager");
-	// }
-	// this.databaseAbstractionManager = mgr;
-	// }
-	//
-	// public DatabaseAbstractionManager getDatabaseAbstractionManager() {
-	// return databaseAbstractionManager;
-	// }
-
 	public void install(DataSource ds) throws SQLException {
 		final String METHOD = "DbbCountsCreator.install: ";
 		if (ds == null) {
