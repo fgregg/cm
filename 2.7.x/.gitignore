@@ -16,3 +16,4 @@ build.xml
 
 .*.swp
 *.BAK-??
+pom_non-rc*.xml
